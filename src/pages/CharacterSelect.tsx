@@ -18,56 +18,38 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a15] flex flex-col items-center justify-center relative overflow-hidden">
-      {/* Background */}
+    <div className="min-h-screen bg-[#0f0f1a] flex flex-col items-center justify-center relative overflow-hidden">
       <div className="absolute inset-0">
         <div
           className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage:
-              "linear-gradient(#8b5cf6 1px, transparent 1px), linear-gradient(90deg, #8b5cf6 1px, transparent 1px)",
+              "linear-gradient(#f97316 1px, transparent 1px), linear-gradient(90deg, #f97316 1px, transparent 1px)",
             backgroundSize: "40px 40px",
           }}
         />
-        {[...Array(4)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full blur-3xl"
-            style={{
-              width: 200,
-              height: 200,
-              background: ["rgba(139,92,246,0.12)", "rgba(236,72,153,0.1)", "rgba(34,211,238,0.08)", "rgba(245,158,11,0.08)"][i],
-              left: `${15 + i * 22}%`,
-              top: `${20 + (i % 2) * 40}%`,
-            }}
-            animate={{ y: [0, -15, 0] }}
-            transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut" }}
-          />
-        ))}
       </div>
 
       <div className="relative z-10 flex flex-col items-center gap-8 px-4 w-full max-w-lg">
         {/* Back button */}
         <motion.button
           onClick={onBack}
-          className="absolute top-6 left-6 text-sm opacity-60 hover:opacity-100 transition-opacity"
-          style={{ color: "#c084fc", fontFamily: '"Press Start 2P", monospace, system-ui' }}
+          className="absolute top-6 left-6 text-xs opacity-50 hover:opacity-90 transition-opacity"
+          style={{ color: "#f97316", fontFamily: '"Press Start 2P", monospace, system-ui' }}
           whileHover={{ x: -4 }}
         >
           ← Back
         </motion.button>
 
         <motion.h2
-          className="text-2xl sm:text-3xl font-bold text-center"
+          className="text-xl sm:text-2xl font-bold text-center text-white"
           style={{
             fontFamily: '"Press Start 2P", monospace, system-ui',
-            color: "#f59e0b",
-            textShadow: "0 0 20px rgba(245,158,11,0.3)",
           }}
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
         >
-          Choose Your Character
+          Pick Your Character
         </motion.h2>
 
         {/* Character cards */}
@@ -80,37 +62,30 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           {/* Boy */}
           <button
             onClick={() => setSelected("boy")}
-            className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-xl transition-all duration-300 border-2 ${
+            className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-2xl transition-all duration-300 border-2 ${
               selected === "boy"
-                ? "border-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.3)] scale-105"
-                : "border-transparent hover:border-cyan-400/30 hover:scale-102"
+                ? "border-sky shadow-[0_0_30px_rgba(14,165,233,0.25)] scale-105"
+                : "border-white/10 hover:border-sky/40 hover:scale-[1.02]"
             }`}
-            style={{ background: "rgba(34,211,238,0.05)" }}
+            style={{ background: "rgba(14,165,233,0.06)" }}
           >
             {selected === "boy" && (
               <motion.div
-                className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs px-2 py-1 rounded-full"
-                style={{ background: "#06b6d4", color: "#000", fontFamily: '"Press Start 2P", monospace' }}
+                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded-full bg-sky text-white font-bold"
+                style={{ fontFamily: '"Press Start 2P", monospace' }}
                 layoutId="selected-badge"
               >
                 ✓
               </motion.div>
             )}
-            <div
-              className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex items-center justify-center"
-              style={{ background: "rgba(6,182,212,0.15)", border: "2px solid rgba(6,182,212,0.3)" }}
-            >
-              {/* Boy placeholder */}
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center bg-sky/10 border border-sky/20">
               <div className="relative">
-                <div className="w-12 h-12 rounded-full bg-cyan-400/80" />
-                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-8 h-4 bg-cyan-300/60 rounded-t-full" />
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-cyan-500/60 rounded-b-lg" />
+                <div className="w-12 h-12 rounded-full bg-sky/80" />
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-8 h-4 bg-sky-light/60 rounded-t-full" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-sky/60 rounded-b-lg" />
               </div>
             </div>
-            <span
-              className="text-sm font-bold"
-              style={{ fontFamily: '"Press Start 2P", monospace, system-ui', color: "#22d3ee" }}
-            >
+            <span className="text-sm font-bold text-sky" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
               Boy
             </span>
           </button>
@@ -118,37 +93,30 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           {/* Girl */}
           <button
             onClick={() => setSelected("girl")}
-            className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-xl transition-all duration-300 border-2 ${
+            className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-2xl transition-all duration-300 border-2 ${
               selected === "girl"
-                ? "border-pink-400 shadow-[0_0_30px_rgba(236,72,153,0.3)] scale-105"
-                : "border-transparent hover:border-pink-400/30 hover:scale-102"
+                ? "border-coral shadow-[0_0_30px_rgba(244,63,94,0.25)] scale-105"
+                : "border-white/10 hover:border-coral/40 hover:scale-[1.02]"
             }`}
-            style={{ background: "rgba(236,72,153,0.05)" }}
+            style={{ background: "rgba(244,63,94,0.06)" }}
           >
             {selected === "girl" && (
               <motion.div
-                className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs px-2 py-1 rounded-full"
-                style={{ background: "#ec4899", color: "#000", fontFamily: '"Press Start 2P", monospace' }}
+                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded-full bg-coral text-white font-bold"
+                style={{ fontFamily: '"Press Start 2P", monospace' }}
                 layoutId="selected-badge"
               >
                 ✓
               </motion.div>
             )}
-            <div
-              className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex items-center justify-center"
-              style={{ background: "rgba(236,72,153,0.15)", border: "2px solid rgba(236,72,153,0.3)" }}
-            >
-              {/* Girl placeholder */}
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center bg-coral/10 border border-coral/20">
               <div className="relative">
-                <div className="w-12 h-12 rounded-full bg-pink-400/80" />
-                <div className="absolute -top-2 -left-1 w-14 h-6 bg-pink-300/50 rounded-t-full" />
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-pink-500/60 rounded-b-lg" />
+                <div className="w-12 h-12 rounded-full bg-coral/80" />
+                <div className="absolute -top-2 -left-1 w-14 h-6 bg-coral-light/50 rounded-t-full" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-coral/60 rounded-b-lg" />
               </div>
             </div>
-            <span
-              className="text-sm font-bold"
-              style={{ fontFamily: '"Press Start 2P", monospace, system-ui', color: "#ec4899" }}
-            >
+            <span className="text-sm font-bold text-coral" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
               Girl
             </span>
           </button>
@@ -162,8 +130,8 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           transition={{ delay: 0.4 }}
         >
           <label
-            className="block text-xs mb-2 opacity-60"
-            style={{ fontFamily: '"Press Start 2P", monospace, system-ui', color: "#c084fc" }}
+            className="block text-xs mb-2 text-white/50"
+            style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}
           >
             Your Name
           </label>
@@ -174,14 +142,14 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
             onKeyDown={(e) => e.key === "Enter" && handleConfirm()}
             maxLength={16}
             placeholder="Enter your name..."
-            className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all duration-200
-                       focus:shadow-[0_0_20px_rgba(139,92,246,0.3)]"
+            className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all duration-200
+                       focus:shadow-[0_0_20px_rgba(249,115,22,0.2)]"
             style={{
               fontFamily: '"Press Start 2P", monospace, system-ui',
               fontSize: "11px",
-              background: "rgba(139,92,246,0.1)",
-              border: "2px solid rgba(139,92,246,0.3)",
-              color: "#e2e8f0",
+              background: "rgba(255,255,255,0.06)",
+              border: "2px solid rgba(255,255,255,0.1)",
+              color: "#fff",
             }}
           />
         </motion.div>
@@ -190,22 +158,22 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
         <motion.button
           onClick={handleConfirm}
           disabled={!selected || !name.trim()}
-          className={`w-full max-w-xs py-4 px-8 text-sm font-bold rounded-lg transition-all duration-200
+          className={`w-full max-w-xs py-4 px-8 text-sm font-bold rounded-2xl transition-all duration-200
                      ${selected && name.trim()
-                       ? "hover:scale-105 hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] active:scale-95"
-                       : "opacity-30 cursor-not-allowed"
+                       ? "hover:scale-105 hover:shadow-[0_0_30px_rgba(249,115,22,0.3)] active:scale-95"
+                       : "opacity-25 cursor-not-allowed"
                      }`}
           style={{
             fontFamily: '"Press Start 2P", monospace, system-ui',
-            background: "linear-gradient(135deg, #7c3aed, #8b5cf6)",
+            background: "linear-gradient(135deg, #f97316, #ea580c)",
             color: "#fff",
-            border: "2px solid rgba(192,132,252,0.5)",
+            boxShadow: selected && name.trim() ? "0 4px 20px rgba(249,115,22,0.25)" : "none",
           }}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          ▶ START GAME
+          ▶ Let&apos;s Go!
         </motion.button>
       </div>
     </div>

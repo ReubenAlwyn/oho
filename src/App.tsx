@@ -36,7 +36,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0a0a15]">
+    <div className="min-h-screen bg-[#0f0f1a]">
       <AnimatePresence mode="wait">
         {screen === "menu" && (
           <motion.div
@@ -44,7 +44,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25 }}
           >
             <MainMenu
               onPlay={() => setScreen("character-select")}
@@ -59,7 +59,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25 }}
           >
             <CharacterSelect
               onSelect={handleSelectCharacter}
@@ -86,7 +86,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25 }}
           >
             <GameOverScreen
               score={lastScore}
@@ -106,7 +106,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25 }}
           >
             <LeaderboardScreen onBack={() => setScreen("menu")} />
           </motion.div>

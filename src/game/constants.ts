@@ -22,22 +22,23 @@ export const ENEMY_CHASE_INTERVAL = 30; // frames between pathfinding recalculat
 export const MIN_SHAWARMAS = 8;
 export const MAX_SHAWARMAS = 15;
 
-// Colors
+// Colors — OHO Shawarma Panic palette
 export const COLORS = {
-  mazeWall: "#1a1a2e",
-  mazeWallGlow: "#4a1a7a",
-  mazePath: "#0a0a15",
-  mazeWallEdge: "#6b21a8",
-  player: "#22d3ee",
-  playerGlow: "#06b6d4",
-  enemy: "#ef4444",
-  enemyGlow: "#dc2626",
-  shawarma: "#f59e0b",
-  shawarmaGlow: "#d97706",
-  text: "#f8fafc",
-  textShadow: "#a855f7",
-  neonPink: "#ec4899",
-  neonBlue: "#3b82f6",
+  mazeWall: "#1a1528",
+  mazeWallGlow: "#f97316",
+  mazePath: "#0f0f1a",
+  mazeWallEdge: "#f97316",
+  player: "#0ea5e9",
+  playerGlow: "#38bdf8",
+  enemy: "#f43f5e",
+  enemyGlow: "#fb7185",
+  shawarma: "#f97316",
+  shawarmaGlow: "#fb923c",
+  text: "#ffffff",
+  textShadow: "#f97316",
+  coral: "#f43f5e",
+  neonPink: "#f43f5e",
+  neonBlue: "#0ea5e9",
   neonGreen: "#10b981",
-  neonPurple: "#8b5cf6",
+  neonPurple: "#a855f7",
 } as const;
