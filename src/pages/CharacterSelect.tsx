@@ -18,34 +18,23 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0f1a] flex flex-col items-center justify-center relative overflow-hidden">
-      <div className="absolute inset-0">
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              "linear-gradient(#f97316 1px, transparent 1px), linear-gradient(90deg, #f97316 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
-      </div>
+    <div className="min-h-screen bg-[#06060e] flex flex-col items-center justify-center relative overflow-hidden scanlines">
+      <div className="absolute inset-0 grid-bg" />
 
       <div className="relative z-10 flex flex-col items-center gap-8 px-4 w-full max-w-lg">
         {/* Back button */}
         <motion.button
           onClick={onBack}
-          className="absolute top-6 left-6 text-xs opacity-50 hover:opacity-90 transition-opacity"
-          style={{ color: "#f97316", fontFamily: '"Press Start 2P", monospace, system-ui' }}
+          className="absolute top-6 left-6 neon-orange opacity-40 hover:opacity-80 transition-opacity"
+          style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}
           whileHover={{ x: -4 }}
         >
           ← Back
         </motion.button>
 
         <motion.h2
-          className="text-xl sm:text-2xl font-bold text-center text-white"
-          style={{
-            fontFamily: '"Press Start 2P", monospace, system-ui',
-          }}
+          className="text-xl sm:text-2xl font-bold text-center neon-orange"
+          style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
         >
@@ -62,30 +51,33 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           {/* Boy */}
           <button
             onClick={() => setSelected("boy")}
-            className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-2xl transition-all duration-300 border-2 ${
+            className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-xl transition-all duration-300 border-2 ${
               selected === "boy"
-                ? "border-sky shadow-[0_0_30px_rgba(14,165,233,0.25)] scale-105"
-                : "border-white/10 hover:border-sky/40 hover:scale-[1.02]"
+                ? "shadow-[0_0_25px_rgba(0,204,255,0.3)] scale-105"
+                : "border-[#2a2a40] hover:border-[#00ccff]/30 hover:scale-[1.02]"
             }`}
-            style={{ background: "rgba(14,165,233,0.06)" }}
+            style={{
+              background: "rgba(0,204,255,0.04)",
+              borderColor: selected === "boy" ? "rgba(0,204,255,0.5)" : undefined,
+            }}
           >
             {selected === "boy" && (
               <motion.div
-                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded-full bg-sky text-white font-bold"
+                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded bg-[#00ccff] text-[#06060e] font-bold"
                 style={{ fontFamily: '"Press Start 2P", monospace' }}
                 layoutId="selected-badge"
               >
                 ✓
               </motion.div>
             )}
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center bg-sky/10 border border-sky/20">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex items-center justify-center bg-[#00ccff]/8 border border-[#00ccff]/15">
               <div className="relative">
-                <div className="w-12 h-12 rounded-full bg-sky/80" />
-                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-8 h-4 bg-sky-light/60 rounded-t-full" />
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-sky/60 rounded-b-lg" />
+                <div className="w-12 h-12 rounded-full bg-[#00ccff]/80 shadow-[0_0_15px_rgba(0,204,255,0.3)]" />
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-8 h-4 bg-[#00ccff]/50 rounded-t-full" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-[#00ccff]/60 rounded-b-lg" />
               </div>
             </div>
-            <span className="text-sm font-bold text-sky" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
+            <span className="text-sm font-bold neon-cyan" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
               Boy
             </span>
           </button>
@@ -93,30 +85,33 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           {/* Girl */}
           <button
             onClick={() => setSelected("girl")}
-            className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-2xl transition-all duration-300 border-2 ${
+            className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-xl transition-all duration-300 border-2 ${
               selected === "girl"
-                ? "border-coral shadow-[0_0_30px_rgba(244,63,94,0.25)] scale-105"
-                : "border-white/10 hover:border-coral/40 hover:scale-[1.02]"
+                ? "shadow-[0_0_25px_rgba(255,51,102,0.3)] scale-105"
+                : "border-[#2a2a40] hover:border-[#ff3366]/30 hover:scale-[1.02]"
             }`}
-            style={{ background: "rgba(244,63,94,0.06)" }}
+            style={{
+              background: "rgba(255,51,102,0.04)",
+              borderColor: selected === "girl" ? "rgba(255,51,102,0.5)" : undefined,
+            }}
           >
             {selected === "girl" && (
               <motion.div
-                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded-full bg-coral text-white font-bold"
+                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded bg-[#ff3366] text-[#06060e] font-bold"
                 style={{ fontFamily: '"Press Start 2P", monospace' }}
                 layoutId="selected-badge"
               >
                 ✓
               </motion.div>
             )}
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center bg-coral/10 border border-coral/20">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex items-center justify-center bg-[#ff3366]/8 border border-[#ff3366]/15">
               <div className="relative">
-                <div className="w-12 h-12 rounded-full bg-coral/80" />
-                <div className="absolute -top-2 -left-1 w-14 h-6 bg-coral-light/50 rounded-t-full" />
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-coral/60 rounded-b-lg" />
+                <div className="w-12 h-12 rounded-full bg-[#ff3366]/80 shadow-[0_0_15px_rgba(255,51,102,0.3)]" />
+                <div className="absolute -top-2 -left-1 w-14 h-6 bg-[#ff3366]/50 rounded-t-full" />
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-[#ff3366]/60 rounded-b-lg" />
               </div>
             </div>
-            <span className="text-sm font-bold text-coral" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
+            <span className="text-sm font-bold neon-pink" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
               Girl
             </span>
           </button>
@@ -130,8 +125,8 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           transition={{ delay: 0.4 }}
         >
           <label
-            className="block text-xs mb-2 text-white/50"
-            style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}
+            className="block text-xs mb-2 neon-orange opacity-50"
+            style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}
           >
             Your Name
           </label>
@@ -142,15 +137,8 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
             onKeyDown={(e) => e.key === "Enter" && handleConfirm()}
             maxLength={16}
             placeholder="Enter your name..."
-            className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all duration-200
-                       focus:shadow-[0_0_20px_rgba(249,115,22,0.2)]"
-            style={{
-              fontFamily: '"Press Start 2P", monospace, system-ui',
-              fontSize: "11px",
-              background: "rgba(255,255,255,0.06)",
-              border: "2px solid rgba(255,255,255,0.1)",
-              color: "#fff",
-            }}
+            className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all duration-200 bg-[#0e0e1a] border-2 border-[#2a2a40] text-[#e0e0f0] placeholder:text-[#3a3a52] focus:border-[#ff6b2b]/50 focus:shadow-[0_0_15px_rgba(255,107,43,0.15)]"
+            style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "11px" }}
           />
         </motion.div>
 
@@ -158,17 +146,13 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
         <motion.button
           onClick={handleConfirm}
           disabled={!selected || !name.trim()}
-          className={`w-full max-w-xs py-4 px-8 text-sm font-bold rounded-2xl transition-all duration-200
-                     ${selected && name.trim()
-                       ? "hover:scale-105 hover:shadow-[0_0_30px_rgba(249,115,22,0.3)] active:scale-95"
-                       : "opacity-25 cursor-not-allowed"
-                     }`}
-          style={{
-            fontFamily: '"Press Start 2P", monospace, system-ui',
-            background: "linear-gradient(135deg, #f97316, #ea580c)",
-            color: "#fff",
-            boxShadow: selected && name.trim() ? "0 4px 20px rgba(249,115,22,0.25)" : "none",
-          }}
+          className={`pixel-btn w-full max-w-xs ${
+            selected && name.trim()
+              ? "bg-[#ff6b2b] border-[#ff6b2b] text-[#06060e]"
+              : "bg-[#1a1a2e] border-[#2a2a40] text-[#3a3a52] cursor-not-allowed"
+          }`}
+          whileHover={selected && name.trim() ? { boxShadow: "0 0 30px rgba(255,107,43,0.5), 0 0 60px rgba(255,107,43,0.25)" } : undefined}
+          whileTap={selected && name.trim() ? { scale: 0.96 } : undefined}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.6 }}

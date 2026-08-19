@@ -42,22 +42,28 @@ function drawMazeToBuffer(ctx: OffscreenCanvasRenderingContext2D, grid: MazeGrid
         ctx.fillStyle = COLORS.mazeWall;
         ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
-        // Glowing edge effect
-        ctx.fillStyle = COLORS.mazeWallEdge;
-        ctx.globalAlpha = 0.3;
+        // Neon edge glow — brighter for arcade feel
+        const hasTop = r > 0 && grid[r - 1][c] === 0;
+        const hasBot = r < MAZE_ROWS - 1 && grid[r + 1][c] === 0;
+        const hasLeft = c > 0 && grid[r][c - 1] === 0;
+        const hasRight = c < MAZE_COLS - 1 && grid[r][c + 1] === 0;
+        const hasEdge = hasTop || hasBot || hasLeft || hasRight;
 
-        // Check adjacent cells for edges
-        if (r > 0 && grid[r - 1][c] === 0) {
-          ctx.fillRect(x, y, TILE_SIZE, 2);
-        }
-        if (r < MAZE_ROWS - 1 && grid[r + 1][c] === 0) {
-          ctx.fillRect(x, y + TILE_SIZE - 2, TILE_SIZE, 2);
-        }
-        if (c > 0 && grid[r][c - 1] === 0) {
-          ctx.fillRect(x, y, 2, TILE_SIZE);
-        }
-        if (c < MAZE_COLS - 1 && grid[r][c + 1] === 0) {
-          ctx.fillRect(x + TILE_SIZE - 2, y, 2, TILE_SIZE);
+        if (hasEdge) {
+          // Inner glow
+          ctx.fillStyle = COLORS.mazeWallEdge;
+          ctx.globalAlpha = 0.5;
+          if (hasTop) ctx.fillRect(x, y, TILE_SIZE, 3);
+          if (hasBot) ctx.fillRect(x, y + TILE_SIZE - 3, TILE_SIZE, 3);
+          if (hasLeft) ctx.fillRect(x, y, 3, TILE_SIZE);
+          if (hasRight) ctx.fillRect(x + TILE_SIZE - 3, y, 3, TILE_SIZE);
+
+          // Outer glow (wider, more transparent)
+          ctx.globalAlpha = 0.12;
+          if (hasTop) ctx.fillRect(x - 2, y - 2, TILE_SIZE + 4, 5);
+          if (hasBot) ctx.fillRect(x - 2, y + TILE_SIZE - 3, TILE_SIZE + 4, 5);
+          if (hasLeft) ctx.fillRect(x - 2, y - 2, 5, TILE_SIZE + 4);
+          if (hasRight) ctx.fillRect(x + TILE_SIZE - 3, y - 2, 5, TILE_SIZE + 4);
         }
         ctx.globalAlpha = 1;
       }

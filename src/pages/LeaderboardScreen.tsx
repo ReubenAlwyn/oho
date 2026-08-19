@@ -31,35 +31,24 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
   const medals = ["🥇", "🥈", "🥉"];
 
   return (
-    <div className="min-h-screen bg-[#0f0f1a] flex flex-col relative overflow-hidden">
-      <div className="absolute inset-0">
-        <div
-          className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage:
-              "linear-gradient(#f97316 1px, transparent 1px), linear-gradient(90deg, #f97316 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
-      </div>
+    <div className="min-h-screen bg-[#06060e] flex flex-col relative overflow-hidden scanlines">
+      <div className="absolute inset-0 grid-bg" />
 
       <div className="relative z-10 flex flex-col h-full p-4 sm:p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 pt-2">
           <motion.button
             onClick={onBack}
-            className="text-xs opacity-50 hover:opacity-90 transition-opacity"
-            style={{ color: "#f97316", fontFamily: '"Press Start 2P", monospace, system-ui' }}
+            className="neon-orange opacity-40 hover:opacity-80 transition-opacity"
+            style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}
             whileHover={{ x: -4 }}
           >
             ← Back
           </motion.button>
 
           <motion.h1
-            className="text-lg sm:text-xl font-bold text-white"
-            style={{
-              fontFamily: '"Press Start 2P", monospace, system-ui',
-            }}
+            className="text-lg sm:text-xl font-bold neon-yellow"
+            style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
           >
@@ -78,10 +67,10 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
               animate={{ opacity: 1 }}
             >
               <p className="text-4xl">🌮</p>
-              <p className="text-sm text-white/40 text-center" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
+              <p className="text-sm neon-orange opacity-50 text-center" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}>
                 No scores yet!
               </p>
-              <p className="text-xs text-white/20" style={{ fontFamily: "monospace" }}>
+              <p className="text-xs text-[#3a3a52]" style={{ fontFamily: "monospace" }}>
                 Play a game to set your first record.
               </p>
             </motion.div>
@@ -91,52 +80,43 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
                 {entries.map((entry, index) => (
                   <motion.div
                     key={entry.id}
-                    className="flex items-center gap-3 p-3 rounded-xl"
+                    className="flex items-center gap-3 p-3 rounded-lg bg-[#0e0e1a] border border-[#2a2a40] hover:border-[#ff6b2b]/20 transition-colors"
                     style={{
-                      background:
-                        index === 0
-                          ? "rgba(249,115,22,0.08)"
-                          : index === 1
-                          ? "rgba(168,85,247,0.06)"
-                          : index === 2
-                          ? "rgba(16,185,129,0.06)"
-                          : "rgba(255,255,255,0.02)",
-                      border: index < 3 ? `1px solid ${
-                        index === 0 ? "rgba(249,115,22,0.2)" : index === 1 ? "rgba(168,85,247,0.15)" : "rgba(16,185,129,0.15)"
-                      }` : "1px solid transparent",
+                      boxShadow: index === 0 ? "0 0 15px rgba(255,107,43,0.1)" : undefined,
                     }}
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: index * 0.04 }}
                   >
                     <div className="w-8 text-center text-lg" style={{ fontFamily: '"Press Start 2P", monospace' }}>
-                      {index < 3 ? medals[index] : <span className="text-xs text-white/25">{index + 1}</span>}
+                      {index < 3 ? medals[index] : <span className="text-[10px] text-[#3a3a52]">{index + 1}</span>}
                     </div>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span
-                          className="text-sm truncate"
+                          className="truncate"
                           style={{
                             fontFamily: '"Press Start 2P", monospace, system-ui',
                             fontSize: "10px",
-                            color: index < 3 ? "#e2e8f0" : "rgba(255,255,255,0.4)",
+                            color: index < 3 ? "#e0e0f0" : "#6a6a8a",
                           }}
                         >
                           {entry.playerName}
                         </span>
                         <span className="text-xs">{entry.character === "boy" ? "👦" : "👧"}</span>
                       </div>
-                      <p className="text-[10px] text-white/20 mt-0.5" style={{ fontFamily: "monospace" }}>
+                      <p className="text-[10px] text-[#3a3a52] mt-0.5" style={{ fontFamily: "monospace" }}>
                         Round {entry.highestRound} · {formatDate(entry.date)}
                       </p>
                     </div>
 
-                    <div className="text-right" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
+                    <div style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
                       <span
-                        className="text-sm"
+                        className={index < 3 ? "neon-orange" : ""}
                         style={{
-                          color: index < 3 ? "#f97316" : "rgba(255,255,255,0.4)",
+                          fontSize: "11px",
+                          color: index >= 3 ? "#6a6a8a" : undefined,
                         }}
                       >
                         {formatScore(entry.score)}
@@ -154,19 +134,19 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
           <div className="flex justify-center mt-4">
             {showConfirmClear ? (
               <div className="flex items-center gap-3">
-                <span className="text-xs text-coral/50" style={{ fontFamily: "monospace" }}>
+                <span className="text-[10px] text-[#ff3366]/50" style={{ fontFamily: "monospace" }}>
                   Clear all scores?
                 </span>
                 <button
                   onClick={handleClear}
-                  className="text-xs px-3 py-1 rounded-lg border border-coral/30 text-coral transition-all hover:bg-coral/10"
+                  className="text-[10px] px-3 py-1 rounded border border-[#ff3366]/30 text-[#ff3366] hover:bg-[#ff3366]/10 transition-all"
                   style={{ fontFamily: "monospace" }}
                 >
                   Yes
                 </button>
                 <button
                   onClick={() => setShowConfirmClear(false)}
-                  className="text-xs px-3 py-1 rounded-lg border border-white/10 text-white/30 transition-all hover:bg-white/5"
+                  className="text-[10px] px-3 py-1 rounded border border-[#2a2a40] text-[#6a6a8a] hover:bg-[#1a1a2e] transition-all"
                   style={{ fontFamily: "monospace" }}
                 >
                   No
@@ -175,7 +155,7 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
             ) : (
               <button
                 onClick={() => setShowConfirmClear(true)}
-                className="text-xs text-white/15 hover:text-white/30 transition-colors"
+                className="text-[10px] text-[#3a3a52] hover:text-[#6a6a8a] transition-colors"
                 style={{ fontFamily: "monospace" }}
               >
                 Clear all scores
