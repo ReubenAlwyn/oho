@@ -16,19 +16,19 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-[#06060e] flex flex-col overflow-hidden relative scanlines">
-      {/* Animated background */}
       <div className="absolute inset-0 grid-bg" />
+
+      {/* Neon orbs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Neon orbs */}
         <motion.div
           className="absolute w-[500px] h-[500px] rounded-full blur-[120px]"
-          style={{ background: "radial-gradient(circle, rgba(255,107,43,0.15) 0%, transparent 70%)", top: "-10%", right: "-10%" }}
+          style={{ background: "radial-gradient(circle, rgba(255,107,43,0.18) 0%, transparent 70%)", top: "-10%", right: "-10%" }}
           animate={{ scale: [1, 1.2, 1], opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           className="absolute w-[400px] h-[400px] rounded-full blur-[100px]"
-          style={{ background: "radial-gradient(circle, rgba(0,204,255,0.1) 0%, transparent 70%)", bottom: "0%", left: "-5%" }}
+          style={{ background: "radial-gradient(circle, rgba(0,204,255,0.12) 0%, transparent 70%)", bottom: "0%", left: "-5%" }}
           animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
@@ -44,7 +44,7 @@ export default function Landing() {
       <header className="relative z-10 flex items-center justify-between px-6 sm:px-10 py-5">
         <div className="flex items-center gap-3">
           <span className="text-2xl">🌮</span>
-          <span className="neon-orange text-lg" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "14px" }}>
+          <span className="neon-orange" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "14px" }}>
             OHO
           </span>
         </div>
@@ -64,7 +64,7 @@ export default function Landing() {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="max-w-3xl"
         >
-          {/* Floating food emojis */}
+          {/* Floating food */}
           <motion.div
             className="flex justify-center gap-5 mb-10"
             initial={{ scale: 0.7, opacity: 0 }}
@@ -98,8 +98,10 @@ export default function Landing() {
             className="mt-6 text-sm sm:text-base leading-relaxed max-w-lg mx-auto"
             style={{ color: "#8888aa", fontFamily: "monospace" }}
           >
-            Dash through neon maces, gobble every shawarma in sight,
-            and dodge the ghosts before they catch you. How far can you go?
+            Run. Eat. Don&apos;t die.
+            <br />
+            A neon maze game where shawarmas won&apos;t collect themselves
+            and the ghosts are always one step behind you.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -120,40 +122,11 @@ export default function Landing() {
             </button>
           </div>
         </motion.div>
-
-        {/* Feature pills */}
-        <motion.div
-          className="mt-20 flex flex-wrap justify-center gap-3 max-w-lg"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.7 }}
-        >
-          {[
-            { icon: "🏃", text: "Endless rounds", color: "#ff6b2b" },
-            { icon: "👻", text: "Ghost chasers", color: "#ff3366" },
-            { icon: "🏆", text: "Global leaderboard", color: "#ffdd00" },
-            { icon: "🎨", text: "Pick your character", color: "#00ccff" },
-          ].map((feat) => (
-            <div
-              key={feat.text}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-lg border text-xs"
-              style={{
-                background: "rgba(255,255,255,0.02)",
-                borderColor: feat.color + "20",
-                color: "#8888aa",
-                fontFamily: "monospace",
-              }}
-            >
-              <span>{feat.icon}</span>
-              <span>{feat.text}</span>
-            </div>
-          ))}
-        </motion.div>
       </main>
 
       {/* Footer */}
       <footer className="relative z-10 text-center py-6 text-[10px]" style={{ color: "#3a3a52", fontFamily: "monospace" }}>
-        OHO Shawarma Panic — A neon maze chase game
+        OHO Shawarma Panic — Built for high scores and good times
       </footer>
     </div>
   );

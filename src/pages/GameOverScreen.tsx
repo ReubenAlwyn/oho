@@ -58,7 +58,7 @@ export default function GameOverScreen({
             Game Over
           </h1>
           <p className="mt-3 text-xs text-[#6a6a8a]" style={{ fontFamily: "monospace" }}>
-            {character === "boy" ? "👦" : "👧"} The ghosts got you this time!
+            {character === "boy" ? "👦" : "👧"} Ghosts: 1 — You: 0. Try again?
           </p>
         </motion.div>
 
@@ -71,7 +71,7 @@ export default function GameOverScreen({
         >
           <div className="text-center">
             <p className="text-[10px] text-[#6a6a8a] mb-1" style={{ fontFamily: "monospace" }}>
-              Final Score
+              Score
             </p>
             <p
               className="text-3xl font-black neon-orange"

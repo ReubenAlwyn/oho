@@ -59,7 +59,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       setError(
         error instanceof Error
           ? error.message
-          : "Could not send verification code. Please try again."
+          : "                    Something went wrong. Try again in a sec."
       );
       setIsLoading(false);
     }
@@ -89,7 +89,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       navigate(redirect);
     } catch (error) {
       console.error("Guest login error:", error);
-      setError("Could not sign in as guest. Please try again.");
+      setError("                    Guest login failed. Give it another shot.");
       setIsLoading(false);
     }
   };
@@ -122,9 +122,9 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     🌮
                   </div>
                 </div>
-                <CardTitle className="text-xl text-[#e0e0f0]">Welcome to OHO</CardTitle>
+                <CardTitle className="text-xl text-[#e0e0f0]">Enter the Maze</CardTitle>
                 <CardDescription className="text-[#6a6a8a]">
-                  Enter your email to create an account or log in
+                  Drop your email to get in — takes two seconds
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleEmailSubmit}>
@@ -175,7 +175,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       disabled={isLoading}
                     >
                       <UserX className="mr-2 h-4 w-4" />
-                      Continue as Guest
+                      Jump in as Guest
                     </Button>
                   </div>
                 </CardContent>

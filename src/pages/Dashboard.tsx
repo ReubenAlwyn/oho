@@ -71,10 +71,10 @@ export default function Dashboard() {
           transition={{ duration: 0.4 }}
         >
           <p className="text-xs text-[#6a6a8a] mb-2" style={{ fontFamily: "monospace" }}>
-            Welcome back{user?.name ? `, ${user.name}` : ""}
+            {user?.name ? `${user.name}, ` : ""}the maze is calling
           </p>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight neon-orange" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
-            Ready to play?
+            Ready to run?
           </h1>
         </motion.div>
 
@@ -146,7 +146,7 @@ export default function Dashboard() {
             <div className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-8 text-center">
               <p className="text-3xl mb-3">🌮</p>
               <p className="text-sm text-[#6a6a8a]" style={{ fontFamily: "monospace" }}>
-                No games played yet. Hit that play button!
+                No games yet. Time to break in those shawarma legs.
               </p>
             </div>
           ) : (

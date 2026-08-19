@@ -68,10 +68,10 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
             >
               <p className="text-4xl">🌮</p>
               <p className="text-sm neon-orange opacity-50 text-center" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}>
-                No scores yet!
+                No scores yet
               </p>
               <p className="text-xs text-[#3a3a52]" style={{ fontFamily: "monospace" }}>
-                Play a game to set your first record.
+                Get out there and earn your spot.
               </p>
             </motion.div>
           ) : (
