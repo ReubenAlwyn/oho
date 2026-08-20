@@ -256,7 +256,8 @@ function drawPlayer(
 }
 
 /**
- * Draw an enemy.
+ * Draw CHUB — the fat guy enemy.
+ * Big round body, stubby limbs, angry little eyes, smooth bobbing movement.
  */
 function drawEnemy(
   ctx: CanvasRenderingContext2D,
@@ -271,42 +272,216 @@ function drawEnemy(
   const pulse = Math.sin(frame * 0.08 + enemy.id) * 0.15 + 0.5;
   drawGlow(ctx, x, y, T * 0.9, COLORS.enemyGlow, pulse);
 
-  // Body colors cycle per enemy type
-  const enemyColors = ["#c850ff", "#a040e0", "#9030d0", "#d060ff", "#8020c0"];
-  const color = enemyColors[enemy.type % enemyColors.length];
+  // CHUB color variants
+  const chubColors = ["#c850ff", "#a040e0", "#9030d0", "#d060ff", "#8020c0"];
+  const skinColors = ["#e8b89d", "#d4a58a", "#c9977d", "#f0c4a8", "#dbb098"];
+  const color = chubColors[enemy.type % chubColors.length];
+  const skin = skinColors[enemy.type % skinColors.length];
 
-  const size = T * 0.38;
+  // Smooth bobbing (not jerky — uses sin with slow frequency)
+  const bob = Math.sin(frame * 0.06 + enemy.id * 1.7) * T * 0.03;
+  const squash = 1 + Math.sin(frame * 0.12 + enemy.id) * 0.03;
 
-  // Ghost-like enemy body
+  ctx.save();
+  ctx.translate(x, y + bob);
+  ctx.scale(1, squash);
+
+  const bodyR = T * 0.36; // big round body radius
+  const headR = T * 0.22; // head radius
+
+  // ── Stubby legs ──
+  const legY = bodyR * 0.75;
+  const legW = T * 0.08;
+  const legH = T * 0.12;
+  // Animate leg waddle
+  const legAngle = Math.sin(frame * 0.15 + enemy.id * 2) * 0.25;
+  // Left leg
   ctx.fillStyle = color;
+  ctx.save();
+  ctx.translate(-bodyR * 0.35, legY);
+  ctx.rotate(-legAngle);
   ctx.beginPath();
-  ctx.arc(x, y - T * 0.03, size * 0.7, Math.PI, 0);
-  const wave = Math.sin(frame * 0.15 + enemy.id) * T * 0.04;
-  ctx.lineTo(x + size * 0.7, y + size * 0.5 + wave);
-  ctx.quadraticCurveTo(x + size * 0.35, y + size * 0.3, x, y + size * 0.5 - wave);
-  ctx.quadraticCurveTo(x - size * 0.35, y + size * 0.7 + wave, x - size * 0.7, y + size * 0.5 - wave);
-  ctx.closePath();
+  ctx.roundRect(-legW / 2, 0, legW, legH, legW * 0.3);
+  ctx.fill();
+  // Shoe
+  ctx.fillStyle = "#333";
+  ctx.beginPath();
+  ctx.ellipse(0, legH, legW * 0.7, legW * 0.35, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+  // Right leg
+  ctx.fillStyle = color;
+  ctx.save();
+  ctx.translate(bodyR * 0.35, legY);
+  ctx.rotate(legAngle);
+  ctx.beginPath();
+  ctx.roundRect(-legW / 2, 0, legW, legH, legW * 0.3);
+  ctx.fill();
+  ctx.fillStyle = "#333";
+  ctx.beginPath();
+  ctx.ellipse(0, legH, legW * 0.7, legW * 0.35, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  // ── Stubby arms ──
+  const armLen = T * 0.1;
+  const armW = T * 0.07;
+  const armY = -bodyR * 0.1;
+  const armSwing = Math.sin(frame * 0.15 + enemy.id * 2 + Math.PI) * 0.3;
+  // Left arm
+  ctx.save();
+  ctx.translate(-bodyR - armW * 0.5, armY);
+  ctx.rotate(-0.4 + armSwing);
+  ctx.fillStyle = skin;
+  ctx.beginPath();
+  ctx.roundRect(-armW / 2, -armLen / 2, armW, armLen, armW * 0.4);
+  ctx.fill();
+  // Fist
+  ctx.beginPath();
+  ctx.arc(0, armLen * 0.5, armW * 0.6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+  // Right arm
+  ctx.save();
+  ctx.translate(bodyR + armW * 0.5, armY);
+  ctx.rotate(0.4 - armSwing);
+  ctx.fillStyle = skin;
+  ctx.beginPath();
+  ctx.roundRect(-armW / 2, -armLen / 2, armW, armLen, armW * 0.4);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(0, armLen * 0.5, armW * 0.6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  // ── Big round body ──
+  const bodyGrad = ctx.createRadialGradient(
+    -bodyR * 0.2, -bodyR * 0.2, bodyR * 0.1,
+    0, 0, bodyR
+  );
+  bodyGrad.addColorStop(0, lightenColor(skin, 20));
+  bodyGrad.addColorStop(0.7, skin);
+  bodyGrad.addColorStop(1, darkenColor(skin, 20));
+  ctx.fillStyle = bodyGrad;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, bodyR, bodyR * 1.05, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // Angry eyes
-  const eyeW = T * 0.05;
-  const eyeH = T * 0.06;
+  // Body outline
+  ctx.strokeStyle = darkenColor(skin, 40);
+  ctx.lineWidth = Math.max(1, T * 0.015);
+  ctx.stroke();
+
+  // Belly highlight
+  ctx.fillStyle = "rgba(255,255,255,0.15)";
+  ctx.beginPath();
+  ctx.ellipse(-bodyR * 0.15, -bodyR * 0.15, bodyR * 0.45, bodyR * 0.35, -0.3, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── Head (on top of body) ──
+  const headY = -bodyR - headR * 0.5;
+  ctx.fillStyle = skin;
+  ctx.beginPath();
+  ctx.arc(0, headY, headR, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = darkenColor(skin, 40);
+  ctx.stroke();
+
+  // ── Hair (spiky top) ──
+  ctx.fillStyle = "#2a1a0a";
+  ctx.beginPath();
+  ctx.ellipse(0, headY - headR * 0.65, headR * 0.85, headR * 0.35, 0, Math.PI, 0);
+  ctx.fill();
+  // Spikes
+  const spikeCount = 5;
+  for (let i = 0; i < spikeCount; i++) {
+    const angle = Math.PI + (Math.PI * (i + 0.5)) / spikeCount;
+    const sx = Math.cos(angle) * headR * 0.9;
+    const sy = Math.sin(angle) * headR * 0.9 + headY;
+    const spikeH = T * 0.04 + Math.sin(i * 2.1) * T * 0.015;
+    ctx.beginPath();
+    ctx.moveTo(sx - T * 0.02, sy);
+    ctx.lineTo(sx, sy - spikeH);
+    ctx.lineTo(sx + T * 0.02, sy);
+    ctx.fill();
+  }
+
+  // ── Eyes (angry, looking at player) ──
+  const eyeSpacing = headR * 0.4;
+  const eyeY = headY + headR * 0.05;
+  const eyeW = T * 0.045;
+  const eyeH = T * 0.055;
+  const pupilOff = getEyeDir(enemy);
+
+  // Eye whites
   ctx.fillStyle = "#fff";
-  ctx.fillRect(x - eyeW * 2, y - T * 0.08, eyeW, eyeH);
-  ctx.fillRect(x + eyeW, y - T * 0.08, eyeW, eyeH);
-  // Pupils
-  const pupilOff = playerDir(enemy, frame);
+  ctx.beginPath();
+  ctx.roundRect(-eyeSpacing - eyeW / 2, eyeY - eyeH / 2, eyeW, eyeH, eyeW * 0.3);
+  ctx.roundRect(eyeSpacing - eyeW / 2, eyeY - eyeH / 2, eyeW, eyeH, eyeW * 0.3);
+  ctx.fill();
+
+  // Angry eyebrow angle
+  ctx.strokeStyle = "#2a1a0a";
+  ctx.lineWidth = Math.max(1.5, T * 0.02);
+  // Left brow (angled down toward center)
+  ctx.beginPath();
+  ctx.moveTo(-eyeSpacing - eyeW * 0.7, eyeY - eyeH * 0.9);
+  ctx.lineTo(-eyeSpacing + eyeW * 0.5, eyeY - eyeH * 1.1);
+  ctx.stroke();
+  // Right brow
+  ctx.beginPath();
+  ctx.moveTo(eyeSpacing + eyeW * 0.7, eyeY - eyeH * 0.9);
+  ctx.lineTo(eyeSpacing - eyeW * 0.5, eyeY - eyeH * 1.1);
+  ctx.stroke();
+
+  // Pupils (follow player)
   ctx.fillStyle = color;
-  ctx.fillRect(x - eyeW * 1.5 + pupilOff.x, y - T * 0.07 + pupilOff.y, eyeW * 0.6, eyeH * 0.6);
-  ctx.fillRect(x + eyeW * 1.5 + pupilOff.x, y - T * 0.07 + pupilOff.y, eyeW * 0.6, eyeH * 0.6);
+  const pupilR = eyeW * 0.35;
+  ctx.beginPath();
+  ctx.arc(-eyeSpacing + pupilOff.x, eyeY + pupilOff.y, pupilR, 0, Math.PI * 2);
+  ctx.arc(eyeSpacing + pupilOff.x, eyeY + pupilOff.y, pupilR, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── Nose ──
+  ctx.fillStyle = darkenColor(skin, 15);
+  ctx.beginPath();
+  ctx.arc(0, headY + headR * 0.2, headR * 0.12, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── Mouth (grumpy frown) ──
+  ctx.strokeStyle = darkenColor(skin, 45);
+  ctx.lineWidth = Math.max(1.5, T * 0.018);
+  ctx.beginPath();
+  ctx.arc(0, headY + headR * 0.5, headR * 0.2, 0.1, Math.PI - 0.1);
+  ctx.stroke();
+
+  ctx.restore();
 }
 
-/** Fake direction for enemy eyes based on movement. */
-function playerDir(enemy: Enemy, _frame: number): { x: number; y: number } {
+/** Get pupil offset toward the player for CHUB's eyes. */
+function getEyeDir(enemy: Enemy): { x: number; y: number } {
   const dx = (enemy.targetPixelPos?.x ?? 0) - enemy.pixelPos.x;
   const dy = (enemy.targetPixelPos?.y ?? 0) - enemy.pixelPos.y;
   const len = Math.sqrt(dx * dx + dy * dy) || 1;
   return { x: (dx / len) * 1.5, y: (dy / len) * 1.5 };
+}
+
+/** Lighten a hex color by a percentage. */
+function lightenColor(hex: string, pct: number): string {
+  const num = parseInt(hex.slice(1), 16);
+  const r = Math.min(255, ((num >> 16) & 255) + pct);
+  const g = Math.min(255, ((num >> 8) & 255) + pct);
+  const b = Math.min(255, (num & 255) + pct);
+  return `rgb(${r},${g},${b})`;
+}
+
+/** Darken a hex color by a percentage. */
+function darkenColor(hex: string, pct: number): string {
+  const num = parseInt(hex.slice(1), 16);
+  const r = Math.max(0, ((num >> 16) & 255) - pct);
+  const g = Math.max(0, ((num >> 8) & 255) - pct);
+  const b = Math.max(0, (num & 255) - pct);
+  return `rgb(${r},${g},${b})`;
 }
 
 /**
