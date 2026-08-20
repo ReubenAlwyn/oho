@@ -12,8 +12,34 @@ import {
 import type { MazeGrid } from "./maze";
 import type { Player, Enemy, Shawarma, Particle } from "./types";
 
+// Character images for canvas rendering
+import boyImgSrc from "../assets/boy.png";
+import girlImgSrc from "../assets/girl.png";
+
 let mazeBuffer: OffscreenCanvas | null = null;
 let mazeBufferRound = -1;
+
+// Preloaded character images
+let boyImg: HTMLImageElement | null = null;
+let girlImg: HTMLImageElement | null = null;
+let imagesLoaded = false;
+
+function loadCharacterImages() {
+  if (imagesLoaded) return;
+
+  boyImg = new Image();
+  boyImg.src = boyImgSrc;
+  boyImg.onload = () => {};
+
+  girlImg = new Image();
+  girlImg.src = girlImgSrc;
+  girlImg.onload = () => {};
+
+  imagesLoaded = true;
+}
+
+// Load images on module init
+loadCharacterImages();
 
 /**
  * Pre-render maze walls to an offscreen canvas for performance.
@@ -42,7 +68,7 @@ function drawMazeToBuffer(ctx: OffscreenCanvasRenderingContext2D, grid: MazeGrid
         ctx.fillStyle = COLORS.mazeWall;
         ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
-        // Neon edge glow — brighter for arcade feel
+        // Neon edge glow
         const hasTop = r > 0 && grid[r - 1][c] === 0;
         const hasBot = r < MAZE_ROWS - 1 && grid[r + 1][c] === 0;
         const hasLeft = c > 0 && grid[r][c - 1] === 0;
@@ -50,7 +76,6 @@ function drawMazeToBuffer(ctx: OffscreenCanvasRenderingContext2D, grid: MazeGrid
         const hasEdge = hasTop || hasBot || hasLeft || hasRight;
 
         if (hasEdge) {
-          // Inner glow
           ctx.fillStyle = COLORS.mazeWallEdge;
           ctx.globalAlpha = 0.5;
           if (hasTop) ctx.fillRect(x, y, TILE_SIZE, 3);
@@ -58,7 +83,6 @@ function drawMazeToBuffer(ctx: OffscreenCanvasRenderingContext2D, grid: MazeGrid
           if (hasLeft) ctx.fillRect(x, y, 3, TILE_SIZE);
           if (hasRight) ctx.fillRect(x + TILE_SIZE - 3, y, 3, TILE_SIZE);
 
-          // Outer glow (wider, more transparent)
           ctx.globalAlpha = 0.12;
           if (hasTop) ctx.fillRect(x - 2, y - 2, TILE_SIZE + 4, 5);
           if (hasBot) ctx.fillRect(x - 2, y + TILE_SIZE - 3, TILE_SIZE + 4, 5);
@@ -95,71 +119,95 @@ function drawGlow(
 }
 
 /**
- * Draw the player character.
+ * Draw a circular clip of an image.
+ */
+function drawCircularImage(
+  ctx: CanvasRenderingContext2D,
+  img: HTMLImageElement,
+  cx: number,
+  cy: number,
+  radius: number
+) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.closePath();
+  ctx.clip();
+
+  // Draw image centered and scaled to fill the circle
+  const imgSize = radius * 2;
+  ctx.drawImage(img, cx - radius, cy - radius, imgSize, imgSize);
+
+  ctx.restore();
+
+  // Border ring
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.strokeStyle = "rgba(255,255,255,0.3)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+/**
+ * Draw the player character using their photo.
  */
 function drawPlayer(
   ctx: CanvasRenderingContext2D,
   player: Player,
-  frame: number
+  _frame: number
 ) {
   const x = player.pixelPos.x + TILE_SIZE / 2;
   const y = player.pixelPos.y + TILE_SIZE / 2;
 
   // Invincibility flash
-  if (player.invincible && Math.floor(frame / 4) % 2 === 0) return;
+  if (player.invincible && Math.floor(_frame / 4) % 2 === 0) return;
+
+  const glowColor = player.type === "boy" ? COLORS.player : COLORS.neonPurple;
+  const radius = TILE_SIZE * 0.55;
 
   // Glow
-  drawGlow(ctx, x, y, TILE_SIZE * 0.8, player.type === "boy" ? COLORS.player : COLORS.neonPurple, 0.4);
+  drawGlow(ctx, x, y, TILE_SIZE * 0.9, glowColor, 0.5);
 
-  // Body
-  const bodyColor = player.type === "boy" ? "#00ccff" : "#c850ff";
-  const size = TILE_SIZE * 0.4;
-
-  // Simple pixel character
-  ctx.fillStyle = bodyColor;
-
-  // Head
-  ctx.beginPath();
-  ctx.arc(x, y - 3, size * 0.65, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Body
-  ctx.fillRect(x - size * 0.4, y + 1, size * 0.8, size * 0.7);
-
-  // Eyes
-  ctx.fillStyle = "#fff";
-  const eyeOffsetX = player.direction === "left" ? -3 : player.direction === "right" ? 3 : 0;
-  const eyeOffsetY = player.direction === "up" ? -2 : 0;
-  ctx.fillRect(x - 3 + eyeOffsetX, y - 5 + eyeOffsetY, 2, 2);
-  ctx.fillRect(x + 1 + eyeOffsetX, y - 5 + eyeOffsetY, 2, 2);
+  // Character photo
+  const img = player.type === "boy" ? boyImg : girlImg;
+  if (img && img.complete && img.naturalWidth > 0) {
+    drawCircularImage(ctx, img, x, y, radius);
+  } else {
+    // Fallback: solid colored circle if image hasn't loaded yet
+    ctx.fillStyle = player.type === "boy" ? "#00ccff" : "#c850ff";
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
   // Direction indicator (small arrow)
   ctx.fillStyle = "#fff";
-  ctx.globalAlpha = 0.6;
+  ctx.globalAlpha = 0.7;
   const arrowSize = 3;
+  const size = TILE_SIZE * 0.4;
   if (player.direction === "up") {
     ctx.beginPath();
-    ctx.moveTo(x, y - size - 4);
-    ctx.lineTo(x - arrowSize, y - size);
-    ctx.lineTo(x + arrowSize, y - size);
+    ctx.moveTo(x, y - size - 6);
+    ctx.lineTo(x - arrowSize, y - size - 2);
+    ctx.lineTo(x + arrowSize, y - size - 2);
     ctx.fill();
   } else if (player.direction === "down") {
     ctx.beginPath();
-    ctx.moveTo(x, y + size + 4);
-    ctx.lineTo(x - arrowSize, y + size);
-    ctx.lineTo(x + arrowSize, y + size);
+    ctx.moveTo(x, y + size + 6);
+    ctx.lineTo(x - arrowSize, y + size + 2);
+    ctx.lineTo(x + arrowSize, y + size + 2);
     ctx.fill();
   } else if (player.direction === "left") {
     ctx.beginPath();
-    ctx.moveTo(x - size - 4, y);
-    ctx.lineTo(x - size, y - arrowSize);
-    ctx.lineTo(x - size, y + arrowSize);
+    ctx.moveTo(x - size - 6, y);
+    ctx.lineTo(x - size - 2, y - arrowSize);
+    ctx.lineTo(x - size - 2, y + arrowSize);
     ctx.fill();
   } else {
     ctx.beginPath();
-    ctx.moveTo(x + size + 4, y);
-    ctx.lineTo(x + size, y - arrowSize);
-    ctx.lineTo(x + size, y + arrowSize);
+    ctx.moveTo(x + size + 6, y);
+    ctx.lineTo(x + size + 2, y - arrowSize);
+    ctx.lineTo(x + size + 2, y + arrowSize);
     ctx.fill();
   }
   ctx.globalAlpha = 1;

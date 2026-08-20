@@ -14,21 +14,6 @@ interface GameEngineOptions {
   onGameOver: (score: number, round: number) => void;
 }
 
-interface Keys {
-  ArrowUp: boolean;
-  ArrowDown: boolean;
-  ArrowLeft: boolean;
-  ArrowRight: boolean;
-  w: boolean;
-  s: boolean;
-  a: boolean;
-  d: boolean;
-  W: boolean;
-  S: boolean;
-  A: boolean;
-  D: boolean;
-}
-
 export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | null>, options: GameEngineOptions) {
   const { character, onGameOver } = options;
 
@@ -42,11 +27,8 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
   const scoreRef = useRef(0);
   const roundRef = useRef(1);
   const frameRef = useRef(0);
-  const keysRef = useRef<Keys>({
-    ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
-    w: false, s: false, a: false, d: false,
-    W: false, S: false, A: false, D: false,
-  });
+  // Tap-to-run: persistent direction that stays active until changed
+  const pendingDirectionRef = useRef<Direction | null>(null);
   const shakeRef = useRef({ x: 0, y: 0, intensity: 0 });
   const transitionTimerRef = useRef(0);
   const transitionTextRef = useRef("");
@@ -63,7 +45,6 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     gridRef.current = grid;
     resetMazeBuffer();
 
-    // Place player at top-left open area
     const startRow = 1;
     const startCol = 1;
 
@@ -79,6 +60,7 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       invincibleTimer: INVINCIBLE_DURATION,
     };
     playerRef.current = player;
+    pendingDirectionRef.current = null;
 
     // Place shawarmas
     const shawarmaCount = MIN_SHAWARMAS + Math.floor(Math.random() * (MAX_SHAWARMAS - MIN_SHAWARMAS + 1));
@@ -125,10 +107,8 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     player.invincible = true;
     player.invincibleTimer = INVINCIBLE_DURATION;
 
-    // Screen shake
     shakeRef.current = { x: 0, y: 0, intensity: 10 };
 
-    // Hit particles
     particlesRef.current.push(
       ...createHitParticles(
         player.pixelPos.x + TILE_SIZE / 2,
@@ -136,7 +116,6 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       )
     );
 
-    // Check game over
     if (player.lives <= 0) {
       gameStateRef.current = "game-over";
       setTimeout(() => {
@@ -162,7 +141,7 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     if (dist < speed) {
       pixelPos.x = targetPos.x;
       pixelPos.y = targetPos.y;
-      return true; // arrived
+      return true;
     }
 
     pixelPos.x += (dx / dist) * speed;
@@ -170,9 +149,6 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     return false;
   };
 
-  /**
-   * Get tile position from pixel position.
-   */
   const pixelToTile = (px: number, py: number): { row: number; col: number } => ({
     row: Math.round(py / TILE_SIZE),
     col: Math.round(px / TILE_SIZE),
@@ -207,9 +183,17 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
         y: newRow * TILE_SIZE,
       };
     } else {
+      // Wall — just face that direction
       player.direction = dir;
     }
   };
+
+  /**
+   * Set a tap direction — the player will keep moving this way.
+   */
+  const setDirection = useCallback((dir: Direction) => {
+    pendingDirectionRef.current = dir;
+  }, []);
 
   /**
    * Main game update loop.
@@ -237,13 +221,11 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
         initRound(roundRef.current);
         setHudState({ score: scoreRef.current, round: roundRef.current, lives: player.lives });
       }
-      // Still render during transition
       renderFrame(
         ctx, gridRef.current, player, enemiesRef.current, shawarmasRef.current,
         particlesRef.current, scoreRef.current, roundRef.current, frame,
         shakeRef.current.x, shakeRef.current.y
       );
-      // Draw transition text
       ctx.fillStyle = "rgba(0,0,0,0.6)";
       ctx.fillRect(0, CANVAS_HEIGHT / 2 - 40, CANVAS_WIDTH, 80);
       ctx.fillStyle = "#c084fc";
@@ -264,12 +246,11 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       }
     }
 
-    // Input handling
-    const keys = keysRef.current;
-    if (keys.ArrowUp || keys.w || keys.W) startMove(player, "up");
-    else if (keys.ArrowDown || keys.s || keys.S) startMove(player, "down");
-    else if (keys.ArrowLeft || keys.a || keys.A) startMove(player, "left");
-    else if (keys.ArrowRight || keys.d || keys.D) startMove(player, "right");
+    // Tap-to-run: if there's a pending direction, try to move that way
+    const pendingDir = pendingDirectionRef.current;
+    if (pendingDir) {
+      startMove(player, pendingDir);
+    }
 
     // Move player
     if (player.moving) {
@@ -292,7 +273,6 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     for (const enemy of enemiesRef.current) {
       if (!enemy.active) continue;
 
-      // Move toward target
       if (enemy.moving === false) enemy.moving = true;
       const arrived = moveEntity(enemy.pixelPos, enemy.targetPixelPos, enemy.speed);
 
@@ -300,7 +280,6 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
         enemy.tilePos = pixelToTile(enemy.pixelPos.x, enemy.pixelPos.y);
         enemy.targetPixelPos = { ...enemy.pixelPos };
 
-        // Recalculate path periodically
         if (frame % ENEMY_CHASE_INTERVAL === enemy.id % ENEMY_CHASE_INTERVAL) {
           const dir = findPath(
             gridRef.current,
@@ -352,7 +331,6 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
         s.collected = true;
         scoreRef.current += SHAWARMA_SCORE;
 
-        // Collect particles
         particlesRef.current.push(
           ...createCollectParticles(
             s.tilePos.col * TILE_SIZE + TILE_SIZE / 2,
@@ -368,7 +346,7 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     if (allCollected && shawarmasRef.current.length > 0) {
       scoreRef.current += ROUND_COMPLETE_SCORE;
       gameStateRef.current = "round-transition";
-      transitionTimerRef.current = 120; // 2 seconds
+      transitionTimerRef.current = 120;
       transitionTextRef.current = `Round ${roundRef.current} Complete! +${ROUND_COMPLETE_SCORE}`;
       particlesRef.current.push(
         ...createRoundCompleteParticles(CANVAS_WIDTH, CANVAS_HEIGHT)
@@ -386,46 +364,64 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       shakeRef.current.x, shakeRef.current.y
     );
 
-    // Render dying state
     if (state === "dying") {
       ctx.fillStyle = "rgba(239,68,68,0.3)";
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     }
   }, [canvasRef, initRound, handlePlayerHit]);
 
-  /**
-   * Start the game.
-   */
   const startGame = useCallback(() => {
     scoreRef.current = 0;
     roundRef.current = 1;
     frameRef.current = 0;
+    pendingDirectionRef.current = null;
     gameStateRef.current = "playing";
     initRound(1);
     setHudState({ score: 0, round: 1, lives: PLAYER_START_LIVES });
   }, [initRound]);
 
   /**
-   * Set up keyboard input and game loop.
+   * Set up keyboard + touch input and game loop.
    */
   useEffect(() => {
+    // Tap-to-run: keydown sets direction persistently
     const handleKeyDown = (e: KeyboardEvent) => {
-      const key = e.key as keyof Keys;
-      if (key in keysRef.current) {
-        keysRef.current[key] = true;
+      const key = e.key;
+      let dir: Direction | null = null;
+      if (key === "ArrowUp" || key === "w" || key === "W") dir = "up";
+      else if (key === "ArrowDown" || key === "s" || key === "S") dir = "down";
+      else if (key === "ArrowLeft" || key === "a" || key === "A") dir = "left";
+      else if (key === "ArrowRight" || key === "d" || key === "D") dir = "right";
+
+      if (dir) {
         e.preventDefault();
+        pendingDirectionRef.current = dir;
       }
     };
 
-    const handleKeyUp = (e: KeyboardEvent) => {
-      const key = e.key as keyof Keys;
-      if (key in keysRef.current) {
-        keysRef.current[key] = false;
+    // Touch controls: tap a quadrant to set direction
+    const handleTouchStart = (e: TouchEvent) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const tx = touch.clientX;
+      const ty = touch.clientY;
+
+      // Determine direction based on which quadrant of the screen was tapped
+      const dx = tx - vw / 2;
+      const dy = ty - vh / 2;
+
+      // Use the axis with greater magnitude
+      if (Math.abs(dx) > Math.abs(dy)) {
+        pendingDirectionRef.current = dx > 0 ? "right" : "left";
+      } else {
+        pendingDirectionRef.current = dy > 0 ? "down" : "up";
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("touchstart", handleTouchStart, { passive: false });
 
     // Game loop
     const loop = () => {
@@ -436,13 +432,14 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener("touchstart", handleTouchStart);
       cancelAnimationFrame(animFrameRef.current);
     };
   }, [update]);
 
   return {
     startGame,
+    setDirection,
     hudState,
     gameState: gameStateRef.current,
   };

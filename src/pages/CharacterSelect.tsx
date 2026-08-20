@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import type { CharacterType } from "../game/types";
+import boyImg from "../assets/boy.png";
+import girlImg from "../assets/girl.png";
 
 interface CharacterSelectProps {
   onSelect: (character: CharacterType, name: string) => void;
@@ -17,6 +19,11 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
     }
   };
 
+  const characters: { type: CharacterType; label: string; img: string; glow: string; bg: string; border: string; badgeBg: string }[] = [
+    { type: "boy", label: "Boy", img: boyImg, glow: "rgba(0,204,255,0.3)", bg: "rgba(0,204,255,0.04)", border: "rgba(0,204,255,0.5)", badgeBg: "#00ccff" },
+    { type: "girl", label: "Girl", img: girlImg, glow: "rgba(200,80,255,0.3)", bg: "rgba(200,80,255,0.04)", border: "rgba(200,80,255,0.5)", badgeBg: "#c850ff" },
+  ];
+
   return (
     <div className="min-h-screen bg-[#06060e] flex flex-col items-center justify-center relative overflow-hidden scanlines">
       <div className="absolute inset-0 grid-bg" />
@@ -30,8 +37,8 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
         {/* Back button */}
         <motion.button
           onClick={onBack}
-          className="absolute top-6 left-6 neon-cyan opacity-40 hover:opacity-100 transition-opacity"
-          style={{ fontSize: "10px" }}
+          className="absolute top-8 left-6 neon-cyan opacity-40 hover:opacity-100 transition-opacity"
+          style={{ fontSize: "13px" }}
           whileHover={{ x: -4 }}
         >
           &larr; Back
@@ -54,75 +61,51 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          {/* Boy */}
-          <motion.button
-            onClick={() => setSelected("boy")}
-            className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-xl transition-all duration-300 border-2 ${
-              selected === "boy"
-                ? "shadow-[0_0_25px_rgba(0,204,255,0.3)] scale-105"
-                : "border-[#2a2a40] hover:border-[#00ccff]/30 hover:scale-[1.03]"
-            }`}
-            style={{
-              background: "rgba(0,204,255,0.04)",
-              borderColor: selected === "boy" ? "rgba(0,204,255,0.5)" : undefined,
-            }}
-            whileHover={{ y: -4 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            {selected === "boy" && (
-              <motion.div
-                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded bg-[#00ccff] text-[#06060e]"
-                layoutId="selected-badge"
-              >
-                P1
-              </motion.div>
-            )}
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex items-center justify-center bg-[#00ccff]/8 border border-[#00ccff]/15">
-              <div className="relative">
-                <div className="w-12 h-12 rounded-full bg-[#00ccff]/80 shadow-[0_0_15px_rgba(0,204,255,0.3)]" />
-                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-8 h-4 bg-[#00ccff]/50 rounded-t-full" />
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-[#00ccff]/60 rounded-b-lg" />
+          {characters.map((char) => (
+            <motion.button
+              key={char.type}
+              onClick={() => setSelected(char.type)}
+              className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-xl transition-all duration-300 border-2 ${
+                selected === char.type
+                  ? "scale-105"
+                  : "border-[#2a2a40] hover:scale-[1.03]"
+              }`}
+              style={{
+                background: char.bg,
+                borderColor: selected === char.type ? char.border : undefined,
+                boxShadow: selected === char.type ? `0 0 25px ${char.glow}` : undefined,
+              }}
+              whileHover={{ y: -4 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              {selected === char.type && (
+                <motion.div
+                  className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded text-[#06060e]"
+                  style={{ backgroundColor: char.badgeBg }}
+                  layoutId="selected-badge"
+                >
+                  P1
+                </motion.div>
+              )}
+              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden border-2 border-[#2a2a40] bg-[#0e0e1a]">
+                <img
+                  src={char.img}
+                  alt={char.label}
+                  className="w-full h-full object-cover"
+                  style={{
+                    filter: selected === char.type
+                      ? `drop-shadow(0 0 12px ${char.glow})`
+                      : "none",
+                  }}
+                />
               </div>
-            </div>
-            <span className="text-sm neon-cyan">
-              Boy
-            </span>
-          </motion.button>
-
-          {/* Girl */}
-          <motion.button
-            onClick={() => setSelected("girl")}
-            className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-xl transition-all duration-300 border-2 ${
-              selected === "girl"
-                ? "shadow-[0_0_25px_rgba(200,80,255,0.3)] scale-105"
-                : "border-[#2a2a40] hover:border-[#c850ff]/30 hover:scale-[1.03]"
-            }`}
-            style={{
-              background: "rgba(200,80,255,0.04)",
-              borderColor: selected === "girl" ? "rgba(200,80,255,0.5)" : undefined,
-            }}
-            whileHover={{ y: -4 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            {selected === "girl" && (
-              <motion.div
-                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded bg-[#c850ff] text-[#06060e]"
-                layoutId="selected-badge"
+              <span
+                className={`text-sm ${char.type === "boy" ? "neon-cyan" : "neon-purple"}`}
               >
-                P1
-              </motion.div>
-            )}
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex items-center justify-center bg-[#c850ff]/8 border border-[#c850ff]/15">
-              <div className="relative">
-                <div className="w-12 h-12 rounded-full bg-[#c850ff]/80 shadow-[0_0_15px_rgba(200,80,255,0.3)]" />
-                <div className="absolute -top-2 -left-1 w-14 h-6 bg-[#c850ff]/50 rounded-t-full" />
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-[#c850ff]/60 rounded-b-lg" />
-              </div>
-            </div>
-            <span className="text-sm neon-purple">
-              Girl
-            </span>
-          </motion.button>
+                {char.label}
+              </span>
+            </motion.button>
+          ))}
         </motion.div>
 
         {/* Name input */}
