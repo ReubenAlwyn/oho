@@ -34,18 +34,24 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
     <div className="min-h-screen bg-[#06060e] flex flex-col relative overflow-hidden scanlines">
       <div className="absolute inset-0 grid-bg" />
 
+      {/* Back button — top left, big and clear */}
+      <motion.button
+        onClick={onBack}
+        className="absolute top-8 left-8 z-10 flex items-center gap-3 px-6 py-3 rounded-xl border-2 border-[#00ccff]/30 bg-[#00ccff]/5 text-[#00ccff] hover:bg-[#00ccff]/15 hover:border-[#00ccff]/60 transition-all"
+        style={{ fontSize: "18px" }}
+        whileHover={{ x: -4, boxShadow: "0 0 20px rgba(0,204,255,0.2)" }}
+        whileTap={{ scale: 0.97 }}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.3, duration: 0.4 }}
+      >
+        <span style={{ fontSize: "22px" }}>&larr;</span>
+        Back
+      </motion.button>
+
       <div className="relative z-10 flex flex-col h-full p-4 sm:p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 pt-2">
-          <motion.button
-            onClick={onBack}
-            className="neon-cyan opacity-40 hover:opacity-100 transition-opacity"
-            style={{ fontSize: "10px" }}
-            whileHover={{ x: -4 }}
-          >
-            &larr; Back
-          </motion.button>
-
           <motion.h1
             className="text-lg sm:text-xl neon-yellow"
             initial={{ y: -20, opacity: 0 }}
