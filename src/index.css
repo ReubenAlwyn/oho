@@ -89,7 +89,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    font-family: "Press Start 2P", monospace, system-ui !important;
+    font-family: "Silkscreen", monospace, system-ui !important;
   }
   body {
     @apply bg-background text-foreground;
@@ -99,7 +99,7 @@
     cursor: pointer;
   }
   input, textarea, select {
-    font-family: "Press Start 2P", monospace, system-ui !important;
+    font-family: "Silkscreen", monospace, system-ui !important;
   }
 }
 
@@ -189,8 +189,8 @@
 
 /* Pixel button base */
 .pixel-btn {
-  font-family: "Press Start 2P", monospace, system-ui;
-  font-size: 12px;
+  font-family: "Silkscreen", monospace, system-ui;
+  font-size: 14px;
   padding: 14px 28px;
   border-radius: 4px;
   border: 2px solid;
