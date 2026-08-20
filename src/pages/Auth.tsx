@@ -246,15 +246,6 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       </>
                     )}
                   </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={() => setStep("signIn")}
-                    disabled={isLoading}
-                    className="w-full text-[#6a6a8a] hover:text-[#e0e0f0] hover:bg-[#1a1a2e]"
-                  >
-                    Use a different email
-                  </Button>
                 </CardFooter>
               </form>
             </>
