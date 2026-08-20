@@ -8,7 +8,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router";
 import "./index.css";
 
-import shawarmaPixel from "./assets/shawarma-pixel.png";
+import shawarmaPixel from "./assets/shawarma-pixel.svg";
 
 // Lazy load route components
 const Landing = lazy(() => import("./pages/Landing"));

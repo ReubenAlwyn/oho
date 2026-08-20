@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { useNavigate } from "react-router";
-import shawarmaPixel from "../assets/shawarma-pixel.png";
+import shawarmaPixel from "../assets/shawarma-pixel.svg";
 
 const floatingShawarmas = [
   { x: "8%", y: "15%", size: 56, delay: 0, duration: 7, rotation: 12 },
