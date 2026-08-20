@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/input-otp";
 import { useAuth } from "@/hooks/use-auth";
 import { ArrowRight, Loader2, Mail, UserX } from "lucide-react";
-import shawarmaPixel from "../assets/shawarma-pixel.svg";
+import shawarmaPixel from "../assets/shawarma-pixel.png";
 import { Suspense, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 

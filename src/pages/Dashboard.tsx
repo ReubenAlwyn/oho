@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { LogOut, Trophy, Target, Flame, Play } from "lucide-react";
 import { getLeaderboard, formatScore, formatDate } from "@/game/leaderboard";
 import type { ScoreEntry } from "@/game/types";
-import shawarmaPixel from "../assets/shawarma-pixel.svg";
+import shawarmaPixel from "../assets/shawarma-pixel.png";
 
 export default function Dashboard() {
   const { user, signOut } = useAuth();
