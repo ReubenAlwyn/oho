@@ -8,7 +8,7 @@ import type { ScoreEntry } from "@/game/types";
 import shawarmaPixel from "../assets/shawarma-pixel.png";
 
 export default function Dashboard() {
-  const { user, signOut } = useAuth();
+  const { user, isAuthenticated, signOut } = useAuth();
   const navigate = useNavigate();
   const [bestScore, setBestScore] = useState(0);
   const [bestRound, setBestRound] = useState(0);
@@ -51,16 +51,35 @@ export default function Dashboard() {
             </span>
           </motion.button>
           <div className="flex items-center gap-4">
-            <div className="w-8 h-8 rounded-lg bg-[#c850ff]/15 border border-[#c850ff]/20 flex items-center justify-center text-[#c850ff] text-sm">
-              {initials}
-            </div>
-            <button
-              onClick={handleSignOut}
-              className="flex items-center gap-1.5 text-xs text-[#6a6a8a] hover:text-[#e0e0f0] transition-colors"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              Sign out
-            </button>
+            {isAuthenticated ? (
+              <>
+                <div className="w-8 h-8 rounded-lg bg-[#c850ff]/15 border border-[#c850ff]/20 flex items-center justify-center text-[#c850ff] text-sm">
+                  {initials}
+                </div>
+                <button
+                  onClick={handleSignOut}
+                  className="flex items-center gap-1.5 text-xs text-[#6a6a8a] hover:text-[#e0e0f0] transition-colors"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="w-8 h-8 rounded-lg bg-[#2a2a40]/50 border border-[#3a3a52] flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6a6a8a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                <button
+                  onClick={() => navigate("/auth?returnTo=/dashboard")}
+                  className="text-xs text-[#6a6a8a] hover:text-[#c850ff] transition-colors"
+                >
+                  Sign in
+                </button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -79,6 +98,26 @@ export default function Dashboard() {
             Ready to run?
           </h1>
         </motion.div>
+
+        {/* Guest banner */}
+        {!isAuthenticated && (
+          <motion.div
+            className="mt-4 rounded-lg px-4 py-3 flex items-center justify-between border border-[#ffdd00]/20 bg-[#ffdd00]/5"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <p className="text-xs" style={{ color: "#ffdd00" }}>
+              Playing as guest — scores won&apos;t be saved
+            </p>
+            <button
+              onClick={() => navigate("/auth?returnTo=/dashboard")}
+              className="text-[10px] px-3 py-1.5 rounded bg-[#c850ff]/15 border border-[#c850ff]/30 text-[#c850ff] hover:bg-[#c850ff]/25 transition-colors"
+            >
+              Sign in
+            </button>
+          </motion.div>
+        )}
 
         {/* Play button */}
         <motion.div

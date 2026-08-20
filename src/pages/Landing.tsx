@@ -18,7 +18,7 @@ export default function Landing() {
   const navigate = useNavigate();
 
   const handlePlay = () => {
-    navigate("/game");
+    navigate("/entry");
   };
 
   return (

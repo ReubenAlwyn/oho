@@ -12,6 +12,7 @@ import shawarmaPixel from "./assets/shawarma-pixel.png";
 
 // Lazy load route components
 const Landing = lazy(() => import("./pages/Landing"));
+const Entry = lazy(() => import("./pages/Entry"));
 const AuthPage = lazy(() => import("./pages/Auth"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const GameApp = lazy(() => import("./App"));
@@ -68,10 +69,10 @@ createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           <RouteSyncer />
           <Suspense fallback={<RouteLoading />}>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-            <Route
-              path="/auth"
+            <Routes>              <Route path="/" element={<Landing />} />
+              <Route path="/entry" element={<Entry />} />
+              <Route
+                path="/auth"
               element={<AuthPage />}
             />
               <Route
@@ -84,11 +85,7 @@ createRoot(document.getElementById("root")!).render(
               />
               <Route
                 path="/game"
-                element={
-                  <RequireAuth>
-                    <GameApp />
-                  </RequireAuth>
-                }
+                element={<GameApp />}
               />
               <Route path="*" element={<NotFound />} />
             </Routes>
