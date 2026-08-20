@@ -18,6 +18,7 @@ export default function Entry() {
   };
 
   const handleGuest = () => {
+    localStorage.setItem("force-guest-ts", Date.now().toString());
     navigate("/game");
   };
 

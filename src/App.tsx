@@ -86,7 +86,10 @@ export default function App() {
             <GameScreen
               character={character}
               onGameOver={handleGameOver}
-              onMainMenu={() => navigate("/dashboard")}
+              onMainMenu={() => {
+                if (!isAuthenticated) localStorage.setItem("force-guest-ts", Date.now().toString());
+                navigate("/dashboard");
+              }}
               onLeaderboard={() => setScreen("leaderboard")}
             />
           </motion.div>
@@ -106,7 +109,10 @@ export default function App() {
               character={character}
               playerName={playerName}
               onPlayAgain={handlePlayAgain}
-              onMainMenu={() => navigate("/dashboard")}
+              onMainMenu={() => {
+                if (!isAuthenticated) localStorage.setItem("force-guest-ts", Date.now().toString());
+                navigate("/dashboard");
+              }}
               onLeaderboard={() => setScreen("leaderboard")}
               isAuthenticated={isAuthenticated}
             />
