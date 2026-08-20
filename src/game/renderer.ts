@@ -12,33 +12,35 @@ import {
 import type { MazeGrid } from "./maze";
 import type { Player, Enemy, Shawarma, Particle } from "./types";
 
-// Character images for canvas rendering
-import boyImgSrc from "../assets/boy.png";
-import girlImgSrc from "../assets/girl.png";
-
 let mazeBuffer: OffscreenCanvas | null = null;
 let mazeBufferRound = -1;
 
-// Preloaded character images
+// ─── Character images (loaded dynamically, graceful fallback) ───
 let boyImg: HTMLImageElement | null = null;
 let girlImg: HTMLImageElement | null = null;
 let imagesLoaded = false;
 
 function loadCharacterImages() {
   if (imagesLoaded) return;
-
-  boyImg = new Image();
-  boyImg.src = boyImgSrc;
-  boyImg.onload = () => {};
-
-  girlImg = new Image();
-  girlImg.src = girlImgSrc;
-  girlImg.onload = () => {};
-
   imagesLoaded = true;
+
+  try {
+    const boySrc = new URL("../assets/boy.png", import.meta.url).href;
+    boyImg = new Image();
+    boyImg.src = boySrc;
+  } catch {
+    /* boy.png not yet added */
+  }
+
+  try {
+    const girlSrc = new URL("../assets/girl.png", import.meta.url).href;
+    girlImg = new Image();
+    girlImg.src = girlSrc;
+  } catch {
+    /* girl.png not yet added */
+  }
 }
 
-// Load images on module init
 loadCharacterImages();
 
 /**
@@ -134,7 +136,6 @@ function drawCircularImage(
   ctx.closePath();
   ctx.clip();
 
-  // Draw image centered and scaled to fill the circle
   const imgSize = radius * 2;
   ctx.drawImage(img, cx - radius, cy - radius, imgSize, imgSize);
 
@@ -149,7 +150,14 @@ function drawCircularImage(
 }
 
 /**
- * Draw the player character using their photo.
+ * Check if an image element has loaded successfully.
+ */
+function imgReady(img: HTMLImageElement | null): img is HTMLImageElement {
+  return img !== null && img.complete && img.naturalWidth > 0;
+}
+
+/**
+ * Draw the player character using their photo (with colored circle fallback).
  */
 function drawPlayer(
   ctx: CanvasRenderingContext2D,
@@ -168,15 +176,23 @@ function drawPlayer(
   // Glow
   drawGlow(ctx, x, y, TILE_SIZE * 0.9, glowColor, 0.5);
 
-  // Character photo
+  // Character photo or fallback
   const img = player.type === "boy" ? boyImg : girlImg;
-  if (img && img.complete && img.naturalWidth > 0) {
+  const fallbackColor = player.type === "boy" ? "#00ccff" : "#c850ff";
+
+  if (imgReady(img)) {
     drawCircularImage(ctx, img, x, y, radius);
   } else {
-    // Fallback: solid colored circle if image hasn't loaded yet
-    ctx.fillStyle = player.type === "boy" ? "#00ccff" : "#c850ff";
+    // Fallback: solid colored circle with inner detail
+    ctx.fillStyle = fallbackColor;
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Inner highlight
+    ctx.fillStyle = "rgba(255,255,255,0.2)";
+    ctx.beginPath();
+    ctx.arc(x - 2, y - 3, radius * 0.4, 0, Math.PI * 2);
     ctx.fill();
   }
 
@@ -238,7 +254,6 @@ function drawEnemy(
   ctx.fillStyle = color;
   ctx.beginPath();
   ctx.arc(x, y - 2, size * 0.7, Math.PI, 0);
-  // Wavy bottom
   const wave = Math.sin(frame * 0.15 + enemy.id) * 2;
   ctx.lineTo(x + size * 0.7, y + size * 0.5 + wave);
   ctx.quadraticCurveTo(x + size * 0.35, y + size * 0.3, x, y + size * 0.5 - wave);
@@ -272,7 +287,7 @@ function drawShawarma(
   // Glow
   drawGlow(ctx, x, y + bob, TILE_SIZE * 0.5, COLORS.shawarmaGlow, 0.4);
 
-  // Shawarma body (wrap shape)
+  // Shawarma body
   ctx.fillStyle = "#fbbf24";
   ctx.beginPath();
   ctx.ellipse(x, y + bob, 6, 8, 0, 0, Math.PI * 2);

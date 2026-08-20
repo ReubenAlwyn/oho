@@ -1,17 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import type { CharacterType } from "../game/types";
-import boyImg from "../assets/boy.png";
-import girlImg from "../assets/girl.png";
 
 interface CharacterSelectProps {
   onSelect: (character: CharacterType, name: string) => void;
   onBack: () => void;
 }
 
+// Try importing images — fall back to empty strings if they don't exist
+let boyImgSrc = "";
+let girlImgSrc = "";
+try {
+  boyImgSrc = new URL("../assets/boy.png", import.meta.url).href;
+} catch { /* no image yet */ }
+try {
+  girlImgSrc = new URL("../assets/girl.png", import.meta.url).href;
+} catch { /* no image yet */ }
+
+// Preload images
+const boyImg = new Image();
+const girlImg = new Image();
+if (boyImgSrc) boyImg.src = boyImgSrc;
+if (girlImgSrc) girlImg.src = girlImgSrc;
+
 export default function CharacterSelect({ onSelect, onBack }: CharacterSelectProps) {
   const [selected, setSelected] = useState<CharacterType | null>(null);
   const [name, setName] = useState("");
+  const [boyReady, setBoyReady] = useState(boyImg.complete && boyImg.naturalWidth > 0);
+  const [girlReady, setGirlReady] = useState(girlImg.complete && girlImg.naturalWidth > 0);
+
+  useEffect(() => {
+    if (boyImgSrc && !boyImg.complete) {
+      boyImg.onload = () => setBoyReady(true);
+    }
+    if (girlImgSrc && !girlImg.complete) {
+      girlImg.onload = () => setGirlReady(true);
+    }
+  }, []);
 
   const handleConfirm = () => {
     if (selected && name.trim()) {
@@ -19,9 +44,21 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
     }
   };
 
-  const characters: { type: CharacterType; label: string; img: string; glow: string; bg: string; border: string; badgeBg: string }[] = [
-    { type: "boy", label: "Boy", img: boyImg, glow: "rgba(0,204,255,0.3)", bg: "rgba(0,204,255,0.04)", border: "rgba(0,204,255,0.5)", badgeBg: "#00ccff" },
-    { type: "girl", label: "Girl", img: girlImg, glow: "rgba(200,80,255,0.3)", bg: "rgba(200,80,255,0.04)", border: "rgba(200,80,255,0.5)", badgeBg: "#c850ff" },
+  interface CharDef {
+    type: CharacterType;
+    label: string;
+    imgSrc: string;
+    imgReady: boolean;
+    glow: string;
+    bg: string;
+    border: string;
+    badgeBg: string;
+    fallbackColor: string;
+  }
+
+  const characters: CharDef[] = [
+    { type: "boy", label: "Boy", imgSrc: boyImgSrc, imgReady: boyReady, glow: "rgba(0,204,255,0.3)", bg: "rgba(0,204,255,0.04)", border: "rgba(0,204,255,0.5)", badgeBg: "#00ccff", fallbackColor: "#00ccff" },
+    { type: "girl", label: "Girl", imgSrc: girlImgSrc, imgReady: girlReady, glow: "rgba(200,80,255,0.3)", bg: "rgba(200,80,255,0.04)", border: "rgba(200,80,255,0.5)", badgeBg: "#c850ff", fallbackColor: "#c850ff" },
   ];
 
   return (
@@ -88,16 +125,30 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
                 </motion.div>
               )}
               <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden border-2 border-[#2a2a40] bg-[#0e0e1a]">
-                <img
-                  src={char.img}
-                  alt={char.label}
-                  className="w-full h-full object-cover"
-                  style={{
-                    filter: selected === char.type
-                      ? `drop-shadow(0 0 12px ${char.glow})`
-                      : "none",
-                  }}
-                />
+                {char.imgReady && char.imgSrc ? (
+                  <img
+                    src={char.imgSrc}
+                    alt={char.label}
+                    className="w-full h-full object-cover"
+                    style={{
+                      filter: selected === char.type
+                        ? `drop-shadow(0 0 12px ${char.glow})`
+                        : "none",
+                    }}
+                  />
+                ) : (
+                  // Fallback placeholder
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div
+                      className="w-16 h-16 rounded-full"
+                      style={{
+                        backgroundColor: char.fallbackColor,
+                        opacity: 0.7,
+                        boxShadow: selected === char.type ? `0 0 20px ${char.glow}` : "none",
+                      }}
+                    />
+                  </div>
+                )}
               </div>
               <span
                 className={`text-sm ${char.type === "boy" ? "neon-cyan" : "neon-purple"}`}
