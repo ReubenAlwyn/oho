@@ -36,7 +36,8 @@ export default function Dashboard() {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate("/");
+    // Hard reload to fully clear Convex auth state
+    window.location.href = "/";
   };
 
   const displayName = user?.name || "Player";

@@ -5,10 +5,10 @@ import shawarmaPixel from "../assets/shawarma-pixel.png";
 
 export default function Entry() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
-  // If already signed in, go straight to game
-  if (isAuthenticated) {
+  // If already signed in with a valid user, go straight to game
+  if (isAuthenticated && user) {
     navigate("/game", { replace: true });
     return null;
   }
