@@ -42,7 +42,7 @@ export default function GameScreen({ character, onGameOver }: GameScreenProps) {
     <div className="fixed inset-0 bg-[#06060e] flex items-center justify-center overflow-hidden z-50">
       {/* Subtle background glow */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#ff6b2b]/5 rounded-full blur-[100px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#c850ff]/5 rounded-full blur-[100px]" />
       </div>
 
       {/* Canvas */}
@@ -54,8 +54,8 @@ export default function GameScreen({ character, onGameOver }: GameScreenProps) {
         style={{
           imageRendering: "pixelated",
           boxShadow:
-            "0 0 2px rgba(255,107,43,0.4), 0 0 20px rgba(255,107,43,0.15), 0 0 60px rgba(255,107,43,0.06)",
-          border: "2px solid rgba(255,107,43,0.25)",
+            "0 0 2px rgba(200,80,255,0.4), 0 0 20px rgba(200,80,255,0.15), 0 0 60px rgba(200,80,255,0.06)",
+          border: "2px solid rgba(200,80,255,0.25)",
         }}
       />
     </div>

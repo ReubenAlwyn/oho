@@ -46,12 +46,12 @@ export default function Dashboard() {
             whileHover={{ scale: 1.05 }}
           >
             <img src={shawarmaPixel} alt="" className="w-5" style={{ imageRendering: "pixelated", height: "auto" }} />
-            <span className="neon-orange" style={{ fontSize: "12px" }}>
+            <span className="neon-cyan" style={{ fontSize: "12px" }}>
               OHO
             </span>
           </motion.button>
           <div className="flex items-center gap-4">
-            <div className="w-8 h-8 rounded-lg bg-[#ff6b2b]/15 border border-[#ff6b2b]/20 flex items-center justify-center text-[#ff6b2b] text-sm">
+            <div className="w-8 h-8 rounded-lg bg-[#c850ff]/15 border border-[#c850ff]/20 flex items-center justify-center text-[#c850ff] text-sm">
               {initials}
             </div>
             <button
@@ -75,7 +75,7 @@ export default function Dashboard() {
           <p className="text-xs text-[#6a6a8a] mb-2">
             {user?.name ? `${user.name}, ` : ""}the maze is calling
           </p>
-          <h1 className="text-2xl sm:text-3xl tracking-tight neon-orange">
+          <h1 className="text-2xl sm:text-3xl tracking-tight neon-purple">
             Ready to run?
           </h1>
         </motion.div>
@@ -89,8 +89,8 @@ export default function Dashboard() {
         >
           <motion.button
             onClick={() => navigate("/game")}
-            className="pixel-btn bg-[#ff6b2b] border-[#ff6b2b] text-[#06060e] flex items-center gap-3"
-            whileHover={{ boxShadow: "0 0 30px rgba(255,107,43,0.5), 0 0 60px rgba(255,107,43,0.25)" }}
+            className="pixel-btn bg-[#c850ff] border-[#c850ff] text-[#06060e] flex items-center gap-3"
+            whileHover={{ boxShadow: "0 0 30px rgba(200,80,255,0.5), 0 0 60px rgba(200,80,255,0.25)" }}
             whileTap={{ scale: 0.94 }}
           >
             <Play className="w-5 h-5 fill-current" />
@@ -106,7 +106,7 @@ export default function Dashboard() {
           transition={{ delay: 0.2, duration: 0.4 }}
         >
           <motion.div
-            className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-5 flex flex-col items-center text-center neon-box-orange interactive-card"
+            className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-5 flex flex-col items-center text-center neon-box-purple interactive-card"
             whileHover={{ y: -3 }}
           >
             <div className="w-10 h-10 rounded-lg bg-[#ffdd00]/10 border border-[#ffdd00]/20 flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(255,221,0,0.1)]">
@@ -121,10 +121,10 @@ export default function Dashboard() {
             className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-5 flex flex-col items-center text-center interactive-card"
             whileHover={{ y: -3 }}
           >
-            <div className="w-10 h-10 rounded-lg bg-[#c850ff]/10 border border-[#c850ff]/20 flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(200,80,255,0.1)]">
-              <Target className="w-5 h-5 text-[#c850ff]" />
+            <div className="w-10 h-10 rounded-lg bg-[#00ccff]/10 border border-[#00ccff]/20 flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(0,204,255,0.1)]">
+              <Target className="w-5 h-5 text-[#00ccff]" />
             </div>
-            <p className="text-2xl neon-purple">
+            <p className="text-2xl neon-cyan">
               {bestRound || "\u2014"}
             </p>
             <p className="text-[10px] text-[#6a6a8a] mt-2">Best Round</p>
@@ -133,10 +133,10 @@ export default function Dashboard() {
             className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-5 flex flex-col items-center text-center interactive-card"
             whileHover={{ y: -3 }}
           >
-            <div className="w-10 h-10 rounded-lg bg-[#00ffaa]/10 border border-[#00ffaa]/20 flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(0,255,170,0.1)]">
-              <Flame className="w-5 h-5 text-[#00ffaa]" />
+            <div className="w-10 h-10 rounded-lg bg-[#c850ff]/10 border border-[#c850ff]/20 flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(200,80,255,0.1)]">
+              <Flame className="w-5 h-5 text-[#c850ff]" />
             </div>
-            <p className="text-2xl neon-green">
+            <p className="text-2xl neon-purple">
               {gamesPlayed}
             </p>
             <p className="text-[10px] text-[#6a6a8a] mt-2">Games Played</p>
@@ -150,7 +150,7 @@ export default function Dashboard() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.4 }}
         >
-          <h2 className="text-[10px] mb-4 neon-orange">
+          <h2 className="text-[10px] mb-4 neon-cyan">
             Recent Games
           </h2>
           {recentGames.length === 0 ? (
@@ -164,15 +164,15 @@ export default function Dashboard() {
               {recentGames.map((game) => (
                 <motion.div
                   key={game.id}
-                  className="interactive-card bg-[#0e0e1a] rounded-xl border border-[#2a2a40] px-5 py-3.5 flex items-center justify-between hover:border-[#ff6b2b]/30 transition-all cursor-default"
+                  className="interactive-card bg-[#0e0e1a] rounded-xl border border-[#2a2a40] px-5 py-3.5 flex items-center justify-between hover:border-[#c850ff]/30 transition-all cursor-default"
                   whileHover={{ x: 4 }}
                 >
                   <div className="flex items-center gap-3">
                     <span
                       className="text-[9px] px-1.5 py-0.5 rounded"
                       style={{
-                        background: game.character === "boy" ? "rgba(0,204,255,0.15)" : "rgba(255,51,102,0.15)",
-                        color: game.character === "boy" ? "#00ccff" : "#ff3366",
+                        background: game.character === "boy" ? "rgba(0,204,255,0.15)" : "rgba(200,80,255,0.15)",
+                        color: game.character === "boy" ? "#00ccff" : "#c850ff",
                       }}
                     >
                       {game.character === "boy" ? "Boy" : "Girl"}
@@ -184,7 +184,7 @@ export default function Dashboard() {
                       <p className="text-[10px] text-[#6a6a8a] mt-0.5">{formatDate(game.date)}</p>
                     </div>
                   </div>
-                  <span className="neon-orange" style={{ fontSize: "11px" }}>
+                  <span className="neon-yellow" style={{ fontSize: "11px" }}>
                     {formatScore(game.score)}
                   </span>
                 </motion.div>

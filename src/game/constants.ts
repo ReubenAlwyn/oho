@@ -22,25 +22,24 @@ export const ENEMY_CHASE_INTERVAL = 30; // frames between pathfinding recalculat
 export const MIN_SHAWARMAS = 8;
 export const MAX_SHAWARMAS = 15;
 
-// Colors — Neon arcade palette
+// Colors — Neon arcade palette (purple / cyan / yellow)
 export const COLORS = {
   mazeWall: "#111120",
-  mazeWallGlow: "#ff6b2b",
+  mazeWallGlow: "#c850ff",
   mazePath: "#08081a",
-  mazeWallEdge: "#ff6b2b",
+  mazeWallEdge: "#c850ff",
   player: "#00ccff",
   playerGlow: "#00eeff",
-  enemy: "#ff3366",
-  enemyGlow: "#ff5588",
-  shawarma: "#ff6b2b",
-  shawarmaGlow: "#ff8844",
+  enemy: "#c850ff",
+  enemyGlow: "#d070ff",
+  shawarma: "#ffdd00",
+  shawarmaGlow: "#ffee44",
   text: "#e0e0f0",
-  textShadow: "#ff6b2b",
-  coral: "#ff3366",
-  neonPink: "#ff3366",
+  textShadow: "#c850ff",
+  neonPink: "#c850ff",
   neonBlue: "#00ccff",
   neonGreen: "#00ffaa",
   neonPurple: "#c850ff",
   neonYellow: "#ffdd00",
-  neonOrange: "#ff6b2b",
+  neonOrange: "#c850ff",
 } as const;

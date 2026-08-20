@@ -106,7 +106,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           className="flex items-center gap-2 hover:opacity-70 transition-opacity"
         >
           <img src={shawarmaPixel} alt="" className="w-6" style={{ imageRendering: "pixelated", height: "auto" }} />
-          <span className="neon-orange" style={{ fontSize: "14px" }}>
+          <span className="neon-cyan" style={{ fontSize: "14px" }}>
             OHO
           </span>
         </button>
@@ -114,12 +114,12 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
 
       {/* Auth Content */}
       <div className="relative z-10 flex-1 flex items-center justify-center px-4">
-        <Card className="w-full max-w-[400px] bg-[#0e0e1a] border-[#2a2a40] shadow-[0_0_40px_rgba(255,107,43,0.08)]">
+        <Card className="w-full max-w-[400px] bg-[#0e0e1a] border-[#2a2a40] shadow-[0_0_40px_rgba(200,80,255,0.08)]">
           {step === "signIn" ? (
             <>
               <CardHeader className="text-center">
                 <div className="flex justify-center mb-2">
-                  <div className="w-14 h-14 rounded-xl bg-[#ff6b2b]/10 border border-[#ff6b2b]/20 flex items-center justify-center shadow-[0_0_15px_rgba(255,107,43,0.15)]">
+                  <div className="w-14 h-14 rounded-xl bg-[#c850ff]/10 border border-[#c850ff]/20 flex items-center justify-center shadow-[0_0_15px_rgba(200,80,255,0.15)]">
                     <img src={shawarmaPixel} alt="" className="w-8" style={{ imageRendering: "pixelated", height: "auto" }} />
                   </div>
                 </div>
@@ -137,7 +137,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                         name="email"
                         placeholder="name@example.com"
                         type="email"
-                        className="pl-9 bg-[#1a1a2e] border-[#2a2a40] text-[#e0e0f0] placeholder:text-[#3a3a52] focus:border-[#ff6b2b]/50 focus:shadow-[0_0_10px_rgba(255,107,43,0.15)]"
+                        className="pl-9 bg-[#1a1a2e] border-[#2a2a40] text-[#e0e0f0] placeholder:text-[#3a3a52] focus:border-[#c850ff]/50 focus:shadow-[0_0_10px_rgba(200,80,255,0.15)]"
                         disabled={isLoading}
                         required
                       />
@@ -147,7 +147,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       variant="outline"
                       size="icon"
                       disabled={isLoading}
-                      className="border-[#2a2a40] bg-[#1a1a2e] hover:bg-[#ff6b2b]/10 hover:border-[#ff6b2b]/40 text-[#e0e0f0]"
+                      className="border-[#2a2a40] bg-[#1a1a2e] hover:bg-[#c850ff]/10 hover:border-[#c850ff]/40 text-[#e0e0f0]"
                     >
                       {isLoading ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -221,7 +221,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     Didn&apos;t receive a code?{" "}
                     <Button
                       variant="link"
-                      className="p-0 h-auto text-[#ff6b2b] hover:text-[#ff6b2b]/80"
+                      className="p-0 h-auto text-[#c850ff] hover:text-[#c850ff]/80"
                       onClick={() => setStep("signIn")}
                     >
                       Try a different email
@@ -231,7 +231,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                 <CardFooter className="flex-col gap-2">
                   <Button
                     type="submit"
-                    className="w-full bg-[#ff6b2b] hover:bg-[#ff6b2b]/90 text-[#06060e] border-none shadow-[0_0_15px_rgba(255,107,43,0.2)]"
+                    className="w-full bg-[#c850ff] hover:bg-[#c850ff]/90 text-[#06060e] border-none shadow-[0_0_15px_rgba(200,80,255,0.2)]"
                     disabled={isLoading || otp.length !== 6}
                   >
                     {isLoading ? (

@@ -65,7 +65,7 @@ export default function Landing() {
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
           className="absolute w-[500px] h-[500px] rounded-full blur-[120px]"
-          style={{ background: "radial-gradient(circle, rgba(140,50,220,0.15) 0%, transparent 70%)", top: "-10%", right: "-10%" }}
+          style={{ background: "radial-gradient(circle, rgba(200,80,255,0.12) 0%, transparent 70%)", top: "-10%", right: "-10%" }}
           animate={{ scale: [1, 1.2, 1], opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -77,7 +77,7 @@ export default function Landing() {
         />
         <motion.div
           className="absolute w-[300px] h-[300px] rounded-full blur-[80px]"
-          style={{ background: "radial-gradient(circle, rgba(255,107,43,0.06) 0%, transparent 70%)", top: "40%", left: "30%" }}
+          style={{ background: "radial-gradient(circle, rgba(255,221,0,0.05) 0%, transparent 70%)", top: "40%", left: "30%" }}
           animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.7, 0.4] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
         />
@@ -91,13 +91,13 @@ export default function Landing() {
           onClick={() => navigate("/")}
         >
           <img src={shawarmaPixel} alt="" className="w-6" style={{ imageRendering: "pixelated", height: "auto" }} />
-          <span className="neon-orange" style={{ fontSize: "14px" }}>
+          <span className="neon-cyan" style={{ fontSize: "14px" }}>
             OHO
           </span>
         </motion.div>
         <motion.button
           onClick={handlePlay}
-          className="pixel-btn bg-transparent border-[#ff6b2b]/40 text-[#ff6b2b] hover:bg-[#ff6b2b]/15 hover:border-[#ff6b2b]/80"
+          className="pixel-btn bg-transparent border-[#00ccff]/40 text-[#00ccff] hover:bg-[#00ccff]/15 hover:border-[#00ccff]/80"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -120,9 +120,9 @@ export default function Landing() {
               style={{ fontSize: "clamp(48px, 10vw, 96px)" }}
               animate={{
                 filter: [
-                  "drop-shadow(0 0 12px rgba(168,85,255,0.6)) drop-shadow(0 0 30px rgba(168,85,255,0.3))",
-                  "drop-shadow(0 0 18px rgba(180,100,255,0.8)) drop-shadow(0 0 40px rgba(168,85,255,0.4))",
-                  "drop-shadow(0 0 12px rgba(168,85,255,0.6)) drop-shadow(0 0 30px rgba(168,85,255,0.3))",
+                  "drop-shadow(0 0 12px rgba(200,80,255,0.6)) drop-shadow(0 0 30px rgba(200,80,255,0.3))",
+                  "drop-shadow(0 0 18px rgba(200,80,255,0.8)) drop-shadow(0 0 40px rgba(200,80,255,0.4))",
+                  "drop-shadow(0 0 12px rgba(200,80,255,0.6)) drop-shadow(0 0 30px rgba(200,80,255,0.3))",
                 ],
               }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -130,13 +130,13 @@ export default function Landing() {
               OHO
             </motion.h1>
             <motion.h2
-              className="neon-orange leading-none mt-2"
+              className="neon-cyan leading-none mt-2"
               style={{ fontSize: "clamp(20px, 4.5vw, 40px)" }}
               animate={{
                 textShadow: [
-                  "0 0 8px #ff6b2b, 0 0 24px rgba(255,107,43,0.5), 0 0 48px rgba(255,107,43,0.2)",
-                  "0 0 14px #ff6b2b, 0 0 36px rgba(255,107,43,0.7), 0 0 64px rgba(255,107,43,0.35)",
-                  "0 0 8px #ff6b2b, 0 0 24px rgba(255,107,43,0.5), 0 0 48px rgba(255,107,43,0.2)",
+                  "0 0 8px #00ccff, 0 0 24px rgba(0,204,255,0.5), 0 0 48px rgba(0,204,255,0.2)",
+                  "0 0 14px #00ccff, 0 0 36px rgba(0,204,255,0.7), 0 0 64px rgba(0,204,255,0.35)",
+                  "0 0 8px #00ccff, 0 0 24px rgba(0,204,255,0.5), 0 0 48px rgba(0,204,255,0.2)",
                 ],
               }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
@@ -158,8 +158,8 @@ export default function Landing() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <motion.button
               onClick={handlePlay}
-              className="pixel-btn bg-[#ff6b2b] border-[#ff6b2b] text-[#06060e]"
-              whileHover={{ boxShadow: "0 0 30px rgba(255,107,43,0.5), 0 0 60px rgba(255,107,43,0.25)" }}
+              className="pixel-btn bg-[#c850ff] border-[#c850ff] text-[#06060e]"
+              whileHover={{ boxShadow: "0 0 30px rgba(200,80,255,0.5), 0 0 60px rgba(200,80,255,0.25)" }}
               whileTap={{ scale: 0.94 }}
             >
               Play Now
@@ -168,7 +168,7 @@ export default function Landing() {
               onClick={() => navigate("/auth?returnTo=/dashboard")}
               className="text-sm transition-all duration-300"
               style={{ color: "#6a6a8a" }}
-              whileHover={{ scale: 1.05, color: "#ff6b2b" }}
+              whileHover={{ scale: 1.05, color: "#00ccff" }}
             >
               Already have an account? Log in
             </motion.button>

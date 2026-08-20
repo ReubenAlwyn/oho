@@ -109,10 +109,10 @@ function drawPlayer(
   if (player.invincible && Math.floor(frame / 4) % 2 === 0) return;
 
   // Glow
-  drawGlow(ctx, x, y, TILE_SIZE * 0.8, player.type === "boy" ? COLORS.player : COLORS.coral, 0.4);
+  drawGlow(ctx, x, y, TILE_SIZE * 0.8, player.type === "boy" ? COLORS.player : COLORS.neonPurple, 0.4);
 
   // Body
-  const bodyColor = player.type === "boy" ? "#0ea5e9" : "#f43f5e";
+  const bodyColor = player.type === "boy" ? "#00ccff" : "#c850ff";
   const size = TILE_SIZE * 0.4;
 
   // Simple pixel character
@@ -181,7 +181,7 @@ function drawEnemy(
   drawGlow(ctx, x, y, TILE_SIZE * 0.9, COLORS.enemyGlow, pulse);
 
   // Body colors cycle per enemy type
-  const enemyColors = ["#f43f5e", "#f97316", "#e879f9", "#a855f7", "#10b981"];
+  const enemyColors = ["#c850ff", "#a040e0", "#9030d0", "#d060ff", "#8020c0"];
   const color = enemyColors[enemy.type % enemyColors.length];
 
   const size = TILE_SIZE * 0.4;

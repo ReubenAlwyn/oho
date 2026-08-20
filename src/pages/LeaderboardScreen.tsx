@@ -39,7 +39,7 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
         <div className="flex items-center justify-between mb-6 pt-2">
           <motion.button
             onClick={onBack}
-            className="neon-orange opacity-40 hover:opacity-100 transition-opacity"
+            className="neon-cyan opacity-40 hover:opacity-100 transition-opacity"
             style={{ fontSize: "10px" }}
             whileHover={{ x: -4 }}
           >
@@ -65,7 +65,7 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <p className="text-[10px] neon-orange opacity-50 text-center">
+              <p className="text-[10px] neon-purple opacity-50 text-center">
                 No scores yet
               </p>
               <p className="text-xs text-[#3a3a52]">
@@ -78,7 +78,7 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
                 {entries.map((entry, index) => (
                   <motion.div
                     key={entry.id}
-                    className="interactive-card flex items-center gap-3 p-3 rounded-lg bg-[#0e0e1a] border border-[#2a2a40] hover:border-[#ff6b2b]/30 transition-all cursor-default"
+                    className="interactive-card flex items-center gap-3 p-3 rounded-lg bg-[#0e0e1a] border border-[#2a2a40] hover:border-[#c850ff]/30 transition-all cursor-default"
                     style={{
                       boxShadow: index === 0 ? "0 0 15px rgba(255,221,0,0.1)" : undefined,
                     }}
@@ -110,8 +110,8 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
                         <span
                           className="text-[9px] px-1.5 py-0.5 rounded"
                           style={{
-                            background: entry.character === "boy" ? "rgba(0,204,255,0.15)" : "rgba(255,51,102,0.15)",
-                            color: entry.character === "boy" ? "#00ccff" : "#ff3366",
+                            background: entry.character === "boy" ? "rgba(0,204,255,0.15)" : "rgba(200,80,255,0.15)",
+                            color: entry.character === "boy" ? "#00ccff" : "#c850ff",
                           }}
                         >
                           {entry.character === "boy" ? "Boy" : "Girl"}
@@ -124,7 +124,7 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
 
                     <div>
                       <span
-                        className={index < 3 ? "neon-orange" : ""}
+                        className={index < 3 ? "neon-yellow" : ""}
                         style={{
                           fontSize: "11px",
                           color: index >= 3 ? "#6a6a8a" : undefined,

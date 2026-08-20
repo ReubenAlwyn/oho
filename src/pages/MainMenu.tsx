@@ -17,13 +17,13 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
           className="absolute w-[400px] h-[400px] rounded-full blur-[100px]"
-          style={{ background: "radial-gradient(circle, rgba(140,50,220,0.12) 0%, transparent 70%)", top: "10%", left: "20%" }}
+          style={{ background: "radial-gradient(circle, rgba(200,80,255,0.12) 0%, transparent 70%)", top: "10%", left: "20%" }}
           animate={{ scale: [1, 1.2, 1] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           className="absolute w-[300px] h-[300px] rounded-full blur-[80px]"
-          style={{ background: "radial-gradient(circle, rgba(255,107,43,0.08) 0%, transparent 70%)", bottom: "20%", right: "15%" }}
+          style={{ background: "radial-gradient(circle, rgba(0,204,255,0.08) 0%, transparent 70%)", bottom: "20%", right: "15%" }}
           animate={{ scale: [1, 1.3, 1] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
         />
@@ -33,7 +33,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
         {/* Back to dashboard */}
         <motion.button
           onClick={() => navigate("/dashboard")}
-          className="absolute top-6 left-6 neon-orange opacity-40 hover:opacity-100 transition-opacity"
+          className="absolute top-6 left-6 neon-cyan opacity-40 hover:opacity-100 transition-opacity"
           style={{ fontSize: "10px" }}
           whileHover={{ x: -4 }}
           initial={{ opacity: 0 }}
@@ -43,7 +43,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
           &larr; Dashboard
         </motion.button>
 
-        {/* Title: OHO on top, SHAWARMA PANIC underneath */}
+        {/* Title */}
         <motion.div
           className="text-center flex flex-col items-center"
           initial={{ y: -40, opacity: 0 }}
@@ -55,9 +55,9 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
             style={{ fontSize: "clamp(40px, 8vw, 72px)" }}
             animate={{
               filter: [
-                "drop-shadow(0 0 10px rgba(168,85,255,0.6)) drop-shadow(0 0 25px rgba(168,85,255,0.3))",
-                "drop-shadow(0 0 16px rgba(180,100,255,0.8)) drop-shadow(0 0 35px rgba(168,85,255,0.4))",
-                "drop-shadow(0 0 10px rgba(168,85,255,0.6)) drop-shadow(0 0 25px rgba(168,85,255,0.3))",
+                "drop-shadow(0 0 10px rgba(200,80,255,0.6)) drop-shadow(0 0 25px rgba(200,80,255,0.3))",
+                "drop-shadow(0 0 16px rgba(200,80,255,0.8)) drop-shadow(0 0 35px rgba(200,80,255,0.4))",
+                "drop-shadow(0 0 10px rgba(200,80,255,0.6)) drop-shadow(0 0 25px rgba(200,80,255,0.3))",
               ],
             }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -65,13 +65,13 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
             OHO
           </motion.h1>
           <motion.h2
-            className="neon-orange leading-none mt-2"
+            className="neon-cyan leading-none mt-2"
             style={{ fontSize: "clamp(16px, 3.5vw, 32px)" }}
             animate={{
               textShadow: [
-                "0 0 8px #ff6b2b, 0 0 24px rgba(255,107,43,0.5), 0 0 48px rgba(255,107,43,0.2)",
-                "0 0 14px #ff6b2b, 0 0 36px rgba(255,107,43,0.7), 0 0 64px rgba(255,107,43,0.35)",
-                "0 0 8px #ff6b2b, 0 0 24px rgba(255,107,43,0.5), 0 0 48px rgba(255,107,43,0.2)",
+                "0 0 8px #00ccff, 0 0 24px rgba(0,204,255,0.5), 0 0 48px rgba(0,204,255,0.2)",
+                "0 0 14px #00ccff, 0 0 36px rgba(0,204,255,0.7), 0 0 64px rgba(0,204,255,0.35)",
+                "0 0 8px #00ccff, 0 0 24px rgba(0,204,255,0.5), 0 0 48px rgba(0,204,255,0.2)",
               ],
             }}
             transition={{ duration: 2.5, delay: 0.5, repeat: Infinity, ease: "easeInOut" }}
@@ -89,8 +89,8 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
         >
           <motion.button
             onClick={onPlay}
-            className="pixel-btn w-full bg-[#ff6b2b] border-[#ff6b2b] text-[#06060e]"
-            whileHover={{ boxShadow: "0 0 30px rgba(255,107,43,0.5), 0 0 60px rgba(255,107,43,0.25)" }}
+            className="pixel-btn w-full bg-[#c850ff] border-[#c850ff] text-[#06060e]"
+            whileHover={{ boxShadow: "0 0 30px rgba(200,80,255,0.5), 0 0 60px rgba(200,80,255,0.25)" }}
             whileTap={{ scale: 0.94 }}
           >
             Start Game

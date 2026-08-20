@@ -26,14 +26,14 @@ export default function GameOverScreen({
     <div className="min-h-screen bg-[#06060e] flex flex-col items-center justify-center relative overflow-hidden scanlines">
       <div className="absolute inset-0 grid-bg" />
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#ff3366]/5 rounded-full blur-[100px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#c850ff]/5 rounded-full blur-[100px]" />
       </div>
 
       <div className="relative z-10 flex flex-col items-center gap-7 px-4">
         {/* Back to dashboard */}
         <motion.button
           onClick={() => navigate("/dashboard")}
-          className="absolute top-6 left-6 neon-orange opacity-40 hover:opacity-100 transition-opacity"
+          className="absolute top-6 left-6 neon-cyan opacity-40 hover:opacity-100 transition-opacity"
           style={{ fontSize: "10px" }}
           whileHover={{ x: -4 }}
           initial={{ opacity: 0 }}
@@ -50,7 +50,7 @@ export default function GameOverScreen({
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 200 }}
         >
-          <h1 className="text-3xl sm:text-4xl neon-pink">
+          <h1 className="text-3xl sm:text-4xl neon-purple">
             Game Over
           </h1>
           <p className="mt-3 text-xs text-[#6a6a8a]">
@@ -60,7 +60,7 @@ export default function GameOverScreen({
 
         {/* Score card */}
         <motion.div
-          className="w-full max-w-sm rounded-xl p-6 space-y-4 bg-[#0e0e1a] border border-[#2a2a40] neon-box-orange interactive-card"
+          className="w-full max-w-sm rounded-xl p-6 space-y-4 bg-[#0e0e1a] border border-[#2a2a40] neon-box-purple interactive-card"
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -70,7 +70,7 @@ export default function GameOverScreen({
               Score
             </p>
             <motion.p
-              className="text-3xl neon-orange"
+              className="text-3xl neon-yellow"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", delay: 0.5 }}
@@ -86,7 +86,7 @@ export default function GameOverScreen({
             </div>
             <div className="text-center">
               <p className="text-[#6a6a8a] mb-1">Character</p>
-              <p className={character === "boy" ? "neon-cyan" : "neon-pink"}>
+              <p className={character === "boy" ? "neon-cyan" : "neon-purple"}>
                 {character === "boy" ? "Boy" : "Girl"}
               </p>
             </div>
@@ -102,8 +102,8 @@ export default function GameOverScreen({
         >
           <motion.button
             onClick={onPlayAgain}
-            className="pixel-btn w-full bg-[#ff6b2b] border-[#ff6b2b] text-[#06060e]"
-            whileHover={{ boxShadow: "0 0 30px rgba(255,107,43,0.5), 0 0 60px rgba(255,107,43,0.25)" }}
+            className="pixel-btn w-full bg-[#c850ff] border-[#c850ff] text-[#06060e]"
+            whileHover={{ boxShadow: "0 0 30px rgba(200,80,255,0.5), 0 0 60px rgba(200,80,255,0.25)" }}
             whileTap={{ scale: 0.94 }}
           >
             Play Again
