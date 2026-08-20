@@ -77,11 +77,7 @@ createRoot(document.getElementById("root")!).render(
             />
               <Route
                 path="/dashboard"
-                element={
-                  <RequireAuth>
-                    <Dashboard />
-                  </RequireAuth>
-                }
+                element={<Dashboard />}
               />
               <Route
                 path="/game"

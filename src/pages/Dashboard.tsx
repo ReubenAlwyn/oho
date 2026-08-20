@@ -16,14 +16,17 @@ export default function Dashboard() {
   const [recentGames, setRecentGames] = useState<ScoreEntry[]>([]);
 
   useEffect(() => {
-    const entries = getLeaderboard();
-    setGamesPlayed(entries.length);
-    if (entries.length > 0) {
-      setBestScore(entries[0].score);
-      setBestRound(Math.max(...entries.map((e) => e.highestRound)));
-      setRecentGames(entries.slice(0, 5));
+    // Only load leaderboard stats if user is authenticated
+    if (isAuthenticated) {
+      const entries = getLeaderboard();
+      setGamesPlayed(entries.length);
+      if (entries.length > 0) {
+        setBestScore(entries[0].score);
+        setBestRound(Math.max(...entries.map((e) => e.highestRound)));
+        setRecentGames(entries.slice(0, 5));
+      }
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -137,7 +140,9 @@ export default function Dashboard() {
           </motion.button>
         </motion.div>
 
-        {/* Stats */}
+        {/* Stats — only for authenticated users */}
+        {isAuthenticated ? (
+        <>
         <motion.div
           className="mt-10 grid grid-cols-3 gap-4"
           initial={{ y: 20, opacity: 0 }}
@@ -179,8 +184,7 @@ export default function Dashboard() {
               {gamesPlayed}
             </p>
             <p className="text-[10px] text-[#6a6a8a] mt-2">Games Played</p>
-          </motion.div>
-        </motion.div>
+          </motion.div>          </motion.div>
 
         {/* Recent games */}
         <motion.div
@@ -231,6 +235,26 @@ export default function Dashboard() {
             </div>
           )}
         </motion.div>
+        </>
+        ) : (
+        /* Guest — prompt to sign in */
+        <motion.div
+          className="mt-10 bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-8 text-center"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <p className="text-sm text-[#6a6a8a] mb-3">
+            Sign in to track your scores and see your stats
+          </p>
+          <button
+            onClick={() => navigate("/auth?returnTo=/dashboard")}
+            className="pixel-btn bg-[#c850ff]/15 border-[#c850ff]/30 text-[#c850ff] text-xs"
+          >
+            Sign in
+          </button>
+        </motion.div>
+        )}
       </main>
     </div>
   );
