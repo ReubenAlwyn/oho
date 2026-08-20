@@ -1,6 +1,17 @@
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { useNavigate } from "react-router";
+import shawarmaPixel from "../assets/shawarma-pixel.svg";
+
+const floatingShawarmas = [
+  { x: "8%", y: "15%", size: 48, delay: 0, duration: 7, rotation: 12 },
+  { x: "82%", y: "20%", size: 56, delay: 1.2, duration: 9, rotation: -8 },
+  { x: "15%", y: "70%", size: 40, delay: 2.5, duration: 8, rotation: 15 },
+  { x: "75%", y: "65%", size: 44, delay: 0.8, duration: 7.5, rotation: -10 },
+  { x: "50%", y: "10%", size: 36, delay: 3, duration: 6.5, rotation: 5 },
+  { x: "90%", y: "80%", size: 38, delay: 1.8, duration: 8.5, rotation: -15 },
+  { x: "35%", y: "85%", size: 42, delay: 0.5, duration: 7, rotation: 8 },
+];
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -17,6 +28,38 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-[#06060e] flex flex-col overflow-hidden relative scanlines">
       <div className="absolute inset-0 grid-bg" />
+
+      {/* Floating pixel shawarmas in background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        {floatingShawarmas.map((s, i) => (
+          <motion.img
+            key={i}
+            src={shawarmaPixel}
+            alt=""
+            className="absolute"
+            style={{
+              left: s.x,
+              top: s.y,
+              width: s.size,
+              height: s.size * 1.5,
+              imageRendering: "pixelated",
+              opacity: 0.12,
+              filter: "brightness(0.8) saturate(1.2)",
+            }}
+            animate={{
+              y: [0, -25, -10, -30, 0],
+              rotate: [0, s.rotation, -s.rotation / 2, s.rotation * 0.7, 0],
+              opacity: [0.08, 0.15, 0.1, 0.14, 0.08],
+            }}
+            transition={{
+              duration: s.duration,
+              delay: s.delay,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
 
       {/* Neon orbs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -42,18 +85,24 @@ export default function Landing() {
 
       {/* Nav */}
       <header className="relative z-10 flex items-center justify-between px-6 sm:px-10 py-5">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">🌮</span>
-          <span className="neon-orange" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "14px" }}>
+        <motion.div
+          className="flex items-center gap-3 cursor-pointer"
+          whileHover={{ scale: 1.05 }}
+          onClick={() => navigate("/")}
+        >
+          <img src={shawarmaPixel} alt="" className="w-6 h-9" style={{ imageRendering: "pixelated" }} />
+          <span className="neon-orange" style={{ fontFamily: '"Silkscreen", monospace', fontSize: "14px" }}>
             OHO
           </span>
-        </div>
-        <button
+        </motion.div>
+        <motion.button
           onClick={handlePlay}
-          className="pixel-btn bg-transparent border-[#ff6b2b]/40 text-[#ff6b2b] hover:bg-[#ff6b2b]/10 hover:border-[#ff6b2b]/70"
+          className="pixel-btn bg-transparent border-[#ff6b2b]/40 text-[#ff6b2b] hover:bg-[#ff6b2b]/15 hover:border-[#ff6b2b]/80"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
           {isAuthenticated ? "Dashboard" : "Sign Up"}
-        </button>
+        </motion.button>
       </header>
 
       {/* Hero */}
@@ -64,34 +113,33 @@ export default function Landing() {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="max-w-3xl"
         >
-          {/* Floating food */}
-          <motion.div
-            className="flex justify-center gap-5 mb-10"
-            initial={{ scale: 0.7, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 150 }}
-          >
-            {["🌮", "🧆", "🌯", "🧃", "🫔"].map((emoji, i) => (
-              <motion.span
-                key={i}
-                className="text-4xl sm:text-5xl"
-                animate={{ y: [0, -12, 0], rotate: [-5, 5, -5] }}
-                transition={{ duration: 2, delay: i * 0.2, repeat: Infinity, ease: "easeInOut" }}
-              >
-                {emoji}
-              </motion.span>
-            ))}
-          </motion.div>
-
           {/* Title */}
           <h1
-            className="text-3xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tight"
-            style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}
+            className="text-4xl sm:text-6xl md:text-7xl font-black leading-tight tracking-tight"
           >
-            <span className="neon-orange">OHO</span>{" "}
-            <span className="neon-yellow">Shawarma</span>
+            <motion.span
+              className="neon-cyan inline-block"
+              animate={{ textShadow: ["0 0 7px #00ccff, 0 0 20px rgba(0,204,255,0.5), 0 0 42px rgba(0,204,255,0.25)", "0 0 10px #00ccff, 0 0 30px rgba(0,204,255,0.7), 0 0 60px rgba(0,204,255,0.35)", "0 0 7px #00ccff, 0 0 20px rgba(0,204,255,0.5), 0 0 42px rgba(0,204,255,0.25)"] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            >
+              OHO
+            </motion.span>{" "}
+            <motion.span
+              className="neon-yellow inline-block"
+              animate={{ textShadow: ["0 0 7px #ffdd00, 0 0 20px rgba(255,221,0,0.5), 0 0 42px rgba(255,221,0,0.25)", "0 0 12px #ffdd00, 0 0 35px rgba(255,221,0,0.7), 0 0 60px rgba(255,221,0,0.35)", "0 0 7px #ffdd00, 0 0 20px rgba(255,221,0,0.5), 0 0 42px rgba(255,221,0,0.25)"] }}
+              transition={{ duration: 3, delay: 0.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              Shawarma
+            </motion.span>
             <br />
-            <span className="neon-pink text-4xl sm:text-6xl md:text-7xl">PANIC</span>
+            <motion.span
+              className="neon-pink inline-block"
+              style={{ fontSize: "1.15em" }}
+              animate={{ textShadow: ["0 0 7px #ff3366, 0 0 20px rgba(255,51,102,0.5), 0 0 42px rgba(255,51,102,0.25)", "0 0 14px #ff3366, 0 0 40px rgba(255,51,102,0.8), 0 0 70px rgba(255,51,102,0.4)", "0 0 7px #ff3366, 0 0 20px rgba(255,51,102,0.5), 0 0 42px rgba(255,51,102,0.25)"] }}
+              transition={{ duration: 2.5, delay: 1, repeat: Infinity, ease: "easeInOut" }}
+            >
+              PANIC
+            </motion.span>
           </h1>
 
           <p
@@ -109,17 +157,18 @@ export default function Landing() {
               onClick={handlePlay}
               className="pixel-btn bg-[#ff6b2b] border-[#ff6b2b] text-[#06060e] font-bold"
               whileHover={{ boxShadow: "0 0 30px rgba(255,107,43,0.5), 0 0 60px rgba(255,107,43,0.25)" }}
-              whileTap={{ scale: 0.96 }}
+              whileTap={{ scale: 0.94 }}
             >
-              ▶ Play Now
+              Play Now
             </motion.button>
-            <button
+            <motion.button
               onClick={() => navigate("/auth?returnTo=/dashboard")}
-              className="text-sm hover:text-[#ff6b2b] transition-colors"
+              className="text-sm hover:text-[#ff6b2b] transition-all duration-300"
               style={{ color: "#6a6a8a", fontFamily: "monospace" }}
+              whileHover={{ scale: 1.05 }}
             >
               Already have an account? Log in
-            </button>
+            </motion.button>
           </div>
         </motion.div>
       </main>

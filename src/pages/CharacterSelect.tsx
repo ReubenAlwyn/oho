@@ -25,16 +25,15 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
         {/* Back button */}
         <motion.button
           onClick={onBack}
-          className="absolute top-6 left-6 neon-orange opacity-40 hover:opacity-80 transition-opacity"
-          style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}
+          className="absolute top-6 left-6 neon-orange opacity-40 hover:opacity-100 transition-opacity"
+          style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}
           whileHover={{ x: -4 }}
         >
-          ← Back
+          &larr; Back
         </motion.button>
 
         <motion.h2
           className="text-xl sm:text-2xl font-bold text-center neon-orange"
-          style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
         >
@@ -49,25 +48,26 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           transition={{ delay: 0.2 }}
         >
           {/* Boy */}
-          <button
+          <motion.button
             onClick={() => setSelected("boy")}
             className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-xl transition-all duration-300 border-2 ${
               selected === "boy"
                 ? "shadow-[0_0_25px_rgba(0,204,255,0.3)] scale-105"
-                : "border-[#2a2a40] hover:border-[#00ccff]/30 hover:scale-[1.02]"
+                : "border-[#2a2a40] hover:border-[#00ccff]/30 hover:scale-[1.03]"
             }`}
             style={{
               background: "rgba(0,204,255,0.04)",
               borderColor: selected === "boy" ? "rgba(0,204,255,0.5)" : undefined,
             }}
+            whileHover={{ y: -4 }}
+            whileTap={{ scale: 0.97 }}
           >
             {selected === "boy" && (
               <motion.div
                 className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded bg-[#00ccff] text-[#06060e] font-bold"
-                style={{ fontFamily: '"Press Start 2P", monospace' }}
                 layoutId="selected-badge"
               >
-                ✓
+                P1
               </motion.div>
             )}
             <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex items-center justify-center bg-[#00ccff]/8 border border-[#00ccff]/15">
@@ -77,31 +77,32 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-[#00ccff]/60 rounded-b-lg" />
               </div>
             </div>
-            <span className="text-sm font-bold neon-cyan" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
+            <span className="text-sm font-bold neon-cyan">
               Boy
             </span>
-          </button>
+          </motion.button>
 
           {/* Girl */}
-          <button
+          <motion.button
             onClick={() => setSelected("girl")}
             className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-xl transition-all duration-300 border-2 ${
               selected === "girl"
                 ? "shadow-[0_0_25px_rgba(255,51,102,0.3)] scale-105"
-                : "border-[#2a2a40] hover:border-[#ff3366]/30 hover:scale-[1.02]"
+                : "border-[#2a2a40] hover:border-[#ff3366]/30 hover:scale-[1.03]"
             }`}
             style={{
               background: "rgba(255,51,102,0.04)",
               borderColor: selected === "girl" ? "rgba(255,51,102,0.5)" : undefined,
             }}
+            whileHover={{ y: -4 }}
+            whileTap={{ scale: 0.97 }}
           >
             {selected === "girl" && (
               <motion.div
                 className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded bg-[#ff3366] text-[#06060e] font-bold"
-                style={{ fontFamily: '"Press Start 2P", monospace' }}
                 layoutId="selected-badge"
               >
-                ✓
+                P1
               </motion.div>
             )}
             <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl flex items-center justify-center bg-[#ff3366]/8 border border-[#ff3366]/15">
@@ -111,10 +112,10 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-[#ff3366]/60 rounded-b-lg" />
               </div>
             </div>
-            <span className="text-sm font-bold neon-pink" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
+            <span className="text-sm font-bold neon-pink">
               Girl
             </span>
-          </button>
+          </motion.button>
         </motion.div>
 
         {/* Name input */}
@@ -126,7 +127,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
         >
           <label
             className="block text-xs mb-2 neon-orange opacity-50"
-            style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}
+            style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}
           >
             Your Name
           </label>
@@ -138,7 +139,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
             maxLength={16}
             placeholder="Enter your name..."
             className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all duration-200 bg-[#0e0e1a] border-2 border-[#2a2a40] text-[#e0e0f0] placeholder:text-[#3a3a52] focus:border-[#ff6b2b]/50 focus:shadow-[0_0_15px_rgba(255,107,43,0.15)]"
-            style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "11px" }}
+            style={{ fontSize: "11px" }}
           />
         </motion.div>
 
@@ -152,12 +153,12 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
               : "bg-[#1a1a2e] border-[#2a2a40] text-[#3a3a52] cursor-not-allowed"
           }`}
           whileHover={selected && name.trim() ? { boxShadow: "0 0 30px rgba(255,107,43,0.5), 0 0 60px rgba(255,107,43,0.25)" } : undefined}
-          whileTap={selected && name.trim() ? { scale: 0.96 } : undefined}
+          whileTap={selected && name.trim() ? { scale: 0.94 } : undefined}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          ▶ Let&apos;s Go!
+          Let&apos;s Go!
         </motion.button>
       </div>
     </div>

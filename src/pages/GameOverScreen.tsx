@@ -33,14 +33,14 @@ export default function GameOverScreen({
         {/* Back to dashboard */}
         <motion.button
           onClick={() => navigate("/dashboard")}
-          className="absolute top-6 left-6 neon-orange opacity-40 hover:opacity-80 transition-opacity"
-          style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}
+          className="absolute top-6 left-6 neon-orange opacity-40 hover:opacity-100 transition-opacity"
+          style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}
           whileHover={{ x: -4 }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.4 }}
           transition={{ delay: 0.5 }}
         >
-          ← Dashboard
+          &larr; Dashboard
         </motion.button>
 
         {/* Game Over title */}
@@ -50,21 +50,19 @@ export default function GameOverScreen({
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 200 }}
         >
-          <p className="text-4xl mb-3">😵</p>
           <h1
             className="text-3xl sm:text-4xl font-black neon-pink"
-            style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}
           >
             Game Over
           </h1>
-          <p className="mt-3 text-xs text-[#6a6a8a]" style={{ fontFamily: "monospace" }}>
-            {character === "boy" ? "👦" : "👧"} Ghosts: 1 — You: 0. Try again?
+          <p className="mt-3 text-xs text-[#6a6a8a]">
+            Ghosts: 1 &mdash; You: 0. Try again?
           </p>
         </motion.div>
 
         {/* Score card */}
         <motion.div
-          className="w-full max-w-sm rounded-xl p-6 space-y-4 bg-[#0e0e1a] border border-[#2a2a40] neon-box-orange"
+          className="w-full max-w-sm rounded-xl p-6 space-y-4 bg-[#0e0e1a] border border-[#2a2a40] neon-box-orange interactive-card"
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -73,15 +71,17 @@ export default function GameOverScreen({
             <p className="text-[10px] text-[#6a6a8a] mb-1" style={{ fontFamily: "monospace" }}>
               Score
             </p>
-            <p
+            <motion.p
               className="text-3xl font-black neon-orange"
-              style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", delay: 0.5 }}
             >
               {formatScore(score)}
-            </p>
+            </motion.p>
           </div>
 
-          <div className="flex justify-between text-xs" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}>
+          <div className="flex justify-between text-xs" style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}>
             <div className="text-center">
               <p className="text-[#6a6a8a] mb-1">Round</p>
               <p className="neon-purple">{round}</p>
@@ -106,24 +106,28 @@ export default function GameOverScreen({
             onClick={onPlayAgain}
             className="pixel-btn w-full bg-[#ff6b2b] border-[#ff6b2b] text-[#06060e]"
             whileHover={{ boxShadow: "0 0 30px rgba(255,107,43,0.5), 0 0 60px rgba(255,107,43,0.25)" }}
-            whileTap={{ scale: 0.96 }}
+            whileTap={{ scale: 0.94 }}
           >
-            ▶ Play Again
+            Play Again
           </motion.button>
 
-          <button
+          <motion.button
             onClick={onLeaderboard}
-            className="pixel-btn w-full bg-transparent border-[#2a2a40] text-[#6a6a8a] hover:text-[#ffdd00] hover:border-[#ffdd00]/30"
+            className="pixel-btn w-full bg-transparent border-[#2a2a40] text-[#6a6a8a] hover:text-[#ffdd00] hover:border-[#ffdd00]/40"
+            whileHover={{ boxShadow: "0 0 20px rgba(255,221,0,0.15)" }}
+            whileTap={{ scale: 0.96 }}
           >
-            🏆 Leaderboard
-          </button>
+            Leaderboard
+          </motion.button>
 
-          <button
+          <motion.button
             onClick={onMainMenu}
             className="pixel-btn w-full bg-transparent border-[#2a2a40] text-[#3a3a52] hover:text-[#6a6a8a] hover:border-[#3a3a52]"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.96 }}
           >
             Back to Dashboard
-          </button>
+          </motion.button>
         </motion.div>
       </div>
     </div>

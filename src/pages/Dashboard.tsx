@@ -39,15 +39,15 @@ export default function Dashboard() {
       {/* Header */}
       <header className="relative z-10 border-b border-[#2a2a40]/50 bg-[#0a0a14]/80 backdrop-blur-sm sticky top-0">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-          <button
+          <motion.button
             onClick={() => navigate("/")}
             className="flex items-center gap-3 hover:opacity-70 transition-opacity"
+            whileHover={{ scale: 1.05 }}
           >
-            <span className="text-xl">🌮</span>
-            <span className="neon-orange" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "12px" }}>
+            <span className="neon-orange" style={{ fontSize: "12px" }}>
               OHO
             </span>
-          </button>
+          </motion.button>
           <div className="flex items-center gap-4">
             <div className="w-8 h-8 rounded-lg bg-[#ff6b2b]/15 border border-[#ff6b2b]/20 flex items-center justify-center text-[#ff6b2b] font-bold text-sm">
               {initials}
@@ -73,7 +73,7 @@ export default function Dashboard() {
           <p className="text-xs text-[#6a6a8a] mb-2" style={{ fontFamily: "monospace" }}>
             {user?.name ? `${user.name}, ` : ""}the maze is calling
           </p>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight neon-orange" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight neon-orange">
             Ready to run?
           </h1>
         </motion.div>
@@ -89,7 +89,7 @@ export default function Dashboard() {
             onClick={() => navigate("/game")}
             className="pixel-btn bg-[#ff6b2b] border-[#ff6b2b] text-[#06060e] flex items-center gap-3"
             whileHover={{ boxShadow: "0 0 30px rgba(255,107,43,0.5), 0 0 60px rgba(255,107,43,0.25)" }}
-            whileTap={{ scale: 0.96 }}
+            whileTap={{ scale: 0.94 }}
           >
             <Play className="w-5 h-5 fill-current" />
             Play
@@ -103,33 +103,42 @@ export default function Dashboard() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.4 }}
         >
-          <div className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-5 flex flex-col items-center text-center neon-box-orange">
+          <motion.div
+            className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-5 flex flex-col items-center text-center neon-box-orange interactive-card"
+            whileHover={{ y: -3 }}
+          >
             <div className="w-10 h-10 rounded-lg bg-[#ffdd00]/10 border border-[#ffdd00]/20 flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(255,221,0,0.1)]">
               <Trophy className="w-5 h-5 text-[#ffdd00]" />
             </div>
-            <p className="text-2xl font-black neon-yellow" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
+            <p className="text-2xl font-black neon-yellow">
               {formatScore(bestScore)}
             </p>
             <p className="text-[10px] text-[#6a6a8a] mt-2" style={{ fontFamily: "monospace" }}>Best Score</p>
-          </div>
-          <div className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-5 flex flex-col items-center text-center">
+          </motion.div>
+          <motion.div
+            className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-5 flex flex-col items-center text-center interactive-card"
+            whileHover={{ y: -3 }}
+          >
             <div className="w-10 h-10 rounded-lg bg-[#c850ff]/10 border border-[#c850ff]/20 flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(200,80,255,0.1)]">
               <Target className="w-5 h-5 text-[#c850ff]" />
             </div>
-            <p className="text-2xl font-black neon-purple" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
-              {bestRound || "—"}
+            <p className="text-2xl font-black neon-purple">
+              {bestRound || "\u2014"}
             </p>
             <p className="text-[10px] text-[#6a6a8a] mt-2" style={{ fontFamily: "monospace" }}>Best Round</p>
-          </div>
-          <div className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-5 flex flex-col items-center text-center">
+          </motion.div>
+          <motion.div
+            className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-5 flex flex-col items-center text-center interactive-card"
+            whileHover={{ y: -3 }}
+          >
             <div className="w-10 h-10 rounded-lg bg-[#00ffaa]/10 border border-[#00ffaa]/20 flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(0,255,170,0.1)]">
               <Flame className="w-5 h-5 text-[#00ffaa]" />
             </div>
-            <p className="text-2xl font-black neon-green" style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}>
+            <p className="text-2xl font-black neon-green">
               {gamesPlayed}
             </p>
             <p className="text-[10px] text-[#6a6a8a] mt-2" style={{ fontFamily: "monospace" }}>Games Played</p>
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* Recent games */}
@@ -139,12 +148,11 @@ export default function Dashboard() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.4 }}
         >
-          <h2 className="text-xs font-bold mb-4 neon-orange" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}>
+          <h2 className="text-xs font-bold mb-4 neon-orange" style={{ fontSize: "10px" }}>
             Recent Games
           </h2>
           {recentGames.length === 0 ? (
             <div className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] p-8 text-center">
-              <p className="text-3xl mb-3">🌮</p>
               <p className="text-sm text-[#6a6a8a]" style={{ fontFamily: "monospace" }}>
                 No games yet. Time to break in those shawarma legs.
               </p>
@@ -152,23 +160,32 @@ export default function Dashboard() {
           ) : (
             <div className="space-y-2">
               {recentGames.map((game) => (
-                <div
+                <motion.div
                   key={game.id}
-                  className="bg-[#0e0e1a] rounded-xl border border-[#2a2a40] px-5 py-3.5 flex items-center justify-between hover:border-[#ff6b2b]/20 transition-colors"
+                  className="interactive-card bg-[#0e0e1a] rounded-xl border border-[#2a2a40] px-5 py-3.5 flex items-center justify-between hover:border-[#ff6b2b]/30 transition-all cursor-default"
+                  whileHover={{ x: 4 }}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-lg">{game.character === "boy" ? "👦" : "👧"}</span>
+                    <span
+                      className="text-[9px] px-1.5 py-0.5 rounded"
+                      style={{
+                        background: game.character === "boy" ? "rgba(0,204,255,0.15)" : "rgba(255,51,102,0.15)",
+                        color: game.character === "boy" ? "#00ccff" : "#ff3366",
+                      }}
+                    >
+                      {game.character === "boy" ? "Boy" : "Girl"}
+                    </span>
                     <div>
-                      <p className="text-sm font-semibold text-[#e0e0f0]" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}>
+                      <p className="text-sm font-semibold text-[#e0e0f0]" style={{ fontSize: "10px" }}>
                         Round {game.highestRound}
                       </p>
                       <p className="text-[10px] text-[#6a6a8a] mt-0.5" style={{ fontFamily: "monospace" }}>{formatDate(game.date)}</p>
                     </div>
                   </div>
-                  <span className="font-bold neon-orange text-sm" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "11px" }}>
+                  <span className="font-bold neon-orange text-sm" style={{ fontSize: "11px" }}>
                     {formatScore(game.score)}
                   </span>
-                </div>
+                </motion.div>
               ))}
             </div>
           )}

@@ -33,14 +33,14 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
         {/* Back to dashboard */}
         <motion.button
           onClick={() => navigate("/dashboard")}
-          className="absolute top-6 left-6 neon-orange opacity-40 hover:opacity-80 transition-opacity"
-          style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}
+          className="absolute top-6 left-6 neon-orange opacity-40 hover:opacity-100 transition-opacity"
+          style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}
           whileHover={{ x: -4 }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.4 }}
           transition={{ delay: 0.5 }}
         >
-          ← Dashboard
+          &larr; Dashboard
         </motion.button>
 
         {/* Title */}
@@ -50,40 +50,23 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <p className="text-xs mb-3 tracking-[0.3em] uppercase neon-orange opacity-60" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "10px" }}>
+          <p className="text-xs mb-3 tracking-[0.3em] uppercase neon-orange opacity-60" style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}>
             OHO
           </p>
-          <h1
+          <motion.h1
             className="text-4xl sm:text-6xl font-black tracking-tight neon-yellow"
-            style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}
+            animate={{ textShadow: ["0 0 7px #ffdd00, 0 0 20px rgba(255,221,0,0.5), 0 0 42px rgba(255,221,0,0.25)", "0 0 12px #ffdd00, 0 0 35px rgba(255,221,0,0.7), 0 0 60px rgba(255,221,0,0.35)", "0 0 7px #ffdd00, 0 0 20px rgba(255,221,0,0.5), 0 0 42px rgba(255,221,0,0.25)"] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           >
             Shawarma
-          </h1>
-          <h2
+          </motion.h1>
+          <motion.h2
             className="text-3xl sm:text-5xl font-black mt-2 neon-pink"
-            style={{ fontFamily: '"Press Start 2P", monospace, system-ui' }}
+            animate={{ textShadow: ["0 0 7px #ff3366, 0 0 20px rgba(255,51,102,0.5), 0 0 42px rgba(255,51,102,0.25)", "0 0 14px #ff3366, 0 0 40px rgba(255,51,102,0.8), 0 0 70px rgba(255,51,102,0.4)", "0 0 7px #ff3366, 0 0 20px rgba(255,51,102,0.5), 0 0 42px rgba(255,51,102,0.25)"] }}
+            transition={{ duration: 2.5, delay: 0.5, repeat: Infinity, ease: "easeInOut" }}
           >
             Panic
-          </h2>
-        </motion.div>
-
-        {/* Floating food */}
-        <motion.div
-          className="flex gap-5"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-        >
-          {["🌮", "🧆", "🌯"].map((emoji, i) => (
-            <motion.span
-              key={i}
-              className="text-3xl"
-              animate={{ y: [0, -8, 0], rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 1.2, delay: i * 0.2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              {emoji}
-            </motion.span>
-          ))}
+          </motion.h2>
         </motion.div>
 
         {/* Buttons */}
@@ -97,17 +80,19 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
             onClick={onPlay}
             className="pixel-btn w-full bg-[#ff6b2b] border-[#ff6b2b] text-[#06060e]"
             whileHover={{ boxShadow: "0 0 30px rgba(255,107,43,0.5), 0 0 60px rgba(255,107,43,0.25)" }}
-            whileTap={{ scale: 0.96 }}
+            whileTap={{ scale: 0.94 }}
           >
-            ▶ Start Game
+            Start Game
           </motion.button>
 
-          <button
+          <motion.button
             onClick={onLeaderboard}
-            className="pixel-btn w-full bg-transparent border-[#2a2a40] text-[#6a6a8a] hover:text-[#ff6b2b] hover:border-[#ff6b2b]/30"
+            className="pixel-btn w-full bg-transparent border-[#2a2a40] text-[#6a6a8a] hover:text-[#ffdd00] hover:border-[#ffdd00]/40"
+            whileHover={{ boxShadow: "0 0 20px rgba(255,221,0,0.15)" }}
+            whileTap={{ scale: 0.96 }}
           >
-            🏆 Leaderboard
-          </button>
+            Leaderboard
+          </motion.button>
         </motion.div>
       </div>
     </div>
