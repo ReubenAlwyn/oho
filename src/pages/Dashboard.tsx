@@ -15,15 +15,20 @@ export default function Dashboard() {
   const [gamesPlayed, setGamesPlayed] = useState(0);
   const [recentGames, setRecentGames] = useState<ScoreEntry[]>([]);
 
-  // Check if user just signed out — force guest mode
-  const forcedGuest = typeof window !== "undefined" && sessionStorage.getItem("force-guest") === "1";
+  // Check if user recently signed out — force guest mode for 60 seconds
+  const forcedGuest = (() => {
+    if (typeof window === "undefined") return false;
+    const ts = localStorage.getItem("force-guest-ts");
+    if (!ts) return false;
+    const elapsed = Date.now() - parseInt(ts, 10);
+    return elapsed < 60000; // 60 seconds
+  })();
   const showAsGuest = forcedGuest || !isAuthenticated || !user;
 
   useEffect(() => {
     if (!showAsGuest) {
-      // Clear the flag once we confirm real auth
-      sessionStorage.removeItem("force-guest");
-      // Load leaderboard stats for authenticated users
+      // Confirmed real auth — clear the flag
+      localStorage.removeItem("force-guest-ts");
       const entries = getLeaderboard();
       setGamesPlayed(entries.length);
       if (entries.length > 0) {
@@ -32,7 +37,6 @@ export default function Dashboard() {
         setRecentGames(entries.slice(0, 5));
       }
     } else {
-      // Clear stats for guests
       setBestScore(0);
       setBestRound(0);
       setGamesPlayed(0);
@@ -41,8 +45,8 @@ export default function Dashboard() {
   }, [showAsGuest]);
 
   const handleSignOut = async () => {
-    // Set flag BEFORE sign out so it persists through the reload
-    sessionStorage.setItem("force-guest", "1");
+    // Set timestamp flag BEFORE sign out — persists through reloads for 60s
+    localStorage.setItem("force-guest-ts", Date.now().toString());
     await signOut();
     window.location.href = "/";
   };
