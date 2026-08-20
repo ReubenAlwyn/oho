@@ -52,7 +52,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
         >
           <motion.h1
             className="neon-purple-glossy leading-none"
-            style={{ fontSize: "clamp(40px, 8vw, 72px)" }}
+            style={{ fontSize: "clamp(64px, 14vw, 140px)" }}
             animate={{
               filter: [
                 "drop-shadow(0 0 10px rgba(200,80,255,0.6)) drop-shadow(0 0 25px rgba(200,80,255,0.3))",
@@ -66,7 +66,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
           </motion.h1>
           <motion.h2
             className="neon-cyan leading-none mt-2"
-            style={{ fontSize: "clamp(16px, 3.5vw, 32px)" }}
+            style={{ fontSize: "clamp(20px, 4.5vw, 40px)" }}
             animate={{
               textShadow: [
                 "0 0 8px #00ccff, 0 0 24px rgba(0,204,255,0.5), 0 0 48px rgba(0,204,255,0.2)",

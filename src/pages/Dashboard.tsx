@@ -45,8 +45,8 @@ export default function Dashboard() {
             className="flex items-center gap-2 hover:opacity-70 transition-opacity"
             whileHover={{ scale: 1.05 }}
           >
-            <img src={shawarmaPixel} alt="" className="w-5" style={{ imageRendering: "pixelated", height: "auto" }} />
-            <span className="neon-cyan" style={{ fontSize: "12px" }}>
+            <img src={shawarmaPixel} alt="" className="w-12" style={{ imageRendering: "pixelated", height: "auto" }} />
+            <span className="neon-cyan" style={{ fontSize: "20px" }}>
               OHO
             </span>
           </motion.button>

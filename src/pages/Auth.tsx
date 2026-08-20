@@ -105,8 +105,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           onClick={() => navigate("/")}
           className="flex items-center gap-2 hover:opacity-70 transition-opacity"
         >
-          <img src={shawarmaPixel} alt="" className="w-6" style={{ imageRendering: "pixelated", height: "auto" }} />
-          <span className="neon-cyan" style={{ fontSize: "14px" }}>
+          <img src={shawarmaPixel} alt="" className="w-12" style={{ imageRendering: "pixelated", height: "auto" }} />
+          <span className="neon-cyan" style={{ fontSize: "20px" }}>
             OHO
           </span>
         </button>
