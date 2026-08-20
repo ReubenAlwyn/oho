@@ -1,5 +1,16 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
+import shawarmaPixel from "../assets/shawarma-pixel.png";
+
+const floatingShawarmas = [
+  { x: "8%", y: "15%", size: 140, delay: 0, duration: 7, rotation: 12 },
+  { x: "82%", y: "20%", size: 160, delay: 1.2, duration: 9, rotation: -8 },
+  { x: "15%", y: "70%", size: 120, delay: 2.5, duration: 8, rotation: 15 },
+  { x: "75%", y: "65%", size: 130, delay: 0.8, duration: 7.5, rotation: -10 },
+  { x: "50%", y: "10%", size: 110, delay: 3, duration: 6.5, rotation: 5 },
+  { x: "90%", y: "80%", size: 115, delay: 1.8, duration: 8.5, rotation: -15 },
+  { x: "35%", y: "85%", size: 125, delay: 0.5, duration: 7, rotation: 8 },
+];
 
 interface MainMenuProps {
   onPlay: () => void;
@@ -12,6 +23,38 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
   return (
     <div className="min-h-screen bg-[#06060e] flex flex-col items-center justify-center relative overflow-hidden scanlines">
       <div className="absolute inset-0 grid-bg" />
+
+      {/* Floating pixel shawarmas in background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        {floatingShawarmas.map((s, i) => (
+          <motion.img
+            key={i}
+            src={shawarmaPixel}
+            alt=""
+            className="absolute"
+            style={{
+              left: s.x,
+              top: s.y,
+              width: s.size,
+              height: "auto",
+              imageRendering: "pixelated",
+              opacity: 0.1,
+              filter: "brightness(0.7) saturate(1.3)",
+            }}
+            animate={{
+              y: [0, -25, -10, -30, 0],
+              rotate: [0, s.rotation, -s.rotation / 2, s.rotation * 0.7, 0],
+              opacity: [0.06, 0.12, 0.08, 0.11, 0.06],
+            }}
+            transition={{
+              duration: s.duration,
+              delay: s.delay,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
 
       {/* Animated neon orbs */}
       <div className="absolute inset-0 pointer-events-none">
@@ -29,17 +72,19 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
         />
       </div>
 
-      {/* Back to dashboard */}
+      {/* Back to dashboard — big button */}
       <motion.button
         onClick={() => navigate("/dashboard")}
-        className="absolute top-14 left-10 z-10 neon-cyan opacity-40 hover:opacity-100 transition-opacity"
-        style={{ fontSize: "16px" }}
-        whileHover={{ x: -4 }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.4 }}
-        transition={{ delay: 0.5 }}
+        className="absolute top-8 left-8 z-10 flex items-center gap-3 px-6 py-3 rounded-xl border-2 border-[#00ccff]/30 bg-[#00ccff]/5 text-[#00ccff] hover:bg-[#00ccff]/15 hover:border-[#00ccff]/60 transition-all"
+        style={{ fontSize: "18px" }}
+        whileHover={{ x: -4, boxShadow: "0 0 20px rgba(0,204,255,0.2)" }}
+        whileTap={{ scale: 0.97 }}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.3, duration: 0.4 }}
       >
-        &larr; Dashboard
+        <span style={{ fontSize: "22px" }}>&larr;</span>
+        Dashboard
       </motion.button>
 
       <div className="relative z-10 flex flex-col items-center gap-8 px-4">
