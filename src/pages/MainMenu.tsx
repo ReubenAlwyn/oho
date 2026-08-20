@@ -32,8 +32,8 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
       {/* Back to dashboard */}
       <motion.button
         onClick={() => navigate("/dashboard")}
-        className="absolute top-12 left-8 z-10 neon-cyan opacity-40 hover:opacity-100 transition-opacity"
-        style={{ fontSize: "13px" }}
+        className="absolute top-14 left-10 z-10 neon-cyan opacity-40 hover:opacity-100 transition-opacity"
+        style={{ fontSize: "16px" }}
         whileHover={{ x: -4 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.4 }}
