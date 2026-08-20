@@ -102,24 +102,14 @@ export default function Landing() {
               Dashboard
             </motion.button>
           ) : (
-            <>
-              <motion.button
-                onClick={() => navigate("/auth?returnTo=/game")}
-                className="text-xs transition-all duration-300"
-                style={{ color: "#6a6a8a" }}
-                whileHover={{ scale: 1.05, color: "#00ccff" }}
-              >
-                Sign In
-              </motion.button>
-              <motion.button
-                onClick={() => navigate("/auth?returnTo=/game")}
-                className="pixel-btn bg-transparent border-[#c850ff]/40 text-[#c850ff] hover:bg-[#c850ff]/15 hover:border-[#c850ff]/80"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Sign Up
-              </motion.button>
-            </>
+            <motion.button
+              onClick={() => navigate("/auth?returnTo=/game")}
+              className="pixel-btn bg-transparent border-[#c850ff]/40 text-[#c850ff] hover:bg-[#c850ff]/15 hover:border-[#c850ff]/80"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Sign In
+            </motion.button>
           )}
         </div>
       </header>
