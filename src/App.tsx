@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router";
+import { useAuth } from "@/hooks/use-auth";
 import MainMenu from "./pages/MainMenu";
 import CharacterSelect from "./pages/CharacterSelect";
 import GameScreen from "./pages/GameScreen";
@@ -11,6 +12,7 @@ import type { CharacterType, GameScreenName } from "./game/types";
 
 export default function App() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [screen, setScreen] = useState<GameScreenName>("menu");
   const [character, setCharacter] = useState<CharacterType>("boy");
   const [playerName, setPlayerName] = useState("Player");
@@ -27,10 +29,13 @@ export default function App() {
     (score: number, round: number) => {
       setLastScore(score);
       setLastRound(round);
-      addScoreEntry(playerName, score, round, character);
+      // Only save to leaderboard if user is signed in
+      if (isAuthenticated) {
+        addScoreEntry(playerName, score, round, character);
+      }
       setScreen("game-over");
     },
-    [playerName, character]
+    [playerName, character, isAuthenticated]
   );
 
   const handlePlayAgain = useCallback(() => {
@@ -103,6 +108,7 @@ export default function App() {
               onPlayAgain={handlePlayAgain}
               onMainMenu={() => navigate("/dashboard")}
               onLeaderboard={() => setScreen("leaderboard")}
+              isAuthenticated={isAuthenticated}
             />
           </motion.div>
         )}

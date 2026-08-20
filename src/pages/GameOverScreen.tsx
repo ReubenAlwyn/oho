@@ -10,6 +10,7 @@ interface GameOverScreenProps {
   onPlayAgain: () => void;
   onMainMenu: () => void;
   onLeaderboard: () => void;
+  isAuthenticated?: boolean;
 }
 
 export default function GameOverScreen({
@@ -19,6 +20,7 @@ export default function GameOverScreen({
   onPlayAgain,
   onMainMenu,
   onLeaderboard,
+  isAuthenticated = false,
 }: GameOverScreenProps) {
   const navigate = useNavigate();
 
@@ -79,6 +81,27 @@ export default function GameOverScreen({
             </div>
           </div>
         </motion.div>
+
+        {/* Guest leaderboard message */}
+        {!isAuthenticated && (
+          <motion.div
+            className="w-full max-w-sm rounded-lg px-4 py-3 text-center border border-[#ffdd00]/20 bg-[#ffdd00]/5"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <p className="text-xs" style={{ color: "#ffdd00" }}>
+              Sign in to save your score to the leaderboard
+            </p>
+            <button
+              onClick={() => navigate("/auth?returnTo=/game")}
+              className="mt-2 text-[10px] underline transition-colors hover:text-[#00ccff]"
+              style={{ color: "#6a6a8a" }}
+            >
+              Sign in / Sign up
+            </button>
+          </motion.div>
+        )}
 
         {/* Buttons */}
         <motion.div

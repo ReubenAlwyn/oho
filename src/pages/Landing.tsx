@@ -18,11 +18,7 @@ export default function Landing() {
   const navigate = useNavigate();
 
   const handlePlay = () => {
-    if (isAuthenticated) {
-      navigate("/game");
-    } else {
-      navigate("/auth?returnTo=/game");
-    }
+    navigate("/game");
   };
 
   return (
@@ -95,14 +91,37 @@ export default function Landing() {
             OHO
           </span>
         </motion.div>
-        <motion.button
-          onClick={handlePlay}
-          className="pixel-btn bg-transparent border-[#00ccff]/40 text-[#00ccff] hover:bg-[#00ccff]/15 hover:border-[#00ccff]/80"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {isAuthenticated ? "Dashboard" : "Sign Up"}
-        </motion.button>
+        <div className="flex items-center gap-3">
+          {isAuthenticated ? (
+            <motion.button
+              onClick={() => navigate("/dashboard")}
+              className="pixel-btn bg-transparent border-[#00ccff]/40 text-[#00ccff] hover:bg-[#00ccff]/15 hover:border-[#00ccff]/80"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Dashboard
+            </motion.button>
+          ) : (
+            <>
+              <motion.button
+                onClick={() => navigate("/auth?returnTo=/game")}
+                className="text-xs transition-all duration-300"
+                style={{ color: "#6a6a8a" }}
+                whileHover={{ scale: 1.05, color: "#00ccff" }}
+              >
+                Sign In
+              </motion.button>
+              <motion.button
+                onClick={() => navigate("/auth?returnTo=/game")}
+                className="pixel-btn bg-transparent border-[#c850ff]/40 text-[#c850ff] hover:bg-[#c850ff]/15 hover:border-[#c850ff]/80"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Sign Up
+              </motion.button>
+            </>
+          )}
+        </div>
       </header>
 
       {/* Hero */}
@@ -166,11 +185,11 @@ export default function Landing() {
             </motion.button>
             <motion.button
               onClick={() => navigate("/auth?returnTo=/game")}
-              className="text-sm transition-all duration-300"
+              className="text-xs transition-all duration-300"
               style={{ color: "#6a6a8a" }}
               whileHover={{ scale: 1.05, color: "#00ccff" }}
             >
-              Already have an account? Log in
+              Sign in to save your score
             </motion.button>
           </div>
         </motion.div>
