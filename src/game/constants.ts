@@ -1,6 +1,6 @@
 // ─── Game Constants ───
 
-export const TILE_SIZE = 32;
+export const TILE_SIZE = 64; // Doubled for higher quality rendering
 export const MAZE_COLS = 21; // Must be odd
 export const MAZE_ROWS = 15; // Must be odd
 export const CANVAS_WIDTH = MAZE_COLS * TILE_SIZE;
