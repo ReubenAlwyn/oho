@@ -17,13 +17,13 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
           className="absolute w-[400px] h-[400px] rounded-full blur-[100px]"
-          style={{ background: "radial-gradient(circle, rgba(255,107,43,0.12) 0%, transparent 70%)", top: "10%", left: "20%" }}
+          style={{ background: "radial-gradient(circle, rgba(140,50,220,0.12) 0%, transparent 70%)", top: "10%", left: "20%" }}
           animate={{ scale: [1, 1.2, 1] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           className="absolute w-[300px] h-[300px] rounded-full blur-[80px]"
-          style={{ background: "radial-gradient(circle, rgba(255,51,102,0.08) 0%, transparent 70%)", bottom: "20%", right: "15%" }}
+          style={{ background: "radial-gradient(circle, rgba(255,107,43,0.08) 0%, transparent 70%)", bottom: "20%", right: "15%" }}
           animate={{ scale: [1, 1.3, 1] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
         />
@@ -34,7 +34,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
         <motion.button
           onClick={() => navigate("/dashboard")}
           className="absolute top-6 left-6 neon-orange opacity-40 hover:opacity-100 transition-opacity"
-          style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}
+          style={{ fontSize: "10px" }}
           whileHover={{ x: -4 }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.4 }}
@@ -43,29 +43,40 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
           &larr; Dashboard
         </motion.button>
 
-        {/* Title */}
+        {/* Title: OHO on top, SHAWARMA PANIC underneath */}
         <motion.div
-          className="text-center"
+          className="text-center flex flex-col items-center"
           initial={{ y: -40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <p className="text-xs mb-3 tracking-[0.3em] uppercase neon-orange opacity-60" style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}>
-            OHO
-          </p>
           <motion.h1
-            className="text-4xl sm:text-6xl font-black tracking-tight neon-yellow"
-            animate={{ textShadow: ["0 0 7px #ffdd00, 0 0 20px rgba(255,221,0,0.5), 0 0 42px rgba(255,221,0,0.25)", "0 0 12px #ffdd00, 0 0 35px rgba(255,221,0,0.7), 0 0 60px rgba(255,221,0,0.35)", "0 0 7px #ffdd00, 0 0 20px rgba(255,221,0,0.5), 0 0 42px rgba(255,221,0,0.25)"] }}
+            className="neon-purple-glossy leading-none"
+            style={{ fontSize: "clamp(40px, 8vw, 72px)" }}
+            animate={{
+              filter: [
+                "drop-shadow(0 0 10px rgba(168,85,255,0.6)) drop-shadow(0 0 25px rgba(168,85,255,0.3))",
+                "drop-shadow(0 0 16px rgba(180,100,255,0.8)) drop-shadow(0 0 35px rgba(168,85,255,0.4))",
+                "drop-shadow(0 0 10px rgba(168,85,255,0.6)) drop-shadow(0 0 25px rgba(168,85,255,0.3))",
+              ],
+            }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           >
-            Shawarma
+            OHO
           </motion.h1>
           <motion.h2
-            className="text-3xl sm:text-5xl font-black mt-2 neon-pink"
-            animate={{ textShadow: ["0 0 7px #ff3366, 0 0 20px rgba(255,51,102,0.5), 0 0 42px rgba(255,51,102,0.25)", "0 0 14px #ff3366, 0 0 40px rgba(255,51,102,0.8), 0 0 70px rgba(255,51,102,0.4)", "0 0 7px #ff3366, 0 0 20px rgba(255,51,102,0.5), 0 0 42px rgba(255,51,102,0.25)"] }}
+            className="neon-orange leading-none mt-2"
+            style={{ fontSize: "clamp(16px, 3.5vw, 32px)" }}
+            animate={{
+              textShadow: [
+                "0 0 8px #ff6b2b, 0 0 24px rgba(255,107,43,0.5), 0 0 48px rgba(255,107,43,0.2)",
+                "0 0 14px #ff6b2b, 0 0 36px rgba(255,107,43,0.7), 0 0 64px rgba(255,107,43,0.35)",
+                "0 0 8px #ff6b2b, 0 0 24px rgba(255,107,43,0.5), 0 0 48px rgba(255,107,43,0.2)",
+              ],
+            }}
             transition={{ duration: 2.5, delay: 0.5, repeat: Infinity, ease: "easeInOut" }}
           >
-            Panic
+            SHAWARMA PANIC
           </motion.h2>
         </motion.div>
 

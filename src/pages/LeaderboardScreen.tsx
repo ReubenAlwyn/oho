@@ -40,14 +40,14 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
           <motion.button
             onClick={onBack}
             className="neon-orange opacity-40 hover:opacity-100 transition-opacity"
-            style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}
+            style={{ fontSize: "10px" }}
             whileHover={{ x: -4 }}
           >
             &larr; Back
           </motion.button>
 
           <motion.h1
-            className="text-lg sm:text-xl font-bold neon-yellow"
+            className="text-lg sm:text-xl neon-yellow"
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
           >
@@ -65,10 +65,10 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <p className="text-sm neon-orange opacity-50 text-center" style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}>
+              <p className="text-[10px] neon-orange opacity-50 text-center">
                 No scores yet
               </p>
-              <p className="text-xs text-[#3a3a52]" style={{ fontFamily: "monospace" }}>
+              <p className="text-xs text-[#3a3a52]">
                 Get out there and earn your spot.
               </p>
             </motion.div>
@@ -86,7 +86,7 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: index * 0.04 }}
                   >
-                    <div className="w-8 text-center" style={{ fontFamily: '"Silkscreen", monospace', fontSize: "11px" }}>
+                    <div className="w-8 text-center" style={{ fontSize: "11px" }}>
                       {index < 3 ? (
                         <span style={{ color: rankColors[index] }}>
                           {index === 0 ? "1st" : index === 1 ? "2nd" : "3rd"}
@@ -101,7 +101,6 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
                         <span
                           className="truncate"
                           style={{
-                            fontFamily: '"Silkscreen", monospace',
                             fontSize: "10px",
                             color: index < 3 ? "#e0e0f0" : "#6a6a8a",
                           }}
@@ -118,7 +117,7 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
                           {entry.character === "boy" ? "Boy" : "Girl"}
                         </span>
                       </div>
-                      <p className="text-[10px] text-[#3a3a52] mt-0.5" style={{ fontFamily: "monospace" }}>
+                      <p className="text-[10px] text-[#3a3a52] mt-0.5">
                         Round {entry.highestRound} &middot; {formatDate(entry.date)}
                       </p>
                     </div>
@@ -127,7 +126,6 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
                       <span
                         className={index < 3 ? "neon-orange" : ""}
                         style={{
-                          fontFamily: '"Silkscreen", monospace',
                           fontSize: "11px",
                           color: index >= 3 ? "#6a6a8a" : undefined,
                         }}
@@ -147,7 +145,7 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
           <div className="flex justify-center mt-4">
             {showConfirmClear ? (
               <div className="flex items-center gap-3">
-                <span className="text-[10px] text-[#ff3366]/50" style={{ fontFamily: "monospace" }}>
+                <span className="text-[10px] text-[#ff3366]/50">
                   Clear all scores?
                 </span>
                 <motion.button
@@ -169,7 +167,6 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
               <button
                 onClick={() => setShowConfirmClear(true)}
                 className="text-[10px] text-[#3a3a52] hover:text-[#6a6a8a] transition-colors"
-                style={{ fontFamily: "monospace" }}
               >
                 Clear all scores
               </button>

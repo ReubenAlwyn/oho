@@ -60,7 +60,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       setError(
         error instanceof Error
           ? error.message
-          : "                    Something went wrong. Try again in a sec."
+          : "Something went wrong. Try again in a sec."
       );
       setIsLoading(false);
     }
@@ -90,7 +90,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       navigate(redirect);
     } catch (error) {
       console.error("Guest login error:", error);
-      setError("                    Guest login failed. Give it another shot.");
+      setError("Guest login failed. Give it another shot.");
       setIsLoading(false);
     }
   };
@@ -103,10 +103,10 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       <header className="relative z-10 flex items-center justify-between px-6 sm:px-10 py-5">
         <button
           onClick={() => navigate("/")}
-          className="flex items-center gap-3 hover:opacity-70 transition-opacity"
+          className="flex items-center gap-2 hover:opacity-70 transition-opacity"
         >
           <img src={shawarmaPixel} alt="" className="w-6" style={{ imageRendering: "pixelated", height: "auto" }} />
-          <span className="neon-orange" style={{ fontFamily: '"Silkscreen", monospace', fontSize: "14px" }}>
+          <span className="neon-orange" style={{ fontSize: "14px" }}>
             OHO
           </span>
         </button>
@@ -117,7 +117,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
         <Card className="w-full max-w-[400px] bg-[#0e0e1a] border-[#2a2a40] shadow-[0_0_40px_rgba(255,107,43,0.08)]">
           {step === "signIn" ? (
             <>
-              <CardHeader className="text-center">                  <div className="flex justify-center mb-2">
+              <CardHeader className="text-center">
+                <div className="flex justify-center mb-2">
                   <div className="w-14 h-14 rounded-xl bg-[#ff6b2b]/10 border border-[#ff6b2b]/20 flex items-center justify-center shadow-[0_0_15px_rgba(255,107,43,0.15)]">
                     <img src={shawarmaPixel} alt="" className="w-8" style={{ imageRendering: "pixelated", height: "auto" }} />
                   </div>
@@ -230,7 +231,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                 <CardFooter className="flex-col gap-2">
                   <Button
                     type="submit"
-                    className="w-full bg-[#ff6b2b] hover:bg-[#ff6b2b]/90 text-[#06060e] font-bold border-none shadow-[0_0_15px_rgba(255,107,43,0.2)]"
+                    className="w-full bg-[#ff6b2b] hover:bg-[#ff6b2b]/90 text-[#06060e] border-none shadow-[0_0_15px_rgba(255,107,43,0.2)]"
                     disabled={isLoading || otp.length !== 6}
                   >
                     {isLoading ? (

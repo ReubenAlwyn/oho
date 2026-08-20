@@ -91,13 +91,13 @@ export default function Landing() {
           onClick={() => navigate("/")}
         >
           <img src={shawarmaPixel} alt="" className="w-6" style={{ imageRendering: "pixelated", height: "auto" }} />
-          <span className="neon-purple-glossy" style={{ fontFamily: '"Silkscreen", monospace', fontSize: "14px" }}>
+          <span className="neon-orange" style={{ fontSize: "14px" }}>
             OHO
           </span>
         </motion.div>
         <motion.button
           onClick={handlePlay}
-          className="pixel-btn bg-transparent border-[#a855f7]/40 text-[#a855f7] hover:bg-[#a855f7]/15 hover:border-[#a855f7]/80"
+          className="pixel-btn bg-transparent border-[#ff6b2b]/40 text-[#ff6b2b] hover:bg-[#ff6b2b]/15 hover:border-[#ff6b2b]/80"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -113,54 +113,41 @@ export default function Landing() {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="max-w-3xl"
         >
-          {/* Title */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl leading-tight tracking-tight">
-            <motion.span
-              className="neon-purple-glossy inline-block"
+          {/* Title: OHO on top, SHAWARMA PANIC underneath */}
+          <div className="flex flex-col items-center">
+            <motion.h1
+              className="neon-purple-glossy leading-none"
+              style={{ fontSize: "clamp(48px, 10vw, 96px)" }}
               animate={{
                 filter: [
-                  "drop-shadow(0 0 8px rgba(168,85,255,0.5)) drop-shadow(0 0 20px rgba(168,85,255,0.3))",
-                  "drop-shadow(0 0 12px rgba(180,100,255,0.7)) drop-shadow(0 0 30px rgba(168,85,255,0.4))",
-                  "drop-shadow(0 0 8px rgba(168,85,255,0.5)) drop-shadow(0 0 20px rgba(168,85,255,0.3))",
+                  "drop-shadow(0 0 12px rgba(168,85,255,0.6)) drop-shadow(0 0 30px rgba(168,85,255,0.3))",
+                  "drop-shadow(0 0 18px rgba(180,100,255,0.8)) drop-shadow(0 0 40px rgba(168,85,255,0.4))",
+                  "drop-shadow(0 0 12px rgba(168,85,255,0.6)) drop-shadow(0 0 30px rgba(168,85,255,0.3))",
                 ],
               }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
               OHO
-            </motion.span>{" "}
-            <motion.span
-              className="neon-purple-glossy-dark inline-block"
+            </motion.h1>
+            <motion.h2
+              className="neon-orange leading-none mt-2"
+              style={{ fontSize: "clamp(20px, 4.5vw, 40px)" }}
               animate={{
-                filter: [
-                  "drop-shadow(0 0 8px rgba(140,50,220,0.5)) drop-shadow(0 0 20px rgba(140,50,220,0.3))",
-                  "drop-shadow(0 0 12px rgba(160,60,240,0.7)) drop-shadow(0 0 30px rgba(140,50,220,0.4))",
-                  "drop-shadow(0 0 8px rgba(140,50,220,0.5)) drop-shadow(0 0 20px rgba(140,50,220,0.3))",
+                textShadow: [
+                  "0 0 8px #ff6b2b, 0 0 24px rgba(255,107,43,0.5), 0 0 48px rgba(255,107,43,0.2)",
+                  "0 0 14px #ff6b2b, 0 0 36px rgba(255,107,43,0.7), 0 0 64px rgba(255,107,43,0.35)",
+                  "0 0 8px #ff6b2b, 0 0 24px rgba(255,107,43,0.5), 0 0 48px rgba(255,107,43,0.2)",
                 ],
               }}
-              transition={{ duration: 3, delay: 0.5, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
             >
-              Shawarma
-            </motion.span>
-            <br />
-            <motion.span
-              className="neon-purple-glossy inline-block"
-              style={{ fontSize: "1.15em" }}
-              animate={{
-                filter: [
-                  "drop-shadow(0 0 8px rgba(168,85,255,0.5)) drop-shadow(0 0 20px rgba(168,85,255,0.3))",
-                  "drop-shadow(0 0 14px rgba(200,100,255,0.8)) drop-shadow(0 0 35px rgba(168,85,255,0.5))",
-                  "drop-shadow(0 0 8px rgba(168,85,255,0.5)) drop-shadow(0 0 20px rgba(168,85,255,0.3))",
-                ],
-              }}
-              transition={{ duration: 2.5, delay: 1, repeat: Infinity, ease: "easeInOut" }}
-            >
-              PANIC
-            </motion.span>
-          </h1>
+              SHAWARMA PANIC
+            </motion.h2>
+          </div>
 
           <p
-            className="mt-6 text-sm sm:text-base leading-relaxed max-w-lg mx-auto"
-            style={{ color: "#8888aa", fontFamily: "monospace" }}
+            className="mt-8 text-sm sm:text-base leading-relaxed max-w-lg mx-auto"
+            style={{ color: "#7a7a9a" }}
           >
             Run. Eat. Don&apos;t die.
             <br />
@@ -171,17 +158,17 @@ export default function Landing() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <motion.button
               onClick={handlePlay}
-              className="pixel-btn bg-[#a855f7] border-[#a855f7] text-[#06060e] font-bold"
-              whileHover={{ boxShadow: "0 0 30px rgba(168,85,255,0.5), 0 0 60px rgba(168,85,255,0.25)" }}
+              className="pixel-btn bg-[#ff6b2b] border-[#ff6b2b] text-[#06060e]"
+              whileHover={{ boxShadow: "0 0 30px rgba(255,107,43,0.5), 0 0 60px rgba(255,107,43,0.25)" }}
               whileTap={{ scale: 0.94 }}
             >
               Play Now
             </motion.button>
             <motion.button
               onClick={() => navigate("/auth?returnTo=/dashboard")}
-              className="text-sm hover:text-[#a855f7] transition-all duration-300"
-              style={{ color: "#6a6a8a", fontFamily: "monospace" }}
-              whileHover={{ scale: 1.05 }}
+              className="text-sm transition-all duration-300"
+              style={{ color: "#6a6a8a" }}
+              whileHover={{ scale: 1.05, color: "#ff6b2b" }}
             >
               Already have an account? Log in
             </motion.button>
@@ -190,7 +177,7 @@ export default function Landing() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 text-center py-6 text-[10px]" style={{ color: "#3a3a52", fontFamily: "monospace" }}>
+      <footer className="relative z-10 text-center py-6 text-[10px]" style={{ color: "#3a3a52" }}>
         OHO Shawarma Panic — Built for high scores and good times
       </footer>
     </div>

@@ -34,7 +34,7 @@ export default function GameOverScreen({
         <motion.button
           onClick={() => navigate("/dashboard")}
           className="absolute top-6 left-6 neon-orange opacity-40 hover:opacity-100 transition-opacity"
-          style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}
+          style={{ fontSize: "10px" }}
           whileHover={{ x: -4 }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.4 }}
@@ -50,9 +50,7 @@ export default function GameOverScreen({
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 200 }}
         >
-          <h1
-            className="text-3xl sm:text-4xl font-black neon-pink"
-          >
+          <h1 className="text-3xl sm:text-4xl neon-pink">
             Game Over
           </h1>
           <p className="mt-3 text-xs text-[#6a6a8a]">
@@ -68,11 +66,11 @@ export default function GameOverScreen({
           transition={{ delay: 0.3 }}
         >
           <div className="text-center">
-            <p className="text-[10px] text-[#6a6a8a] mb-1" style={{ fontFamily: "monospace" }}>
+            <p className="text-[10px] text-[#6a6a8a] mb-1">
               Score
             </p>
             <motion.p
-              className="text-3xl font-black neon-orange"
+              className="text-3xl neon-orange"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", delay: 0.5 }}
@@ -81,7 +79,7 @@ export default function GameOverScreen({
             </motion.p>
           </div>
 
-          <div className="flex justify-between text-xs" style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}>
+          <div className="flex justify-between text-[10px]">
             <div className="text-center">
               <p className="text-[#6a6a8a] mb-1">Round</p>
               <p className="neon-purple">{round}</p>

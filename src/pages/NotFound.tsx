@@ -15,7 +15,7 @@ export default function NotFound() {
 
       <div className="relative z-10 flex flex-col items-center gap-6 px-4">
         <motion.h1
-          className="text-5xl sm:text-7xl font-black neon-orange"
+          className="text-5xl sm:text-7xl neon-orange"
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 200 }}
@@ -25,7 +25,6 @@ export default function NotFound() {
 
         <motion.p
           className="text-sm text-[#6a6a8a] text-center"
-          style={{ fontFamily: '"Silkscreen", monospace' }}
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}

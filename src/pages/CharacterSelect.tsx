@@ -21,24 +21,31 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
     <div className="min-h-screen bg-[#06060e] flex flex-col items-center justify-center relative overflow-hidden scanlines">
       <div className="absolute inset-0 grid-bg" />
 
+      {/* Neon orb */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#ff6b2b]/5 rounded-full blur-[100px]" />
+      </div>
+
       <div className="relative z-10 flex flex-col items-center gap-8 px-4 w-full max-w-lg">
         {/* Back button */}
         <motion.button
           onClick={onBack}
           className="absolute top-6 left-6 neon-orange opacity-40 hover:opacity-100 transition-opacity"
-          style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}
+          style={{ fontSize: "10px" }}
           whileHover={{ x: -4 }}
         >
           &larr; Back
         </motion.button>
 
-        <motion.h2
-          className="text-xl sm:text-2xl font-bold text-center neon-orange"
+        <motion.div
+          className="text-center flex flex-col items-center"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
         >
-          Pick Your Character
-        </motion.h2>
+          <h2 className="text-xl sm:text-2xl neon-orange">
+            Pick Your Character
+          </h2>
+        </motion.div>
 
         {/* Character cards */}
         <motion.div
@@ -64,7 +71,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           >
             {selected === "boy" && (
               <motion.div
-                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded bg-[#00ccff] text-[#06060e] font-bold"
+                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded bg-[#00ccff] text-[#06060e]"
                 layoutId="selected-badge"
               >
                 P1
@@ -77,7 +84,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-[#00ccff]/60 rounded-b-lg" />
               </div>
             </div>
-            <span className="text-sm font-bold neon-cyan">
+            <span className="text-sm neon-cyan">
               Boy
             </span>
           </motion.button>
@@ -99,7 +106,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           >
             {selected === "girl" && (
               <motion.div
-                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded bg-[#ff3366] text-[#06060e] font-bold"
+                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] px-2.5 py-1 rounded bg-[#ff3366] text-[#06060e]"
                 layoutId="selected-badge"
               >
                 P1
@@ -112,7 +119,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-6 bg-[#ff3366]/60 rounded-b-lg" />
               </div>
             </div>
-            <span className="text-sm font-bold neon-pink">
+            <span className="text-sm neon-pink">
               Girl
             </span>
           </motion.button>
@@ -126,8 +133,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           transition={{ delay: 0.4 }}
         >
           <label
-            className="block text-xs mb-2 neon-orange opacity-50"
-            style={{ fontFamily: '"Silkscreen", monospace', fontSize: "10px" }}
+            className="block text-[10px] mb-2 neon-orange opacity-50"
           >
             Your Name
           </label>
