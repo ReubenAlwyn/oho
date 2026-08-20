@@ -4,13 +4,13 @@ import { useNavigate } from "react-router";
 import shawarmaPixel from "../assets/shawarma-pixel.png";
 
 const floatingShawarmas = [
-  { x: "8%", y: "15%", size: 56, delay: 0, duration: 7, rotation: 12 },
-  { x: "82%", y: "20%", size: 64, delay: 1.2, duration: 9, rotation: -8 },
-  { x: "15%", y: "70%", size: 48, delay: 2.5, duration: 8, rotation: 15 },
-  { x: "75%", y: "65%", size: 52, delay: 0.8, duration: 7.5, rotation: -10 },
-  { x: "50%", y: "10%", size: 44, delay: 3, duration: 6.5, rotation: 5 },
-  { x: "90%", y: "80%", size: 46, delay: 1.8, duration: 8.5, rotation: -15 },
-  { x: "35%", y: "85%", size: 50, delay: 0.5, duration: 7, rotation: 8 },
+  { x: "8%", y: "15%", size: 140, delay: 0, duration: 7, rotation: 12 },
+  { x: "82%", y: "20%", size: 160, delay: 1.2, duration: 9, rotation: -8 },
+  { x: "15%", y: "70%", size: 120, delay: 2.5, duration: 8, rotation: 15 },
+  { x: "75%", y: "65%", size: 130, delay: 0.8, duration: 7.5, rotation: -10 },
+  { x: "50%", y: "10%", size: 110, delay: 3, duration: 6.5, rotation: 5 },
+  { x: "90%", y: "80%", size: 115, delay: 1.8, duration: 8.5, rotation: -15 },
+  { x: "35%", y: "85%", size: 125, delay: 0.5, duration: 7, rotation: 8 },
 ];
 
 export default function Landing() {
