@@ -4,13 +4,13 @@ import { useNavigate } from "react-router";
 import shawarmaPixel from "../assets/shawarma-pixel.svg";
 
 const floatingShawarmas = [
-  { x: "8%", y: "15%", size: 48, delay: 0, duration: 7, rotation: 12 },
-  { x: "82%", y: "20%", size: 56, delay: 1.2, duration: 9, rotation: -8 },
-  { x: "15%", y: "70%", size: 40, delay: 2.5, duration: 8, rotation: 15 },
-  { x: "75%", y: "65%", size: 44, delay: 0.8, duration: 7.5, rotation: -10 },
-  { x: "50%", y: "10%", size: 36, delay: 3, duration: 6.5, rotation: 5 },
-  { x: "90%", y: "80%", size: 38, delay: 1.8, duration: 8.5, rotation: -15 },
-  { x: "35%", y: "85%", size: 42, delay: 0.5, duration: 7, rotation: 8 },
+  { x: "8%", y: "15%", size: 56, delay: 0, duration: 7, rotation: 12 },
+  { x: "82%", y: "20%", size: 64, delay: 1.2, duration: 9, rotation: -8 },
+  { x: "15%", y: "70%", size: 48, delay: 2.5, duration: 8, rotation: 15 },
+  { x: "75%", y: "65%", size: 52, delay: 0.8, duration: 7.5, rotation: -10 },
+  { x: "50%", y: "10%", size: 44, delay: 3, duration: 6.5, rotation: 5 },
+  { x: "90%", y: "80%", size: 46, delay: 1.8, duration: 8.5, rotation: -15 },
+  { x: "35%", y: "85%", size: 50, delay: 0.5, duration: 7, rotation: 8 },
 ];
 
 export default function Landing() {
@@ -41,15 +41,15 @@ export default function Landing() {
               left: s.x,
               top: s.y,
               width: s.size,
-              height: s.size * 1.5,
+              height: "auto",
               imageRendering: "pixelated",
-              opacity: 0.12,
-              filter: "brightness(0.8) saturate(1.2)",
+              opacity: 0.1,
+              filter: "brightness(0.7) saturate(1.3)",
             }}
             animate={{
               y: [0, -25, -10, -30, 0],
               rotate: [0, s.rotation, -s.rotation / 2, s.rotation * 0.7, 0],
-              opacity: [0.08, 0.15, 0.1, 0.14, 0.08],
+              opacity: [0.06, 0.12, 0.08, 0.11, 0.06],
             }}
             transition={{
               duration: s.duration,
@@ -65,19 +65,19 @@ export default function Landing() {
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
           className="absolute w-[500px] h-[500px] rounded-full blur-[120px]"
-          style={{ background: "radial-gradient(circle, rgba(255,107,43,0.18) 0%, transparent 70%)", top: "-10%", right: "-10%" }}
+          style={{ background: "radial-gradient(circle, rgba(140,50,220,0.15) 0%, transparent 70%)", top: "-10%", right: "-10%" }}
           animate={{ scale: [1, 1.2, 1], opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           className="absolute w-[400px] h-[400px] rounded-full blur-[100px]"
-          style={{ background: "radial-gradient(circle, rgba(0,204,255,0.12) 0%, transparent 70%)", bottom: "0%", left: "-5%" }}
+          style={{ background: "radial-gradient(circle, rgba(0,204,255,0.08) 0%, transparent 70%)", bottom: "0%", left: "-5%" }}
           animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
         <motion.div
           className="absolute w-[300px] h-[300px] rounded-full blur-[80px]"
-          style={{ background: "radial-gradient(circle, rgba(200,80,255,0.08) 0%, transparent 70%)", top: "40%", left: "30%" }}
+          style={{ background: "radial-gradient(circle, rgba(255,107,43,0.06) 0%, transparent 70%)", top: "40%", left: "30%" }}
           animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.7, 0.4] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
         />
@@ -90,14 +90,14 @@ export default function Landing() {
           whileHover={{ scale: 1.05 }}
           onClick={() => navigate("/")}
         >
-          <img src={shawarmaPixel} alt="" className="w-6 h-9" style={{ imageRendering: "pixelated" }} />
-          <span className="neon-orange" style={{ fontFamily: '"Silkscreen", monospace', fontSize: "14px" }}>
+          <img src={shawarmaPixel} alt="" className="w-6" style={{ imageRendering: "pixelated", height: "auto" }} />
+          <span className="neon-purple-glossy" style={{ fontFamily: '"Silkscreen", monospace', fontSize: "14px" }}>
             OHO
           </span>
         </motion.div>
         <motion.button
           onClick={handlePlay}
-          className="pixel-btn bg-transparent border-[#ff6b2b]/40 text-[#ff6b2b] hover:bg-[#ff6b2b]/15 hover:border-[#ff6b2b]/80"
+          className="pixel-btn bg-transparent border-[#a855f7]/40 text-[#a855f7] hover:bg-[#a855f7]/15 hover:border-[#a855f7]/80"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -114,28 +114,44 @@ export default function Landing() {
           className="max-w-3xl"
         >
           {/* Title */}
-          <h1
-            className="text-4xl sm:text-6xl md:text-7xl font-black leading-tight tracking-tight"
-          >
+          <h1 className="text-4xl sm:text-6xl md:text-7xl leading-tight tracking-tight">
             <motion.span
-              className="neon-cyan inline-block"
-              animate={{ textShadow: ["0 0 7px #00ccff, 0 0 20px rgba(0,204,255,0.5), 0 0 42px rgba(0,204,255,0.25)", "0 0 10px #00ccff, 0 0 30px rgba(0,204,255,0.7), 0 0 60px rgba(0,204,255,0.35)", "0 0 7px #00ccff, 0 0 20px rgba(0,204,255,0.5), 0 0 42px rgba(0,204,255,0.25)"] }}
+              className="neon-purple-glossy inline-block"
+              animate={{
+                filter: [
+                  "drop-shadow(0 0 8px rgba(168,85,255,0.5)) drop-shadow(0 0 20px rgba(168,85,255,0.3))",
+                  "drop-shadow(0 0 12px rgba(180,100,255,0.7)) drop-shadow(0 0 30px rgba(168,85,255,0.4))",
+                  "drop-shadow(0 0 8px rgba(168,85,255,0.5)) drop-shadow(0 0 20px rgba(168,85,255,0.3))",
+                ],
+              }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
               OHO
             </motion.span>{" "}
             <motion.span
-              className="neon-yellow inline-block"
-              animate={{ textShadow: ["0 0 7px #ffdd00, 0 0 20px rgba(255,221,0,0.5), 0 0 42px rgba(255,221,0,0.25)", "0 0 12px #ffdd00, 0 0 35px rgba(255,221,0,0.7), 0 0 60px rgba(255,221,0,0.35)", "0 0 7px #ffdd00, 0 0 20px rgba(255,221,0,0.5), 0 0 42px rgba(255,221,0,0.25)"] }}
+              className="neon-purple-glossy-dark inline-block"
+              animate={{
+                filter: [
+                  "drop-shadow(0 0 8px rgba(140,50,220,0.5)) drop-shadow(0 0 20px rgba(140,50,220,0.3))",
+                  "drop-shadow(0 0 12px rgba(160,60,240,0.7)) drop-shadow(0 0 30px rgba(140,50,220,0.4))",
+                  "drop-shadow(0 0 8px rgba(140,50,220,0.5)) drop-shadow(0 0 20px rgba(140,50,220,0.3))",
+                ],
+              }}
               transition={{ duration: 3, delay: 0.5, repeat: Infinity, ease: "easeInOut" }}
             >
               Shawarma
             </motion.span>
             <br />
             <motion.span
-              className="neon-pink inline-block"
+              className="neon-purple-glossy inline-block"
               style={{ fontSize: "1.15em" }}
-              animate={{ textShadow: ["0 0 7px #ff3366, 0 0 20px rgba(255,51,102,0.5), 0 0 42px rgba(255,51,102,0.25)", "0 0 14px #ff3366, 0 0 40px rgba(255,51,102,0.8), 0 0 70px rgba(255,51,102,0.4)", "0 0 7px #ff3366, 0 0 20px rgba(255,51,102,0.5), 0 0 42px rgba(255,51,102,0.25)"] }}
+              animate={{
+                filter: [
+                  "drop-shadow(0 0 8px rgba(168,85,255,0.5)) drop-shadow(0 0 20px rgba(168,85,255,0.3))",
+                  "drop-shadow(0 0 14px rgba(200,100,255,0.8)) drop-shadow(0 0 35px rgba(168,85,255,0.5))",
+                  "drop-shadow(0 0 8px rgba(168,85,255,0.5)) drop-shadow(0 0 20px rgba(168,85,255,0.3))",
+                ],
+              }}
               transition={{ duration: 2.5, delay: 1, repeat: Infinity, ease: "easeInOut" }}
             >
               PANIC
@@ -155,15 +171,15 @@ export default function Landing() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <motion.button
               onClick={handlePlay}
-              className="pixel-btn bg-[#ff6b2b] border-[#ff6b2b] text-[#06060e] font-bold"
-              whileHover={{ boxShadow: "0 0 30px rgba(255,107,43,0.5), 0 0 60px rgba(255,107,43,0.25)" }}
+              className="pixel-btn bg-[#a855f7] border-[#a855f7] text-[#06060e] font-bold"
+              whileHover={{ boxShadow: "0 0 30px rgba(168,85,255,0.5), 0 0 60px rgba(168,85,255,0.25)" }}
               whileTap={{ scale: 0.94 }}
             >
               Play Now
             </motion.button>
             <motion.button
               onClick={() => navigate("/auth?returnTo=/dashboard")}
-              className="text-sm hover:text-[#ff6b2b] transition-all duration-300"
+              className="text-sm hover:text-[#a855f7] transition-all duration-300"
               style={{ color: "#6a6a8a", fontFamily: "monospace" }}
               whileHover={{ scale: 1.05 }}
             >

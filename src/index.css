@@ -225,6 +225,22 @@
   transform: translateY(-4px);
 }
 
+/* Glossy purple title */
+.neon-purple-glossy {
+  background: linear-gradient(180deg, #d8a0ff 0%, #b060f0 25%, #8a30d0 50%, #9040d8 55%, #a050e8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(168, 85, 255, 0.5)) drop-shadow(0 0 20px rgba(168, 85, 255, 0.3));
+}
+.neon-purple-glossy-dark {
+  background: linear-gradient(180deg, #c080f0 0%, #9040d0 25%, #6a18b0 50%, #7a28b8 55%, #8830c8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(140, 50, 220, 0.5)) drop-shadow(0 0 20px rgba(140, 50, 220, 0.3));
+}
+
 /* Floating animation */
 @keyframes float {
   0%, 100% { transform: translateY(0) rotate(0deg); }
