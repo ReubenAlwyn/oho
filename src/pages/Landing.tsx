@@ -19,9 +19,9 @@ export default function Landing() {
 
   const handlePlay = () => {
     if (isAuthenticated) {
-      navigate("/dashboard");
+      navigate("/game");
     } else {
-      navigate("/auth?returnTo=/dashboard");
+      navigate("/auth?returnTo=/game");
     }
   };
 
@@ -165,7 +165,7 @@ export default function Landing() {
               Play Now
             </motion.button>
             <motion.button
-              onClick={() => navigate("/auth?returnTo=/dashboard")}
+              onClick={() => navigate("/auth?returnTo=/game")}
               className="text-sm transition-all duration-300"
               style={{ color: "#6a6a8a" }}
               whileHover={{ scale: 1.05, color: "#00ccff" }}

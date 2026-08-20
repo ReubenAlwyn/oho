@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useNavigate } from "react-router";
 import MainMenu from "./pages/MainMenu";
 import CharacterSelect from "./pages/CharacterSelect";
 import GameScreen from "./pages/GameScreen";
@@ -9,6 +10,7 @@ import { addScoreEntry } from "./game/leaderboard";
 import type { CharacterType, GameScreenName } from "./game/types";
 
 export default function App() {
+  const navigate = useNavigate();
   const [screen, setScreen] = useState<GameScreenName>("menu");
   const [character, setCharacter] = useState<CharacterType>("boy");
   const [playerName, setPlayerName] = useState("Player");
@@ -94,7 +96,7 @@ export default function App() {
               character={character}
               playerName={playerName}
               onPlayAgain={handlePlayAgain}
-              onMainMenu={() => setScreen("menu")}
+              onMainMenu={() => navigate("/dashboard")}
               onLeaderboard={() => setScreen("leaderboard")}
             />
           </motion.div>
