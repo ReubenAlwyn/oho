@@ -114,7 +114,9 @@ export function isWall(grid: MazeGrid, row: number, col: number): boolean {
 }
 
 /**
- * Place shawarmas in the maze at random open positions.
+ * Place shawarmas evenly throughout the maze using spatial bucketing.
+ * Divides the maze into a grid of cells and distributes shawarmas
+ * so every region of the map gets some.
  */
 export function placeShawarmas(
   grid: MazeGrid,
@@ -125,11 +127,51 @@ export function placeShawarmas(
   const excludeSet = new Set(excludePositions.map(([r, c]) => `${r},${c}`));
   const available = open.filter(([r, c]) => !excludeSet.has(`${r},${c}`));
 
-  // Shuffle available positions
-  for (let i = available.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [available[i], available[j]] = [available[j], available[i]];
+  if (available.length === 0) return [];
+
+  // Divide maze into a grid of buckets (roughly 4x3 for a 15x21 maze)
+  const bucketCols = 4;
+  const bucketRows = 3;
+  const cellH = MAZE_ROWS / bucketRows;
+  const cellW = MAZE_COLS / bucketCols;
+
+  // Assign each open position to a bucket
+  const buckets: [number, number][][] = Array.from({ length: bucketRows * bucketCols }, () => []);
+  for (const pos of available) {
+    const bRow = Math.min(Math.floor(pos[0] / cellH), bucketRows - 1);
+    const bCol = Math.min(Math.floor(pos[1] / cellW), bucketCols - 1);
+    buckets[bRow * bucketCols + bCol].push(pos);
   }
 
-  return available.slice(0, Math.min(count, available.length));
+  // Shuffle each bucket
+  for (const bucket of buckets) {
+    for (let i = bucket.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [bucket[i], bucket[j]] = [bucket[j], bucket[i]];
+    }
+  }
+
+  // Round-robin pick from buckets so every region gets shawarmas
+  const result: [number, number][] = [];
+  const used = new Set<string>();
+  let round = 0;
+  while (result.length < count) {
+    let added = false;
+    for (let b = 0; b < buckets.length && result.length < count; b++) {
+      const bucket = buckets[b];
+      const idx = round % bucket.length;
+      const pos = bucket[idx];
+      const key = `${pos[0]},${pos[1]}`;
+      if (!used.has(key)) {
+        used.add(key);
+        result.push(pos);
+        added = true;
+      }
+    }
+    round++;
+    // Safety: if all buckets exhausted, break
+    if (!added || round > Math.max(MAZE_ROWS, MAZE_COLS)) break;
+  }
+
+  return result;
 }

@@ -30,19 +30,6 @@ export default function GameOverScreen({
       </div>
 
       <div className="relative z-10 flex flex-col items-center gap-7 px-4">
-        {/* Back to dashboard */}
-        <motion.button
-          onClick={() => navigate("/dashboard")}
-          className="absolute top-6 left-6 neon-cyan opacity-40 hover:opacity-100 transition-opacity"
-          style={{ fontSize: "10px" }}
-          whileHover={{ x: -4 }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.4 }}
-          transition={{ delay: 0.5 }}
-        >
-          &larr; Dashboard
-        </motion.button>
-
         {/* Game Over title */}
         <motion.div
           className="text-center"

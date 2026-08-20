@@ -33,6 +33,8 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
   const transitionTimerRef = useRef(0);
   const transitionTextRef = useRef("");
   const animFrameRef = useRef(0);
+  const roundStartFrameRef = useRef(0);
+  const ENEMY_GRACE_FRAMES = 120; // ~2 seconds before CHUB starts chasing
 
   // React state for HUD
   const [hudState, setHudState] = useState({ score: 0, round: 1, lives: PLAYER_START_LIVES });
@@ -72,6 +74,9 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       collected: false,
       animTimer: 0,
     }));
+
+    // Track when the round started for enemy grace period
+    roundStartFrameRef.current = frameRef.current;
 
     // Spawn enemies
     const enemyCount = round;
@@ -270,6 +275,9 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     }
 
     // Enemy AI & movement
+    const roundAge = frame - roundStartFrameRef.current;
+    const graceActive = roundAge < ENEMY_GRACE_FRAMES;
+
     for (const enemy of enemiesRef.current) {
       if (!enemy.active) continue;
 
@@ -278,9 +286,10 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
 
       if (arrived) {
         enemy.tilePos = pixelToTile(enemy.pixelPos.x, enemy.pixelPos.y);
-        enemy.targetPixelPos = { ...enemy.pixelPos };
 
-        if (frame % ENEMY_CHASE_INTERVAL === enemy.id % ENEMY_CHASE_INTERVAL) {
+        // Immediately pick next direction — no waiting for interval
+        // This makes CHUB move smoothly without pausing at each tile
+        if (!graceActive) {
           const dir = findPath(
             gridRef.current,
             enemy.tilePos.row,
@@ -304,6 +313,32 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
               gridRef.current[nr][nc] === 0
             ) {
               enemy.targetPixelPos = { x: nc * TILE_SIZE, y: nr * TILE_SIZE };
+            } else {
+              // Wall — stay put briefly
+              enemy.targetPixelPos = { ...enemy.pixelPos };
+            }
+          } else {
+            enemy.targetPixelPos = { ...enemy.pixelPos };
+          }
+        } else {
+          // Grace period: enemies just wander randomly
+          const dirs: Direction[] = ["up", "down", "left", "right"];
+          const shuffled = dirs.sort(() => Math.random() - 0.5);
+          for (const d of shuffled) {
+            let dr = 0, dc = 0;
+            if (d === "up") dr = -1;
+            else if (d === "down") dr = 1;
+            else if (d === "left") dc = -1;
+            else dc = 1;
+            const nr = enemy.tilePos.row + dr;
+            const nc = enemy.tilePos.col + dc;
+            if (
+              nr >= 0 && nr < gridRef.current.length &&
+              nc >= 0 && nc < gridRef.current[0].length &&
+              gridRef.current[nr][nc] === 0
+            ) {
+              enemy.targetPixelPos = { x: nc * TILE_SIZE, y: nr * TILE_SIZE };
+              break;
             }
           }
         }
