@@ -1,4 +1,5 @@
 import { useRef, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../game/constants";
 import { useGameEngine } from "../game/useGameEngine";
 import type { CharacterType } from "../game/types";
@@ -6,11 +7,13 @@ import type { CharacterType } from "../game/types";
 interface GameScreenProps {
   character: CharacterType;
   onGameOver: (score: number, round: number) => void;
+  onMainMenu?: () => void;
+  onLeaderboard?: () => void;
 }
 
-export default function GameScreen({ character, onGameOver }: GameScreenProps) {
+export default function GameScreen({ character, onGameOver, onMainMenu, onLeaderboard }: GameScreenProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { startGame } = useGameEngine(canvasRef, { character, onGameOver });
+  const { startGame, togglePause, isPaused } = useGameEngine(canvasRef, { character, onGameOver });
 
   useEffect(() => {
     const timer = setTimeout(() => startGame(), 100);
@@ -31,11 +34,9 @@ export default function GameScreen({ character, onGameOver }: GameScreenProps) {
     let drawH: number;
 
     if (screenAspect > canvasAspect) {
-      // Screen is wider than canvas — fit to height
       drawH = vh;
       drawW = vh * canvasAspect;
     } else {
-      // Screen is taller than canvas — fit to width
       drawW = vw;
       drawH = vw / canvasAspect;
     }
@@ -59,6 +60,87 @@ export default function GameScreen({ character, onGameOver }: GameScreenProps) {
         className="block"
         style={{ imageRendering: "pixelated" }}
       />
+
+      {/* Pause overlay */}
+      <AnimatePresence>
+        {isPaused && (
+          <motion.div
+            className="absolute inset-0 flex items-center justify-center z-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {/* Dark backdrop */}
+            <div className="absolute inset-0 bg-[#06060e]/80 backdrop-blur-sm" />
+
+            {/* Pause card */}
+            <motion.div
+              className="relative z-10 flex flex-col items-center gap-6 px-10 py-8 rounded-2xl border-2 border-[#2a2a40] bg-[#0e0e1a]/95 shadow-[0_0_60px_rgba(200,80,255,0.15)]"
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            >
+              {/* Pause icon */}
+              <div className="flex gap-2 mb-1">
+                <div className="w-3 h-8 rounded-sm bg-[#c850ff]" />
+                <div className="w-3 h-8 rounded-sm bg-[#c850ff]" />
+              </div>
+
+              <h2 className="text-2xl neon-purple" style={{ fontFamily: "\"Silkscreen\", monospace" }}>
+                PAUSED
+              </h2>
+
+              <p className="text-[10px] text-[#6a6a8a] -mt-3">
+                Press ESC or P to resume
+              </p>
+
+              <div className="flex flex-col items-center gap-3 w-full max-w-[200px]">
+                {/* Resume */}
+                <motion.button
+                  onClick={togglePause}
+                  className="pixel-btn w-full bg-[#c850ff] border-[#c850ff] text-[#06060e]"
+                  whileHover={{ boxShadow: "0 0 30px rgba(200,80,255,0.5), 0 0 60px rgba(200,80,255,0.25)" }}
+                  whileTap={{ scale: 0.94 }}
+                >
+                  Resume
+                </motion.button>
+
+                {/* Leaderboard */}
+                {onLeaderboard && (
+                  <motion.button
+                    onClick={() => {
+                      togglePause();
+                      onLeaderboard();
+                    }}
+                    className="pixel-btn w-full bg-transparent border-[#2a2a40] text-[#6a6a8a] hover:text-[#ffdd00] hover:border-[#ffdd00]/40"
+                    whileHover={{ boxShadow: "0 0 20px rgba(255,221,0,0.15)" }}
+                    whileTap={{ scale: 0.96 }}
+                  >
+                    Leaderboard
+                  </motion.button>
+                )}
+
+                {/* Main Menu / Dashboard */}
+                {onMainMenu && (
+                  <motion.button
+                    onClick={() => {
+                      togglePause();
+                      onMainMenu();
+                    }}
+                    className="pixel-btn w-full bg-transparent border-[#2a2a40] text-[#3a3a52] hover:text-[#6a6a8a] hover:border-[#3a3a52]"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.96 }}
+                  >
+                    Dashboard
+                  </motion.button>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

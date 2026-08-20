@@ -78,7 +78,12 @@ export default function App() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <GameScreen character={character} onGameOver={handleGameOver} />
+            <GameScreen
+              character={character}
+              onGameOver={handleGameOver}
+              onMainMenu={() => navigate("/dashboard")}
+              onLeaderboard={() => setScreen("leaderboard")}
+            />
           </motion.div>
         )}
 

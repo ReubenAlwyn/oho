@@ -72,4 +72,4 @@ export type GameScreenName =
   | "game-over"
   | "leaderboard";
 
-export type GameState = "idle" | "playing" | "dying" | "round-transition" | "game-over";
+export type GameState = "idle" | "playing" | "paused" | "dying" | "round-transition" | "game-over";

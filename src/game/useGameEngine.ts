@@ -35,6 +35,16 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
   const animFrameRef = useRef(0);
   const roundStartFrameRef = useRef(0);
   const ENEMY_GRACE_FRAMES = 120; // ~2 seconds before CHUB starts chasing
+  const pausedRef = useRef(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const togglePause = useCallback(() => {
+    const state = gameStateRef.current;
+    if (state !== "playing" && state !== "paused") return;
+    pausedRef.current = !pausedRef.current;
+    gameStateRef.current = pausedRef.current ? "paused" : "playing";
+    setIsPaused(pausedRef.current);
+  }, []);
 
   // React state for HUD
   const [hudState, setHudState] = useState({ score: 0, round: 1, lives: PLAYER_START_LIVES });
@@ -206,6 +216,7 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
   const update = useCallback(() => {
     const state = gameStateRef.current;
     if (state === "game-over" || state === "idle") return;
+    if (state === "paused") return; // Don't update game logic while paused
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -422,6 +433,17 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     // Tap-to-run: keydown sets direction persistently
     const handleKeyDown = (e: KeyboardEvent) => {
       const key = e.key;
+
+      // Pause/unpause
+      if (key === "Escape" || key === "p" || key === "P") {
+        e.preventDefault();
+        togglePause();
+        return;
+      }
+
+      // Don't process movement keys while paused
+      if (pausedRef.current) return;
+
       let dir: Direction | null = null;
       if (key === "ArrowUp" || key === "w" || key === "W") dir = "up";
       else if (key === "ArrowDown" || key === "s" || key === "S") dir = "down";
@@ -475,7 +497,9 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
   return {
     startGame,
     setDirection,
+    togglePause,
     hudState,
     gameState: gameStateRef.current,
+    isPaused,
   };
 }
