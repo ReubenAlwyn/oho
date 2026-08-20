@@ -16,7 +16,7 @@ import {
 import { useAuth } from "@/hooks/use-auth";
 import { ArrowRight, Loader2, Mail, UserX } from "lucide-react";
 import shawarmaPixel from "../assets/shawarma-pixel.png";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 
 interface AuthProps {
@@ -40,10 +40,16 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Track auth state on mount — only clear guest flag if auth CHANGES during this session
+  const wasAuthenticatedRef = useRef(isAuthenticated);
+
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
-      // Clear guest flag — user is now properly signed in
-      localStorage.removeItem("force-guest-ts");
+      // Only clear guest flag if user was NOT authenticated when this page loaded
+      // (i.e. they just signed in, not just visiting while already logged in)
+      if (!wasAuthenticatedRef.current) {
+        localStorage.removeItem("force-guest-ts");
+      }
       navigate(redirect);
     }
   }, [authLoading, isAuthenticated, navigate, redirect]);
