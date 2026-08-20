@@ -75,7 +75,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
       {/* Back to dashboard — big button */}
       <motion.button
         onClick={() => navigate("/dashboard")}
-        className="absolute top-8 left-8 z-10 flex items-center gap-3 px-6 py-3 rounded-xl border-2 border-[#00ccff]/30 bg-[#00ccff]/5 text-[#00ccff] hover:bg-[#00ccff]/15 hover:border-[#00ccff]/60 transition-all"
+        className="absolute top-8 left-8 z-20 flex items-center gap-3 px-6 py-3 rounded-xl border-2 border-[#00ccff]/30 bg-[#00ccff]/5 text-[#00ccff] hover:bg-[#00ccff]/15 hover:border-[#00ccff]/60 transition-all"
         style={{ fontSize: "18px" }}
         whileHover={{ x: -4, boxShadow: "0 0 20px rgba(0,204,255,0.2)" }}
         whileTap={{ scale: 0.97 }}
