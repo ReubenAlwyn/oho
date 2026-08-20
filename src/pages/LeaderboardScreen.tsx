@@ -51,7 +51,7 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
 
       <div className="relative z-10 flex flex-col h-full p-4 sm:p-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6 pt-2">
+        <div className="flex items-center justify-center mb-6 pt-2">
           <motion.h1
             className="text-lg sm:text-xl neon-yellow"
             initial={{ y: -20, opacity: 0 }}
@@ -59,8 +59,6 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
           >
             Leaderboard
           </motion.h1>
-
-          <div style={{ width: 80 }} />
         </div>
 
         {/* Leaderboard list */}
