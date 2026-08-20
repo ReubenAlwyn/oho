@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../game/constants";
 import { useGameEngine } from "../game/useGameEngine";
 import type { CharacterType } from "../game/types";
@@ -17,32 +17,46 @@ export default function GameScreen({ character, onGameOver }: GameScreenProps) {
     return () => clearTimeout(timer);
   }, [startGame]);
 
-  // Fill entire viewport
-  useEffect(() => {
-    const handleResize = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
+  // Scale canvas to fill viewport while preserving aspect ratio (contain)
+  const updateCanvasSize = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const canvasAspect = CANVAS_WIDTH / CANVAS_HEIGHT;
+    const screenAspect = vw / vh;
 
-      // Fill the entire screen
-      canvas.style.width = `${vw}px`;
-      canvas.style.height = `${vh}px`;
-    };
+    let drawW: number;
+    let drawH: number;
 
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    if (screenAspect > canvasAspect) {
+      // Screen is wider than canvas — fit to height
+      drawH = vh;
+      drawW = vh * canvasAspect;
+    } else {
+      // Screen is taller than canvas — fit to width
+      drawW = vw;
+      drawH = vw / canvasAspect;
+    }
+
+    canvas.style.width = `${Math.floor(drawW)}px`;
+    canvas.style.height = `${Math.floor(drawH)}px`;
   }, []);
 
+  useEffect(() => {
+    updateCanvasSize();
+    window.addEventListener("resize", updateCanvasSize);
+    return () => window.removeEventListener("resize", updateCanvasSize);
+  }, [updateCanvasSize]);
+
   return (
-    <div className="fixed inset-0 bg-[#06060e] overflow-hidden z-50">
+    <div className="fixed inset-0 bg-[#06060e] overflow-hidden z-50 flex items-center justify-center">
       <canvas
         ref={canvasRef}
         width={CANVAS_WIDTH}
         height={CANVAS_HEIGHT}
-        className="block w-full h-full"
+        className="block"
         style={{ imageRendering: "pixelated" }}
       />
     </div>
