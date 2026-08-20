@@ -16,8 +16,8 @@ export default function Dashboard() {
   const [recentGames, setRecentGames] = useState<ScoreEntry[]>([]);
 
   useEffect(() => {
-    // Only load leaderboard stats if user is authenticated
-    if (isAuthenticated) {
+    if (isAuthenticated && user) {
+      // Load leaderboard stats for authenticated users
       const entries = getLeaderboard();
       setGamesPlayed(entries.length);
       if (entries.length > 0) {
@@ -25,8 +25,14 @@ export default function Dashboard() {
         setBestRound(Math.max(...entries.map((e) => e.highestRound)));
         setRecentGames(entries.slice(0, 5));
       }
+    } else {
+      // Clear stats for guests — they have no saved data
+      setBestScore(0);
+      setBestRound(0);
+      setGamesPlayed(0);
+      setRecentGames([]);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -54,7 +60,7 @@ export default function Dashboard() {
             </span>
           </motion.button>
           <div className="flex items-center gap-4">
-            {isAuthenticated ? (
+            {isAuthenticated && user ? (
               <>
                 <div className="w-8 h-8 rounded-lg bg-[#c850ff]/15 border border-[#c850ff]/20 flex items-center justify-center text-[#c850ff] text-sm">
                   {initials}
@@ -141,7 +147,7 @@ export default function Dashboard() {
         </motion.div>
 
         {/* Stats — only for authenticated users */}
-        {isAuthenticated ? (
+        {isAuthenticated && user ? (
         <>
         <motion.div
           className="mt-10 grid grid-cols-3 gap-4"
