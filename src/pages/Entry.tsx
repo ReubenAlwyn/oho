@@ -14,10 +14,12 @@ export default function Entry() {
   }
 
   const handleSignIn = () => {
+    sessionStorage.removeItem("force-guest");
     navigate("/auth?returnTo=/game");
   };
 
   const handleGuest = () => {
+    sessionStorage.removeItem("force-guest");
     navigate("/game");
   };
 

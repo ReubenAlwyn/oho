@@ -42,6 +42,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
 
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
+      // Clear guest flag — user is now properly signed in
+      sessionStorage.removeItem("force-guest");
       navigate(redirect);
     }
   }, [authLoading, isAuthenticated, navigate, redirect]);

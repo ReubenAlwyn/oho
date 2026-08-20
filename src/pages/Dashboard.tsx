@@ -15,8 +15,14 @@ export default function Dashboard() {
   const [gamesPlayed, setGamesPlayed] = useState(0);
   const [recentGames, setRecentGames] = useState<ScoreEntry[]>([]);
 
+  // Check if user just signed out — force guest mode
+  const forcedGuest = typeof window !== "undefined" && sessionStorage.getItem("force-guest") === "1";
+  const showAsGuest = forcedGuest || !isAuthenticated || !user;
+
   useEffect(() => {
-    if (isAuthenticated && user) {
+    if (!showAsGuest) {
+      // Clear the flag once we confirm real auth
+      sessionStorage.removeItem("force-guest");
       // Load leaderboard stats for authenticated users
       const entries = getLeaderboard();
       setGamesPlayed(entries.length);
@@ -26,17 +32,18 @@ export default function Dashboard() {
         setRecentGames(entries.slice(0, 5));
       }
     } else {
-      // Clear stats for guests — they have no saved data
+      // Clear stats for guests
       setBestScore(0);
       setBestRound(0);
       setGamesPlayed(0);
       setRecentGames([]);
     }
-  }, [isAuthenticated, user]);
+  }, [showAsGuest]);
 
   const handleSignOut = async () => {
+    // Set flag BEFORE sign out so it persists through the reload
+    sessionStorage.setItem("force-guest", "1");
     await signOut();
-    // Hard reload to fully clear Convex auth state
     window.location.href = "/";
   };
 
@@ -61,7 +68,7 @@ export default function Dashboard() {
             </span>
           </motion.button>
           <div className="flex items-center gap-4">
-            {isAuthenticated && user ? (
+            {!showAsGuest ? (
               <>
                 <div className="w-8 h-8 rounded-lg bg-[#c850ff]/15 border border-[#c850ff]/20 flex items-center justify-center text-[#c850ff] text-sm">
                   {initials}
@@ -110,7 +117,7 @@ export default function Dashboard() {
         </motion.div>
 
         {/* Guest banner */}
-        {!isAuthenticated && (
+        {showAsGuest && (
           <motion.div
             className="mt-4 rounded-lg px-4 py-3 flex items-center justify-between border border-[#ffdd00]/20 bg-[#ffdd00]/5"
             initial={{ opacity: 0, y: 10 }}
@@ -148,7 +155,7 @@ export default function Dashboard() {
         </motion.div>
 
         {/* Stats — only for authenticated users */}
-        {isAuthenticated && user ? (
+        {!showAsGuest ? (
         <>
         <motion.div
           className="mt-10 grid grid-cols-3 gap-4"
