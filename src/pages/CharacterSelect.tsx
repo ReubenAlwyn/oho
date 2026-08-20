@@ -70,17 +70,22 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#c850ff]/5 rounded-full blur-[100px]" />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center gap-8 px-4 w-full max-w-lg">
-        {/* Back button */}
-        <motion.button
-          onClick={onBack}
-          className="absolute top-8 left-6 neon-cyan opacity-40 hover:opacity-100 transition-opacity"
-          style={{ fontSize: "13px" }}
-          whileHover={{ x: -4 }}
-        >
-          &larr; Back
-        </motion.button>
+      {/* Back button — top left, big and clear */}
+      <motion.button
+        onClick={onBack}
+        className="absolute top-8 left-8 z-10 flex items-center gap-3 px-6 py-3 rounded-xl border-2 border-[#00ccff]/30 bg-[#00ccff]/5 text-[#00ccff] hover:bg-[#00ccff]/15 hover:border-[#00ccff]/60 transition-all"
+        style={{ fontSize: "18px" }}
+        whileHover={{ x: -4, boxShadow: "0 0 20px rgba(0,204,255,0.2)" }}
+        whileTap={{ scale: 0.97 }}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.3, duration: 0.4 }}
+      >
+        <span style={{ fontSize: "22px" }}>&larr;</span>
+        Back
+      </motion.button>
 
+      <div className="relative z-10 flex flex-col items-center gap-8 px-4 w-full max-w-lg">
         <motion.div
           className="text-center flex flex-col items-center"
           initial={{ y: -20, opacity: 0 }}
