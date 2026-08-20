@@ -90,8 +90,8 @@ export default function Landing() {
           whileHover={{ scale: 1.05 }}
           onClick={() => navigate("/")}
         >
-          <img src={shawarmaPixel} alt="" className="w-6" style={{ imageRendering: "pixelated", height: "auto" }} />
-          <span className="neon-cyan" style={{ fontSize: "14px" }}>
+          <img src={shawarmaPixel} alt="" className="w-12" style={{ imageRendering: "pixelated", height: "auto" }} />
+          <span className="neon-cyan" style={{ fontSize: "20px" }}>
             OHO
           </span>
         </motion.div>
@@ -117,7 +117,7 @@ export default function Landing() {
           <div className="flex flex-col items-center">
             <motion.h1
               className="neon-purple-glossy leading-none"
-              style={{ fontSize: "clamp(48px, 10vw, 96px)" }}
+              style={{ fontSize: "clamp(64px, 14vw, 140px)" }}
               animate={{
                 filter: [
                   "drop-shadow(0 0 12px rgba(200,80,255,0.6)) drop-shadow(0 0 30px rgba(200,80,255,0.3))",
