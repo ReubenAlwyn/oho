@@ -41,17 +41,19 @@ export default function Entry() {
         />
       </div>
 
-      {/* Back to home */}
+      {/* Back to home — big button */}
       <motion.button
         onClick={() => navigate("/")}
-        className="absolute top-8 left-8 z-10 neon-cyan opacity-40 hover:opacity-100 transition-opacity"
-        style={{ fontSize: "16px" }}
-        whileHover={{ x: -4 }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.4 }}
-        transition={{ delay: 0.5 }}
+        className="absolute top-8 left-8 z-10 flex items-center gap-3 px-6 py-3 rounded-xl border-2 border-[#00ccff]/30 bg-[#00ccff]/5 text-[#00ccff] hover:bg-[#00ccff]/15 hover:border-[#00ccff]/60 transition-all"
+        style={{ fontSize: "18px" }}
+        whileHover={{ x: -4, boxShadow: "0 0 20px rgba(0,204,255,0.2)" }}
+        whileTap={{ scale: 0.97 }}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.3, duration: 0.4 }}
       >
-        &larr; Home
+        <span style={{ fontSize: "22px" }}>&larr;</span>
+        Home
       </motion.button>
 
       <div className="relative z-10 flex flex-col items-center gap-8 px-4">
