@@ -25,16 +25,16 @@ function loadCharacterImages() {
   imagesLoaded = true;
 
   try {
-    const boySrc = new URL("../assets/boy.png", import.meta.url).href;
+    const boySrc = new URL("../assets/boy.jpg", import.meta.url).href;
     boyImg = new Image();
     boyImg.src = boySrc;
-  } catch { /* boy.png not yet added */ }
+  } catch { /* boy.jpg not yet added */ }
 
   try {
-    const girlSrc = new URL("../assets/girl.png", import.meta.url).href;
+    const girlSrc = new URL("../assets/girl.jpg", import.meta.url).href;
     girlImg = new Image();
     girlImg.src = girlSrc;
-  } catch { /* girl.png not yet added */ }
+  } catch { /* girl.jpg not yet added */ }
 }
 
 loadCharacterImages();

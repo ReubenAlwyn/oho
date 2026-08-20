@@ -11,10 +11,10 @@ interface CharacterSelectProps {
 let boyImgSrc = "";
 let girlImgSrc = "";
 try {
-  boyImgSrc = new URL("../assets/boy.png", import.meta.url).href;
+  boyImgSrc = new URL("../assets/boy.jpg", import.meta.url).href;
 } catch { /* no image yet */ }
 try {
-  girlImgSrc = new URL("../assets/girl.png", import.meta.url).href;
+  girlImgSrc = new URL("../assets/girl.jpg", import.meta.url).href;
 } catch { /* no image yet */ }
 
 // Preload images
