@@ -298,7 +298,7 @@ function drawHUD(
   ctx.fillStyle = "rgba(0,0,0,0.7)";
   ctx.fillRect(0, CANVAS_HEIGHT - 28, CANVAS_WIDTH, 28);
 
-  ctx.font = 'bold 13px "Press Start 2P", monospace, system-ui';
+  ctx.font = 'bold 13px "Silkscreen", monospace, system-ui';
 
   // Top bar
   ctx.textAlign = "left";
@@ -315,7 +315,7 @@ function drawHUD(
   // Bottom bar
   ctx.textAlign = "center";
   ctx.fillStyle = COLORS.shawarma;
-  ctx.font = '11px "Press Start 2P", monospace, system-ui';
+  ctx.font = '11px "Silkscreen", monospace, system-ui';
   ctx.fillText(`🌮 ${remainingShawarmas} shawarmas left`, CANVAS_WIDTH / 2, CANVAS_HEIGHT - 12);
 
   ctx.restore();

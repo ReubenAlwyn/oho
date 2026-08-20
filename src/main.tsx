@@ -8,6 +8,8 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router";
 import "./index.css";
 
+import shawarmaPixel from "./assets/shawarma-pixel.svg";
+
 // Lazy load route components
 const Landing = lazy(() => import("./pages/Landing"));
 const AuthPage = lazy(() => import("./pages/Auth"));
@@ -18,7 +20,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 function RouteLoading() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="animate-pulse text-muted-foreground" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "12px" }}>
+      <div className="animate-pulse text-muted-foreground" style={{ fontFamily: '"Silkscreen", monospace, system-ui', fontSize: "12px" }}>
         Loading...
       </div>
     </div>
@@ -38,7 +40,7 @@ class RootErrorBoundary extends React.Component<
       return (
         <div className="min-h-screen flex items-center justify-center bg-background p-6">
           <div className="max-w-md text-center">
-            <p className="text-2xl mb-3">🌮</p>
+            <p className="text-2xl mb-3"><img src={shawarmaPixel} alt="" className="w-10 inline" style={{ imageRendering: "pixelated", height: "auto" }} /></p>
             <p className="text-sm font-semibold text-foreground">Oops! Something went wrong.</p>
             <p className="mt-2 text-xs text-muted-foreground">{this.state.message}</p>
           </div>

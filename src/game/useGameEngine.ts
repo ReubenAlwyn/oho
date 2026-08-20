@@ -247,7 +247,7 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       ctx.fillStyle = "rgba(0,0,0,0.6)";
       ctx.fillRect(0, CANVAS_HEIGHT / 2 - 40, CANVAS_WIDTH, 80);
       ctx.fillStyle = "#c084fc";
-      ctx.font = 'bold 20px "Press Start 2P", monospace, system-ui';
+      ctx.font = 'bold 20px "Silkscreen", monospace, system-ui';
       ctx.textAlign = "center";
       ctx.fillText(transitionTextRef.current, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 8);
       ctx.textAlign = "left";

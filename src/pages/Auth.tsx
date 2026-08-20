@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/input-otp";
 import { useAuth } from "@/hooks/use-auth";
 import { ArrowRight, Loader2, Mail, UserX } from "lucide-react";
+import shawarmaPixel from "../assets/shawarma-pixel.svg";
 import { Suspense, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 
@@ -104,8 +105,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           onClick={() => navigate("/")}
           className="flex items-center gap-3 hover:opacity-70 transition-opacity"
         >
-          <span className="text-2xl">🌮</span>
-          <span className="neon-orange" style={{ fontFamily: '"Press Start 2P", monospace, system-ui', fontSize: "14px" }}>
+          <img src={shawarmaPixel} alt="" className="w-6" style={{ imageRendering: "pixelated", height: "auto" }} />
+          <span className="neon-orange" style={{ fontFamily: '"Silkscreen", monospace', fontSize: "14px" }}>
             OHO
           </span>
         </button>
@@ -116,10 +117,9 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
         <Card className="w-full max-w-[400px] bg-[#0e0e1a] border-[#2a2a40] shadow-[0_0_40px_rgba(255,107,43,0.08)]">
           {step === "signIn" ? (
             <>
-              <CardHeader className="text-center">
-                <div className="flex justify-center mb-2">
-                  <div className="w-14 h-14 rounded-xl bg-[#ff6b2b]/10 border border-[#ff6b2b]/20 flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(255,107,43,0.15)]">
-                    🌮
+              <CardHeader className="text-center">                  <div className="flex justify-center mb-2">
+                  <div className="w-14 h-14 rounded-xl bg-[#ff6b2b]/10 border border-[#ff6b2b]/20 flex items-center justify-center shadow-[0_0_15px_rgba(255,107,43,0.15)]">
+                    <img src={shawarmaPixel} alt="" className="w-8" style={{ imageRendering: "pixelated", height: "auto" }} />
                   </div>
                 </div>
                 <CardTitle className="text-xl text-[#e0e0f0]">Enter the Maze</CardTitle>
