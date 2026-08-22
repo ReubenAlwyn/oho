@@ -433,15 +433,6 @@ function drawEnemy(
   ctx.arc(x, headY + T * 0.12, T * 0.08, Math.PI + 0.3, Math.PI * 2 - 0.3);
   ctx.stroke();
 
-  // Name tag
-  ctx.fillStyle = accentColor;
-  ctx.globalAlpha = 0.7;
-  ctx.font = `bold ${Math.floor(T * 0.14)}px "Silkscreen", monospace, system-ui`;
-  ctx.textAlign = "center";
-  ctx.textBaseline = "top";
-  ctx.fillText("CHUB", x, y + bodyH + T * 0.22);
-  ctx.globalAlpha = 1;
-  ctx.textAlign = "left";
 }
 
 function getEyeDir(enemy: Enemy): { x: number; y: number } {
@@ -636,80 +627,96 @@ function drawHUD(
   remaining: number
 ) {
   const T = TILE_SIZE;
-  const barH = T * 0.55;
-  const fontMain = `bold ${Math.floor(T * 0.28)}px "Silkscreen", monospace, system-ui`;
-  const fontSmall = `${Math.floor(T * 0.18)}px "Silkscreen", monospace, system-ui`;
+  const barH = T * 0.8;
+  const fontLabel = `bold ${Math.floor(T * 0.2)}px "Silkscreen", monospace, system-ui`;
+  const fontValue = `bold ${Math.floor(T * 0.38)}px "Silkscreen", monospace, system-ui`;
 
-  // HUD background bar
-  ctx.fillStyle = "#06060e";
+  // HUD background bar with gradient
+  const barGrad = ctx.createLinearGradient(0, 0, 0, barH);
+  barGrad.addColorStop(0, "rgba(6,6,14,0.95)");
+  barGrad.addColorStop(1, "rgba(6,6,14,0.75)");
+  ctx.fillStyle = barGrad;
   ctx.fillRect(0, 0, CANVAS_WIDTH, barH);
+  // Bottom accent line
   ctx.fillStyle = "#c850ff";
-  ctx.globalAlpha = 0.15;
-  ctx.fillRect(0, barH, CANVAS_WIDTH, 2);
+  ctx.globalAlpha = 0.25;
+  ctx.fillRect(0, barH - 2, CANVAS_WIDTH, 2);
   ctx.globalAlpha = 1;
 
-  const cy = barH * 0.55;
+  const labelY = barH * 0.35;
+  const valueY = barH * 0.7;
 
-  // Score (center)
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.font = fontSmall;
-  ctx.fillStyle = "#6a6a8a";
-  ctx.fillText("SCORE", CANVAS_WIDTH / 2, cy - T * 0.12);
-  ctx.font = fontMain;
-  ctx.shadowColor = "#ffdd00";
-  ctx.shadowBlur = 10;
-  ctx.fillStyle = "#ffdd00";
-  ctx.fillText(score.toLocaleString(), CANVAS_WIDTH / 2, cy + T * 0.08);
-  ctx.shadowBlur = 0;
-
-  // Round (left)
+  // ── Round (left) ──
+  const roundX = T * 0.8;
   ctx.textAlign = "left";
-  ctx.font = fontSmall;
+  ctx.font = fontLabel;
   ctx.fillStyle = "#6a6a8a";
-  ctx.fillText("ROUND", T * 0.5, cy - T * 0.12);
-  ctx.font = fontMain;
+  ctx.fillText("ROUND", roundX, labelY);
+  ctx.font = fontValue;
   ctx.shadowColor = "#c850ff";
-  ctx.shadowBlur = 8;
+  ctx.shadowBlur = 14;
   ctx.fillStyle = "#c850ff";
-  ctx.fillText(String(round), T * 0.5, cy + T * 0.08);
+  ctx.fillText(String(round), roundX, valueY);
   ctx.shadowBlur = 0;
 
-  // Lives (left of center)
-  ctx.textAlign = "left";
-  ctx.font = fontSmall;
+  // ── Lives (hearts) ──
+  const livesX = T * 3.2;
+  ctx.font = fontLabel;
   ctx.fillStyle = "#6a6a8a";
-  ctx.fillText("LIVES", T * 3.5, cy - T * 0.12);
-  ctx.font = fontMain;
-  ctx.shadowColor = "#ff3366";
-  ctx.shadowBlur = 8;
-  ctx.fillStyle = "#ff3366";
-  // Draw heart icons instead of number
-  for (let i = 0; i < lives; i++) {
-    const hx = T * 3.5 + i * T * 0.35;
-    const hy = cy + T * 0.08;
+  ctx.fillText("LIVES", livesX, labelY);
+  // Draw pixel hearts
+  const heartSize = T * 0.16;
+  for (let i = 0; i < 5; i++) {
+    const hx = livesX + i * (heartSize * 2.4);
+    const hy = valueY;
+    const filled = i < lives;
+    ctx.save();
+    ctx.shadowColor = filled ? "#ff3366" : "transparent";
+    ctx.shadowBlur = filled ? 10 : 0;
+    // Heart shape using two arcs and a triangle
+    ctx.fillStyle = filled ? "#ff3366" : "#2a2a40";
     ctx.beginPath();
-    ctx.arc(hx + T * 0.04, hy, T * 0.08, 0, Math.PI * 2);
-    ctx.arc(hx + T * 0.14, hy, T * 0.08, 0, Math.PI * 2);
+    ctx.arc(hx + heartSize * 0.35, hy - heartSize * 0.1, heartSize * 0.45, Math.PI, 0);
+    ctx.arc(hx + heartSize * 1.05, hy - heartSize * 0.1, heartSize * 0.45, Math.PI, 0);
+    ctx.lineTo(hx + heartSize * 1.5, hy + heartSize * 0.05);
+    ctx.lineTo(hx, hy + heartSize * 0.05);
+    ctx.closePath();
     ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(hx - T * 0.02, hy + T * 0.04);
-    ctx.lineTo(hx + T * 0.09, hy + T * 0.16);
-    ctx.lineTo(hx + T * 0.2, hy + T * 0.04);
-    ctx.fill();
+    // Inner glow for filled hearts
+    if (filled) {
+      ctx.fillStyle = "rgba(255,100,130,0.4)";
+      ctx.beginPath();
+      ctx.arc(hx + heartSize * 0.5, hy - heartSize * 0.2, heartSize * 0.18, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
   }
+
+  // ── Score (center) ──
+  const scoreX = CANVAS_WIDTH / 2;
+  ctx.textAlign = "center";
+  ctx.font = fontLabel;
+  ctx.fillStyle = "#6a6a8a";
+  ctx.fillText("SCORE", scoreX, labelY);
+  // Score with golden glow
+  ctx.font = `bold ${Math.floor(T * 0.45)}px "Silkscreen", monospace, system-ui`;
+  ctx.shadowColor = "#ffdd00";
+  ctx.shadowBlur = 16;
+  ctx.fillStyle = "#ffdd00";
+  ctx.fillText(score.toLocaleString(), scoreX, valueY + T * 0.02);
   ctx.shadowBlur = 0;
 
-  // Remaining shawarmas (right)
+  // ── Remaining shawarmas (right) ──
+  const shawX = CANVAS_WIDTH - T * 0.8;
   ctx.textAlign = "right";
-  ctx.font = fontSmall;
+  ctx.font = fontLabel;
   ctx.fillStyle = "#6a6a8a";
-  ctx.fillText("SHAWARMAS", CANVAS_WIDTH - T * 0.5, cy - T * 0.12);
-  ctx.font = fontMain;
+  ctx.fillText("SHAWARMAS", shawX, labelY);
+  ctx.font = fontValue;
   ctx.shadowColor = "#00ccff";
-  ctx.shadowBlur = 8;
+  ctx.shadowBlur = 14;
   ctx.fillStyle = "#00ccff";
-  ctx.fillText(String(remaining), CANVAS_WIDTH - T * 0.5, cy + T * 0.08);
+  ctx.fillText(String(remaining), shawX, valueY);
   ctx.shadowBlur = 0;
 
   ctx.textAlign = "left";
