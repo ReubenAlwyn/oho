@@ -174,59 +174,156 @@ function imgReady(img: HTMLImageElement | null): img is HTMLImageElement {
 function drawPlayer(
   ctx: CanvasRenderingContext2D,
   player: Player,
-  _frame: number
+  frame: number
 ) {
   const T = TILE_SIZE;
-  const x = player.pixelPos.x + T / 2;
-  const y = player.pixelPos.y + T / 2;
+  const baseX = player.pixelPos.x + T / 2;
+  const baseY = player.pixelPos.y + T / 2;
 
   // Invincibility flash
-  if (player.invincible && Math.floor(_frame / 4) % 2 === 0) return;
+  if (player.invincible && Math.floor(frame / 4) % 2 === 0) return;
 
   const glowColor = player.type === "boy" ? COLORS.player : COLORS.neonPurple;
   const radius = T * 0.45;
 
-  // Glow
-  drawGlow(ctx, x, y, T * 0.8, glowColor, 0.5);
+  // Wobble animation — bouncy when moving, gentle idle bob
+  const wobble = player.moving
+    ? Math.sin(frame * 0.3) * 4 + Math.sin(frame * 0.7) * 2
+    : Math.sin(frame * 0.08) * 2;
+  const squash = player.moving
+    ? 1 + Math.sin(frame * 0.4) * 0.06
+    : 1 + Math.sin(frame * 0.1) * 0.03;
+  const stretch = player.moving
+    ? 1 - Math.sin(frame * 0.4) * 0.06
+    : 1 - Math.sin(frame * 0.1) * 0.03;
+
+  // Squash on direction change (big squish)
+  const squashBoost = Math.max(0, 1 - (frame % 8) / 8) * 0.12;
+
+  const x = baseX;
+  const y = baseY + wobble;
+
+  // Glow (pulsing)
+  const glowPulse = 0.4 + Math.sin(frame * 0.1) * 0.15;
+  drawGlow(ctx, x, y, T * 0.9, glowColor, glowPulse);
+
+  // Speed lines when moving
+  if (player.moving) {
+    ctx.save();
+    ctx.globalAlpha = 0.3;
+    ctx.strokeStyle = glowColor;
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 3; i++) {
+      const offX = (Math.random() - 0.5) * T * 0.3;
+      const offY = (Math.random() - 0.5) * T * 0.3;
+      const lineLen = T * 0.15 + Math.random() * T * 0.1;
+      let lx1 = x + offX, ly1 = y + offY;
+      let lx2 = lx1, ly2 = ly1;
+      if (player.direction === "left") lx2 -= lineLen;
+      else if (player.direction === "right") lx2 += lineLen;
+      else if (player.direction === "up") ly2 -= lineLen;
+      else ly2 += lineLen;
+      ctx.beginPath();
+      ctx.moveTo(lx1, ly1);
+      ctx.lineTo(lx2, ly2);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(squash + squashBoost, stretch - squashBoost);
 
   // Character photo or fallback
   const img = player.type === "boy" ? boyImg : girlImg;
   const fallbackColor = player.type === "boy" ? "#00ccff" : "#c850ff";
 
   if (imgReady(img)) {
-    drawCircularImage(ctx, img, x, y, radius);
+    drawCircularImage(ctx, img, 0, 0, radius);
   } else {
     // Fallback: solid colored circle with inner detail
     ctx.fillStyle = fallbackColor;
     ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.arc(0, 0, radius, 0, Math.PI * 2);
     ctx.fill();
 
     // Inner highlight
     ctx.fillStyle = "rgba(255,255,255,0.25)";
     ctx.beginPath();
-    ctx.arc(x - radius * 0.15, y - radius * 0.2, radius * 0.4, 0, Math.PI * 2);
+    ctx.arc(-radius * 0.15, -radius * 0.2, radius * 0.4, 0, Math.PI * 2);
     ctx.fill();
 
     // Eyes
     ctx.fillStyle = "#fff";
-    const eyeR = radius * 0.08;
+    const eyeR = radius * 0.1;
     ctx.beginPath();
-    ctx.arc(x - radius * 0.2, y - radius * 0.05, eyeR, 0, Math.PI * 2);
-    ctx.arc(x + radius * 0.2, y - radius * 0.05, eyeR, 0, Math.PI * 2);
+    ctx.arc(-radius * 0.22, -radius * 0.08, eyeR, 0, Math.PI * 2);
+    ctx.arc(radius * 0.22, -radius * 0.08, eyeR, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = "#222";
     ctx.beginPath();
-    ctx.arc(x - radius * 0.2, y - radius * 0.05, eyeR * 0.5, 0, Math.PI * 2);
-    ctx.arc(x + radius * 0.2, y - radius * 0.05, eyeR * 0.5, 0, Math.PI * 2);
+    ctx.arc(-radius * 0.22, -radius * 0.08, eyeR * 0.5, 0, Math.PI * 2);
+    ctx.arc(radius * 0.22, -radius * 0.08, eyeR * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Goofy grin
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(0, radius * 0.08, radius * 0.25, 0.1, Math.PI - 0.1);
+    ctx.stroke();
+  }
+
+  // Funny accessories on top of character
+  if (player.type === "boy") {
+    // Shawarzilla: little crown
+    ctx.fillStyle = "#ffdd00";
+    ctx.beginPath();
+    ctx.moveTo(-radius * 0.35, -radius - 2);
+    ctx.lineTo(-radius * 0.25, -radius - T * 0.18);
+    ctx.lineTo(-radius * 0.1, -radius - 4);
+    ctx.lineTo(0, -radius - T * 0.22);
+    ctx.lineTo(radius * 0.1, -radius - 4);
+    ctx.lineTo(radius * 0.25, -radius - T * 0.18);
+    ctx.lineTo(radius * 0.35, -radius - 2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "#f59e0b";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    // Crown gem
+    ctx.fillStyle = "#ff3366";
+    ctx.beginPath();
+    ctx.arc(0, -radius - T * 0.13, 3, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    // Shawarpunzel: flower on head
+    const petalColor = "#f472b6";
+    const centerColor = "#ffdd00";
+    const flowerY = -radius - 2;
+    for (let i = 0; i < 5; i++) {
+      const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+      const px = Math.cos(angle) * 7;
+      const py = flowerY + Math.sin(angle) * 7;
+      ctx.fillStyle = petalColor;
+      ctx.beginPath();
+      ctx.arc(px, py, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.fillStyle = centerColor;
+    ctx.beginPath();
+    ctx.arc(0, flowerY, 3, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // Direction indicator (bigger arrow)
+  ctx.restore();
+
+  // Direction indicator (bigger arrow) — drawn outside scale transform
   ctx.fillStyle = "#fff";
   ctx.globalAlpha = 0.85;
   const arrowSize = T * 0.1;
-  const armLen = T * 0.42;
+  const armLen = T * 0.44;
   if (player.direction === "up") {
     ctx.beginPath();
     ctx.moveTo(x, y - armLen - T * 0.12);
