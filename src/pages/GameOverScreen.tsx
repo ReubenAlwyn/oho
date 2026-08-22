@@ -26,12 +26,13 @@ export default function GameOverScreen({
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#06060e] flex flex-col items-center justify-center relative overflow-hidden scanlines">
+    <div className="min-h-screen bg-[#06060e] flex flex-col relative overflow-hidden scanlines">
       <div className="absolute inset-0 grid-bg" />
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#c850ff]/5 rounded-full blur-[100px]" />
       </div>
 
+      <div className="flex-1 flex items-center justify-center w-full">
       <div className="relative z-10 flex flex-col items-center gap-7 px-4">
         {/* Game Over title */}
         <motion.div
@@ -138,6 +139,7 @@ export default function GameOverScreen({
             Back to Dashboard
           </motion.button>
         </motion.div>
+      </div>
       </div>
       <Footer />
     </div>

@@ -91,7 +91,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
   ];
 
   return (
-    <div className="min-h-screen bg-[#06060e] flex flex-col items-center justify-center relative overflow-hidden scanlines">
+    <div className="min-h-screen bg-[#06060e] flex flex-col relative overflow-hidden scanlines">
       <div className="absolute inset-0 grid-bg" />
 
       {/* Neon orb */}
@@ -114,6 +114,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
         Back
       </motion.button>
 
+      <div className="flex-1 flex items-center justify-center w-full">
       <div className="relative z-10 flex flex-col items-center gap-8 px-4 w-full max-w-lg">
         <motion.div
           className="text-center flex flex-col items-center"
@@ -246,6 +247,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
         >
           Let&apos;s Go!
         </motion.button>
+      </div>
       </div>
       <Footer />
     </div>

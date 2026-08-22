@@ -22,7 +22,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#06060e] flex flex-col items-center justify-center relative overflow-hidden scanlines">
+    <div className="min-h-screen bg-[#06060e] flex flex-col relative overflow-hidden scanlines">
       <div className="absolute inset-0 grid-bg" />
 
       {/* Floating pixel shawarmas in background */}
@@ -88,6 +88,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
         Dashboard
       </motion.button>
 
+      <div className="flex-1 flex items-center justify-center w-full">
       <div className="relative z-10 flex flex-col items-center gap-8 px-4">
         {/* Title */}
         <motion.div
@@ -151,6 +152,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
             Leaderboard
           </motion.button>
         </motion.div>
+      </div>
       </div>
       <Footer />
     </div>
