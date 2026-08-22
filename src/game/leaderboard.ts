@@ -29,15 +29,29 @@ export function addScoreEntry(
   character: CharacterType
 ): void {
   const entries = getLeaderboard();
-  const newEntry: ScoreEntry = {
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-    playerName,
-    score,
-    highestRound,
-    character,
-    date: new Date().toISOString(),
-  };
-  entries.push(newEntry);
+
+  // Only keep the highest score per player name
+  const existing = entries.find((e) => e.playerName === playerName);
+  if (existing) {
+    // Update only if the new score is higher
+    if (score > existing.score) {
+      existing.score = score;
+      existing.highestRound = highestRound;
+      existing.character = character;
+      existing.date = new Date().toISOString();
+    }
+  } else {
+    // New player — add entry
+    entries.push({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      playerName,
+      score,
+      highestRound,
+      character,
+      date: new Date().toISOString(),
+    });
+  }
+
   entries.sort((a, b) => b.score - a.score);
   // Keep top 50
   localStorage.setItem(STORAGE_KEY, JSON.stringify(entries.slice(0, 50)));
