@@ -32,16 +32,21 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
   const [boyReady, setBoyReady] = useState(boyImg.complete && boyImg.naturalWidth > 0);
   const [girlReady, setGirlReady] = useState(girlImg.complete && girlImg.naturalWidth > 0);
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const savedName = useQuery(api.profiles.getPlayerName);
   const savePlayerName = useMutation(api.profiles.savePlayerName);
 
+  // Use profile query result, with user.name as immediate fallback
+  // This prevents the name input from flashing while the query loads
+  const effectiveName = savedName ?? user?.name ?? null;
+  const profileLoaded = savedName !== undefined;
+
   // Signed-in user: use their profile name directly (no input needed)
-  const isSignedIn = isAuthenticated && savedName !== null && savedName !== undefined;
-  const displayName = isSignedIn ? (savedName ?? "") : name;
+  const isSignedIn = isAuthenticated && effectiveName !== null;
+  const displayName = isSignedIn ? (effectiveName ?? "") : name;
 
   // First-time signed-in users: still need to set a name
-  const needsNameSetup = isAuthenticated && savedName === null;
+  const needsNameSetup = isAuthenticated && profileLoaded && savedName === null;
   const showNameInput = !isAuthenticated || needsNameSetup;
 
   useEffect(() => {
