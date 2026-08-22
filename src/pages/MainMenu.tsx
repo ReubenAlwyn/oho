@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 import shawarmaPixel from "../assets/shawarma-pixel.png";
+import Footer from "@/components/Footer";
 
 const floatingShawarmas = [
   { x: "8%", y: "15%", size: 140, delay: 0, duration: 7, rotation: 12 },
@@ -151,6 +152,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
           </motion.button>
         </motion.div>
       </div>
+      <Footer />
     </div>
   );
 }

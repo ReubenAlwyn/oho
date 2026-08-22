@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 import { useAuth } from "@/hooks/use-auth";
 import shawarmaPixel from "../assets/shawarma-pixel.png";
+import Footer from "@/components/Footer";
 
 export default function Entry() {
   const navigate = useNavigate();
@@ -118,6 +119,7 @@ export default function Entry() {
           </p>
         </motion.div>
       </div>
+      <Footer />
     </div>
   );
 }

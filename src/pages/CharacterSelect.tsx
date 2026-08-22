@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { api } from "@/convex/_generated/api";
 import { useQuery, useMutation } from "convex/react";
 import type { CharacterType } from "../game/types";
+import Footer from "@/components/Footer";
 
 interface CharacterSelectProps {
   onSelect: (character: CharacterType, name: string) => void;
@@ -246,6 +247,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           Let&apos;s Go!
         </motion.button>
       </div>
+      <Footer />
     </div>
   );
 }

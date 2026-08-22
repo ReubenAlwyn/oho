@@ -186,8 +186,9 @@ export default function Landing() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 text-center py-6 text-[10px]" style={{ color: "#3a3a52" }}>
-        OHO Shawarma Panic — Built for high scores and good times
+      <footer className="relative z-10 text-right py-6 px-6 sm:px-10 text-[10px]" style={{ color: "#3a3a52" }}>
+        &copy; 2026 All Rights Reserved &mdash; Designed &amp; Developed by{' '}
+        <span style={{ color: '#6a6a8a' }}>Reuben Alwyn</span>
       </footer>
     </div>
   );

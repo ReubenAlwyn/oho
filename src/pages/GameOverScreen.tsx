@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { formatScore } from "../game/leaderboard";
 import { useNavigate } from "react-router";
+import Footer from "@/components/Footer";
 
 interface GameOverScreenProps {
   score: number;
@@ -138,6 +139,7 @@ export default function GameOverScreen({
           </motion.button>
         </motion.div>
       </div>
+      <Footer />
     </div>
   );
 }

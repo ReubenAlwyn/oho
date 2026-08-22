@@ -8,6 +8,7 @@ import { useQuery, useMutation } from "convex/react";
 import { getLeaderboard, formatScore, formatDate } from "@/game/leaderboard";
 import type { ScoreEntry } from "@/game/types";
 import shawarmaPixel from "../assets/shawarma-pixel.png";
+import Footer from "@/components/Footer";
 
 export default function Dashboard() {
   const { user, isAuthenticated, signOut } = useAuth();
@@ -369,6 +370,7 @@ export default function Dashboard() {
         </motion.div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

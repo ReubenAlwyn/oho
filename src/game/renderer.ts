@@ -222,11 +222,11 @@ function drawPlayer(
     ctx.fill();
   }
 
-  // Direction indicator (small arrow)
+  // Direction indicator (bigger arrow)
   ctx.fillStyle = "#fff";
-  ctx.globalAlpha = 0.7;
-  const arrowSize = T * 0.06;
-  const armLen = T * 0.38;
+  ctx.globalAlpha = 0.85;
+  const arrowSize = T * 0.1;
+  const armLen = T * 0.42;
   if (player.direction === "up") {
     ctx.beginPath();
     ctx.moveTo(x, y - armLen - T * 0.12);

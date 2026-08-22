@@ -18,6 +18,7 @@ import { ArrowRight, Loader2, Mail, UserX } from "lucide-react";
 import shawarmaPixel from "../assets/shawarma-pixel.png";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
+import Footer from "@/components/Footer";
 
 interface AuthProps {
   redirectAfterAuth?: string;
@@ -267,6 +268,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           )}
         </Card>
       </div>
+      <Footer />
     </div>
   );
 }

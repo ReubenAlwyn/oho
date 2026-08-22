@@ -7,6 +7,7 @@ import {
   formatDate,
 } from "../game/leaderboard";
 import type { ScoreEntry } from "../game/types";
+import Footer from "@/components/Footer";
 import { useNavigate } from "react-router";
 
 interface LeaderboardScreenProps {
@@ -178,6 +179,7 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }
