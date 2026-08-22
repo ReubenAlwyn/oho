@@ -591,20 +591,16 @@ function drawHUD(
   const fontLabel = `bold ${Math.floor(T * 0.26)}px "Silkscreen", monospace, system-ui`;
   const fontValue = `bold ${Math.floor(T * 0.46)}px "Silkscreen", monospace, system-ui`;
 
-  // HUD background bar with gradient
-  const barGrad = ctx.createLinearGradient(0, 0, 0, barH);
-  barGrad.addColorStop(0, "rgba(6,6,14,0.95)");
-  barGrad.addColorStop(1, "rgba(6,6,14,0.75)");
-  ctx.fillStyle = barGrad;
+  // HUD background bar — solid
+  ctx.fillStyle = "#06060e";
   ctx.fillRect(0, 0, CANVAS_WIDTH, barH);
   // Bottom accent line
   ctx.fillStyle = "#c850ff";
-  ctx.globalAlpha = 0.25;
-  ctx.fillRect(0, barH - 2, CANVAS_WIDTH, 2);
-  ctx.globalAlpha = 1;
+  ctx.fillRect(0, barH - 3, CANVAS_WIDTH, 3);
 
-  const labelY = barH * 0.32;
-  const valueY = barH * 0.72;
+  const cy = barH * 0.5;
+  const labelY = cy - T * 0.18;
+  const valueY = cy + T * 0.2;
 
   // ── Round (left) ──
   const roundX = T * 1;
@@ -629,7 +625,7 @@ function drawHUD(
   const heartH = T * 0.55;
   for (let i = 0; i < 3; i++) {
     const hx = livesX + i * (heartW + T * 0.18);
-    const hy = valueY - heartH * 0.35;
+    const hy = cy - heartH * 0.1;
     const filled = i < lives;
     ctx.save();
     ctx.shadowColor = filled ? "#ff3366" : "transparent";
