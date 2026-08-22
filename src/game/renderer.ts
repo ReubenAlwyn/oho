@@ -609,9 +609,9 @@ function drawHUD(
   ctx.fillStyle = "#6a6a8a";
   ctx.fillText("ROUND", roundX, labelY);
   ctx.font = fontValue;
-  ctx.shadowColor = "#ffdd00";
+  ctx.shadowColor = "#c850ff";
   ctx.shadowBlur = 14;
-  ctx.fillStyle = "#ffdd00";
+  ctx.fillStyle = "#c850ff";
   ctx.fillText(String(round), roundX, valueY);
   ctx.shadowBlur = 0;
 

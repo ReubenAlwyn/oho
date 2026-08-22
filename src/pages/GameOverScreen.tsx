@@ -74,7 +74,7 @@ export default function GameOverScreen({
           <div className="flex justify-between text-sm">
             <div className="text-center">
               <p className="text-[#6a6a8a] mb-2" style={{ fontSize: "14px" }}>Round</p>
-              <p className="neon-purple" style={{ fontSize: "28px" }}>{round}</p>
+              <p className="neon-yellow" style={{ fontSize: "28px" }}>{round}</p>
             </div>
             <div className="text-center">
               <p className="text-[#6a6a8a] mb-2" style={{ fontSize: "14px" }}>Character</p>
