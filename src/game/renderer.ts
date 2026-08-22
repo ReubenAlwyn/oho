@@ -600,7 +600,7 @@ function drawHUD(
 
   const cy = barH * 0.5;
   const labelY = cy - T * 0.18;
-  const valueY = cy + T * 0.2;
+  const valueY = cy + T * 0.3;
 
   // ── Round (left) ──
   const roundX = T * 1;
