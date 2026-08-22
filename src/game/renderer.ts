@@ -620,28 +620,42 @@ function drawHUD(
   ctx.font = fontLabel;
   ctx.fillStyle = "#6a6a8a";
   ctx.fillText("LIVES", livesX, labelY);
-  // Draw 3 hearts (matching PLAYER_START_LIVES)
-  const heartW = T * 0.6;
-  const heartH = T * 0.55;
+  // Draw 3 pixel hearts (matching PLAYER_START_LIVES)
+  // 7x6 pixel grid pattern
+  const heartGrid = [
+    [0,1,0,0,0,1,0],
+    [1,1,1,0,1,1,1],
+    [1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1],
+    [0,1,1,1,1,1,0],
+    [0,0,1,1,1,0,0],
+    [0,0,0,1,0,0,0],
+  ];
+  const pixSize = Math.floor(T * 0.09);
+  const gridW = heartGrid[0].length * pixSize;
+  const gridH = heartGrid.length * pixSize;
   for (let i = 0; i < 3; i++) {
-    const hx = livesX + i * (heartW + T * 0.18);
-    const hy = cy - heartH * 0.1;
+    const hx = livesX + i * (gridW + T * 0.2);
+    const hy = cy - gridH * 0.5;
     const filled = i < lives;
     ctx.save();
-    ctx.shadowColor = filled ? "#ff3366" : "transparent";
-    ctx.shadowBlur = filled ? 14 : 0;
-    ctx.fillStyle = filled ? "#ff3366" : "#2a2a40";
-    ctx.beginPath();
-    ctx.moveTo(hx + heartW * 0.5, hy + heartH * 0.9);
-    ctx.bezierCurveTo(hx - heartW * 0.1, hy + heartH * 0.5, hx - heartW * 0.1, hy - heartW * 0.1, hx + heartW * 0.5, hy + heartH * 0.05);
-    ctx.bezierCurveTo(hx + heartW * 1.1, hy - heartW * 0.1, hx + heartW * 1.1, hy + heartH * 0.5, hx + heartW * 0.5, hy + heartH * 0.9);
-    ctx.fill();
-    // Shine on filled hearts
     if (filled) {
+      ctx.shadowColor = "#ff3366";
+      ctx.shadowBlur = 10;
+    }
+    for (let row = 0; row < heartGrid.length; row++) {
+      for (let col = 0; col < heartGrid[row].length; col++) {
+        if (heartGrid[row][col]) {
+          ctx.fillStyle = filled ? "#ff3366" : "#2a2a40";
+          ctx.fillRect(hx + col * pixSize, hy + row * pixSize, pixSize, pixSize);
+        }
+      }
+    }
+    // Pixel shine on filled hearts
+    if (filled) {
+      ctx.shadowBlur = 0;
       ctx.fillStyle = "rgba(255,180,200,0.5)";
-      ctx.beginPath();
-      ctx.arc(hx + heartW * 0.35, hy + heartH * 0.25, heartW * 0.12, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillRect(hx + 1 * pixSize, hy + 1 * pixSize, pixSize, pixSize);
     }
     ctx.restore();
   }
