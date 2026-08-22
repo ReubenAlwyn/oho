@@ -1,6 +1,6 @@
 // ─── Particle Effects ───
 
-import type { Particle } from "./types";
+import type { Particle, FloatingText } from "./types";
 
 /**
  * Create particles for shawarma collection.
@@ -73,6 +73,41 @@ export function createRoundCompleteParticles(width: number, height: number): Par
     });
   }
   return particles;
+}
+
+const COMBO_TEXTS = ["NICE!", "YUM!", "WOO!", "CRUNCH!", "TASTY!", "SLAY!"];
+
+/**
+ * Create floating text for shawarma collection with combo support.
+ */
+export function createCollectText(
+  x: number,
+  y: number,
+  combo: number
+): FloatingText {
+  const text = combo > 2
+    ? `COMBO x${combo}!`
+    : combo > 1
+    ? `x${combo}!`
+    : COMBO_TEXTS[Math.floor(Math.random() * COMBO_TEXTS.length)];
+  const color = combo > 3 ? "#f472b6" : combo > 2 ? "#ffdd00" : combo > 1 ? "#22d3ee" : "#fbbf24";
+  const fontSize = 12 + Math.min(combo * 2, 16);
+  return { x, y, text, color, life: 50, maxLife: 50, fontSize, vy: -2.5 };
+}
+
+/**
+ * Create floating text for round completion.
+ */
+export function createRoundText(x: number, y: number, round: number): FloatingText {
+  return {
+    x, y,
+    text: `ROUND ${round}!`,
+    color: "#c850ff",
+    life: 70,
+    maxLife: 70,
+    fontSize: 24,
+    vy: -1.5,
+  };
 }
 
 /**

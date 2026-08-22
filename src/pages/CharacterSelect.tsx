@@ -85,8 +85,8 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
   }
 
   const characters: CharDef[] = [
-    { type: "boy", label: "Boy", imgSrc: boyImgSrc, imgReady: boyReady, glow: "rgba(0,204,255,0.3)", bg: "rgba(0,204,255,0.04)", border: "rgba(0,204,255,0.5)", badgeBg: "#00ccff", fallbackColor: "#00ccff" },
-    { type: "girl", label: "Girl", imgSrc: girlImgSrc, imgReady: girlReady, glow: "rgba(200,80,255,0.3)", bg: "rgba(200,80,255,0.04)", border: "rgba(200,80,255,0.5)", badgeBg: "#c850ff", fallbackColor: "#c850ff" },
+    { type: "boy", label: "Shawarzilla", imgSrc: boyImgSrc, imgReady: boyReady, glow: "rgba(0,204,255,0.3)", bg: "rgba(0,204,255,0.04)", border: "rgba(0,204,255,0.5)", badgeBg: "#00ccff", fallbackColor: "#00ccff" },
+    { type: "girl", label: "Shawarpunzel", imgSrc: girlImgSrc, imgReady: girlReady, glow: "rgba(200,80,255,0.3)", bg: "rgba(200,80,255,0.04)", border: "rgba(200,80,255,0.5)", badgeBg: "#c850ff", fallbackColor: "#c850ff" },
   ];
 
   return (

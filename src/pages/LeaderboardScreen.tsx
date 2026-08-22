@@ -118,7 +118,7 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
                             color: entry.character === "boy" ? "#00ccff" : "#c850ff",
                           }}
                         >
-                          {entry.character === "boy" ? "Boy" : "Girl"}
+                          {entry.character === "boy" ? "Shawarzilla" : "Shawarpunzel"}
                         </span>
                       </div>
                       <p className="text-[10px] text-[#3a3a52] mt-0.5">

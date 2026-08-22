@@ -56,6 +56,17 @@ export interface Particle {
   type: "spark" | "glow" | "trail";
 }
 
+export interface FloatingText {
+  x: number;
+  y: number;
+  text: string;
+  color: string;
+  life: number;
+  maxLife: number;
+  fontSize: number;
+  vy: number;
+}
+
 export interface ScoreEntry {
   id: string;
   playerName: string;

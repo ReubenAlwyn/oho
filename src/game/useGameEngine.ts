@@ -6,8 +6,8 @@ import { CANVAS_WIDTH, CANVAS_HEIGHT, TILE_SIZE, PLAYER_SPEED, PLAYER_START_LIVE
 import { generateMaze, placeShawarmas, type MazeGrid } from "./maze";
 import { findPath, getSpawnPositions } from "./pathfinding";
 import { renderFrame, resetMazeBuffer } from "./renderer";
-import { createCollectParticles, createHitParticles, createRoundCompleteParticles, updateParticles } from "./particles";
-import type { Player, Enemy, Shawarma, Particle, Direction, CharacterType, GameState } from "./types";
+import { createCollectParticles, createHitParticles, createRoundCompleteParticles, updateParticles, createCollectText } from "./particles";
+import type { Player, Enemy, Shawarma, Particle, Direction, CharacterType, GameState, FloatingText } from "./types";
 
 interface GameEngineOptions {
   character: CharacterType;
@@ -37,6 +37,9 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
   const ENEMY_GRACE_FRAMES = 120; // ~2 seconds before CHUB starts chasing
   const pausedRef = useRef(false);
   const [isPaused, setIsPaused] = useState(false);
+  const floatingTextsRef = useRef<FloatingText[]>([]);
+  const comboRef = useRef(0);
+  const comboTimerRef = useRef(0);
 
   const togglePause = useCallback(() => {
     const state = gameStateRef.current;
@@ -113,6 +116,9 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     }
 
     particlesRef.current = createRoundCompleteParticles(CANVAS_WIDTH, CANVAS_HEIGHT);
+    floatingTextsRef.current = [];
+    comboRef.current = 0;
+    comboTimerRef.current = 0;
   }, [character]);
 
   /**
@@ -134,6 +140,19 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
         player.pixelPos.y + TILE_SIZE / 2
       )
     );
+
+    // Funny hit reaction text
+    const hitTexts = ["OUCH!", "BONK!", "YOINK!", "BOP!", "WHAM!", "owie!", "hey!"];
+    floatingTextsRef.current.push({
+      x: player.pixelPos.x + TILE_SIZE / 2,
+      y: player.pixelPos.y - TILE_SIZE * 0.5,
+      text: hitTexts[Math.floor(Math.random() * hitTexts.length)],
+      color: "#ff3366",
+      life: 45,
+      maxLife: 45,
+      fontSize: 16,
+      vy: -3,
+    });
 
     if (player.lives <= 0) {
       gameStateRef.current = "game-over";
@@ -252,7 +271,8 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       renderFrame(
         ctx, gridRef.current, player, enemiesRef.current, shawarmasRef.current,
         particlesRef.current, scoreRef.current, roundRef.current, frame,
-        shakeRef.current.x, shakeRef.current.y
+        shakeRef.current.x, shakeRef.current.y,
+        floatingTextsRef.current
       );
       ctx.fillStyle = "rgba(0,0,0,0.6)";
       ctx.fillRect(0, CANVAS_HEIGHT / 2 - 40, CANVAS_WIDTH, 80);
@@ -283,6 +303,21 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     // Move player
     if (player.moving) {
       const arrived = moveEntity(player.pixelPos, player.targetPixelPos, PLAYER_SPEED);
+      // Trail particles while moving
+      if (frame % 3 === 0) {
+        const trailColor = player.type === "boy" ? "#00ccff" : "#c850ff";
+        particlesRef.current.push({
+          x: player.pixelPos.x + TILE_SIZE / 2 + (Math.random() - 0.5) * 8,
+          y: player.pixelPos.y + TILE_SIZE / 2 + (Math.random() - 0.5) * 8,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          life: 15 + Math.random() * 10,
+          maxLife: 25,
+          color: trailColor,
+          size: 1.5 + Math.random() * 2,
+          type: "trail",
+        });
+      }
       if (arrived) {
         player.moving = false;
         player.tilePos = pixelToTile(player.pixelPos.x, player.pixelPos.y);
@@ -437,16 +472,38 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
         s.collected = true;
         scoreRef.current += SHAWARMA_SCORE;
 
+        // Combo tracking
+        comboRef.current++;
+        comboTimerRef.current = 90; // ~1.5s to chain next combo
+        const combo = comboRef.current;
+        const collectX = s.tilePos.col * TILE_SIZE + TILE_SIZE / 2;
+        const collectY = s.tilePos.row * TILE_SIZE + TILE_SIZE / 2;
+
         particlesRef.current.push(
-          ...createCollectParticles(
-            s.tilePos.col * TILE_SIZE + TILE_SIZE / 2,
-            s.tilePos.row * TILE_SIZE + TILE_SIZE / 2
-          )
+          ...createCollectParticles(collectX, collectY)
+        );
+
+        // Floating combo text
+        floatingTextsRef.current.push(
+          createCollectText(collectX, collectY - TILE_SIZE * 0.3, combo)
         );
 
         setHudState((prev) => ({ ...prev, score: scoreRef.current }));
       }
     }
+
+    // Combo timer
+    if (comboTimerRef.current > 0) {
+      comboTimerRef.current--;
+      if (comboTimerRef.current <= 0) {
+        comboRef.current = 0;
+      }
+    }
+
+    // Update floating texts
+    floatingTextsRef.current = floatingTextsRef.current
+      .map((t) => ({ ...t, y: t.y + t.vy, life: t.life - 1 }))
+      .filter((t) => t.life > 0);
 
     // Round complete
     if (allCollected && shawarmasRef.current.length > 0) {
@@ -467,7 +524,8 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     renderFrame(
       ctx, gridRef.current, player, enemiesRef.current, shawarmasRef.current,
       particlesRef.current, scoreRef.current, roundRef.current, frame,
-      shakeRef.current.x, shakeRef.current.y
+      shakeRef.current.x, shakeRef.current.y,
+      floatingTextsRef.current
     );
 
     if (state === "dying") {
@@ -481,6 +539,9 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     roundRef.current = 1;
     frameRef.current = 0;
     pendingDirectionRef.current = null;
+    floatingTextsRef.current = [];
+    comboRef.current = 0;
+    comboTimerRef.current = 0;
     gameStateRef.current = "playing";
     initRound(1);
     setHudState({ score: 0, round: 1, lives: PLAYER_START_LIVES });

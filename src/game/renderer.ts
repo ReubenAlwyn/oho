@@ -10,7 +10,7 @@ import {
   COLORS,
 } from "./constants";
 import type { MazeGrid } from "./maze";
-import type { Player, Enemy, Shawarma, Particle } from "./types";
+import type { Player, Enemy, Shawarma, Particle, FloatingText } from "./types";
 
 let mazeBuffer: OffscreenCanvas | null = null;
 let mazeBufferRound = -1;
@@ -723,7 +723,8 @@ export function renderFrame(
   round: number,
   frame: number,
   shakeX: number,
-  shakeY: number
+  shakeY: number,
+  floatingTexts?: FloatingText[]
 ) {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
@@ -749,6 +750,25 @@ export function renderFrame(
 
   // Draw particles
   drawParticles(ctx, particles);
+
+  // Draw floating texts (combo, collection messages)
+  if (floatingTexts) {
+    for (const ft of floatingTexts) {
+      const alpha = Math.min(1, ft.life / (ft.maxLife * 0.3));
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.font = `bold ${ft.fontSize}px "Silkscreen", monospace, system-ui`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      // Shadow glow
+      ctx.shadowColor = ft.color;
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = ft.color;
+      ctx.fillText(ft.text, ft.x, ft.y);
+      ctx.shadowBlur = 0;
+      ctx.restore();
+    }
+  }
 
   ctx.restore();
 

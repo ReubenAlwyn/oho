@@ -331,7 +331,7 @@ export default function Dashboard() {
                         color: game.character === "boy" ? "#00ccff" : "#c850ff",
                       }}
                     >
-                      {game.character === "boy" ? "Boy" : "Girl"}
+                      {game.character === "boy" ? "Shawarzilla" : "Shawarpunzel"}
                     </span>
                     <div>
                       <p className="text-[10px] text-[#e0e0f0]">

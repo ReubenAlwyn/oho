@@ -43,7 +43,7 @@ export default function GameOverScreen({
             Game Over
           </h1>
           <p className="mt-3 text-xs text-[#6a6a8a]">
-            Ghosts: 1 &mdash; You: 0. Try again?
+            CHUBs: 1 &mdash; You: 0. Try again?
           </p>
         </motion.div>
 
@@ -76,7 +76,7 @@ export default function GameOverScreen({
             <div className="text-center">
               <p className="text-[#6a6a8a] mb-2" style={{ fontSize: "14px" }}>Character</p>
               <p className={character === "boy" ? "neon-cyan" : "neon-purple"} style={{ fontSize: "28px" }}>
-                {character === "boy" ? "Boy" : "Girl"}
+                {character === "boy" ? "Shawarzilla" : "Shawarpunzel"}
               </p>
             </div>
           </div>
