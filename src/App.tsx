@@ -25,9 +25,11 @@ export default function App() {
   const { isAuthenticated } = useAuth();
   const [screen, setScreen] = useState<GameScreenName>("menu");
   const [character, setCharacter] = useState<CharacterType>("boy");
+
   const [playerName, setPlayerName] = useState("Player");
   const [lastScore, setLastScore] = useState(0);
   const [lastRound, setLastRound] = useState(1);
+  const [leaderboardFrom, setLeaderboardFrom] = useState<GameScreenName>("menu");
 
   // When user signs in, retroactively save any pending guest scores
   useEffect(() => {
@@ -91,7 +93,7 @@ export default function App() {
           >
             <MainMenu
               onPlay={() => setScreen("character-select")}
-              onLeaderboard={() => setScreen("leaderboard")}
+              onLeaderboard={() => { setLeaderboardFrom("menu"); setScreen("leaderboard"); }}
             />
           </motion.div>
         )}
@@ -126,7 +128,7 @@ export default function App() {
                 if (!isAuthenticated) localStorage.setItem("force-guest-ts", Date.now().toString());
                 navigate("/dashboard");
               }}
-              onLeaderboard={() => setScreen("leaderboard")}
+              onLeaderboard={() => { setLeaderboardFrom("game"); setScreen("leaderboard"); }}
             />
           </motion.div>
         )}
@@ -149,7 +151,7 @@ export default function App() {
                 if (!isAuthenticated) localStorage.setItem("force-guest-ts", Date.now().toString());
                 navigate("/dashboard");
               }}
-              onLeaderboard={() => setScreen("leaderboard")}
+              onLeaderboard={() => { setLeaderboardFrom("game-over"); setScreen("leaderboard"); }}
               isAuthenticated={isAuthenticated}
             />
           </motion.div>
@@ -163,7 +165,7 @@ export default function App() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
           >
-            <LeaderboardScreen onBack={() => setScreen("menu")} />
+            <LeaderboardScreen onBack={() => setScreen(leaderboardFrom)} />
           </motion.div>
         )}
       </AnimatePresence>
