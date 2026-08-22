@@ -588,8 +588,8 @@ function drawHUD(
 ) {
   const T = TILE_SIZE;
   const barH = T * 1.1;
-  const fontLabel = `bold ${Math.floor(T * 0.26)}px "Silkscreen", monospace, system-ui`;
-  const fontValue = `bold ${Math.floor(T * 0.46)}px "Silkscreen", monospace, system-ui`;
+  const fontLabel = `bold ${Math.floor(T * 0.32)}px "Silkscreen", monospace, system-ui`;
+  const fontValue = `bold ${Math.floor(T * 0.52)}px "Silkscreen", monospace, system-ui`;
 
   // HUD background bar — solid
   ctx.fillStyle = "#06060e";
@@ -619,7 +619,7 @@ function drawHUD(
   const livesX = T * 4;
   ctx.font = fontLabel;
   ctx.fillStyle = "#6a6a8a";
-  ctx.fillText("LIVES", livesX, labelY);
+  ctx.fillText("LIVES", livesX, cy + T * 0.08);
   // Draw 3 pixel hearts (matching PLAYER_START_LIVES)
   // 7x6 pixel grid pattern
   const heartGrid = [
@@ -634,7 +634,7 @@ function drawHUD(
   const pixSize = Math.floor(T * 0.09);
   const gridW = heartGrid[0].length * pixSize;
   const gridH = heartGrid.length * pixSize;
-  const heartsStartX = livesX + T * 2.2;
+  const heartsStartX = livesX + T * 1.3;
   for (let i = 0; i < 3; i++) {
     const hx = heartsStartX + i * (gridW + T * 0.25);
     const hy = cy - gridH * 0.5;
@@ -667,7 +667,7 @@ function drawHUD(
   ctx.font = fontLabel;
   ctx.fillStyle = "#6a6a8a";
   ctx.fillText("SCORE", scoreX, labelY);
-  ctx.font = `bold ${Math.floor(T * 0.55)}px "Silkscreen", monospace, system-ui`;
+  ctx.font = `bold ${Math.floor(T * 0.65)}px "Silkscreen", monospace, system-ui`;
   ctx.shadowColor = "#ffdd00";
   ctx.shadowBlur = 18;
   ctx.fillStyle = "#ffdd00";
