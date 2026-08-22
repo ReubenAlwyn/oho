@@ -98,17 +98,10 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
     }
   };
 
-  const handleGuestLogin = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      await signIn("anonymous");
-      navigate(redirect);
-    } catch (error) {
-      console.error("Guest login error:", error);
-      setError("Guest login failed. Give it another shot.");
-      setIsLoading(false);
-    }
+  const handleGuestLogin = () => {
+    // Don't create an anonymous Convex session — just set the guest flag and go
+    localStorage.setItem("force-guest-ts", Date.now().toString());
+    navigate("/game");
   };
 
   return (
