@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   getLeaderboard,
+  clearLeaderboard,
   formatScore,
   formatDate,
 } from "../game/leaderboard";
@@ -137,6 +138,18 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
             </div>
           )}
         </div>
+
+        {/* Clear button */}
+        {entries.length > 0 && (
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={() => { clearLeaderboard(); setEntries([]); }}
+              className="text-[10px] text-[#3a3a52] hover:text-[#ff3366] transition-colors"
+            >
+              Clear all scores
+            </button>
+          </div>
+        )}
 
       </div>
       <Footer />
