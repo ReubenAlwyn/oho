@@ -3,8 +3,8 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 /**
- * Save the player's display name to their profile.
- * Called the first time a signed-in user plays.
+ * Set the player's display name (first time only).
+ * Called when a signed-in user first plays.
  */
 export const savePlayerName = mutation({
   args: { name: v.string() },
@@ -19,6 +19,25 @@ export const savePlayerName = mutation({
     if (!user.name || user.name === "Player") {
       await ctx.db.patch(userId, { name: args.name });
     }
+
+    return { success: true };
+  },
+});
+
+/**
+ * Update the player's display name (from the dashboard profile editor).
+ * Can be called any time to change the name.
+ */
+export const updatePlayerName = mutation({
+  args: { name: v.string() },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
+
+    const user = await ctx.db.get(userId);
+    if (!user) throw new Error("User not found");
+
+    await ctx.db.patch(userId, { name: args.name });
 
     return { success: true };
   },

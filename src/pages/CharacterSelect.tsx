@@ -31,19 +31,18 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
   const [name, setName] = useState("");
   const [boyReady, setBoyReady] = useState(boyImg.complete && boyImg.naturalWidth > 0);
   const [girlReady, setGirlReady] = useState(girlImg.complete && girlImg.naturalWidth > 0);
-  const [nameSaved, setNameSaved] = useState(false);
 
   const { isAuthenticated } = useAuth();
   const savedName = useQuery(api.profiles.getPlayerName);
   const savePlayerName = useMutation(api.profiles.savePlayerName);
 
-  // Auto-fill name if user has a saved profile name
-  useEffect(() => {
-    if (isAuthenticated && savedName && !nameSaved) {
-      setName(savedName);
-      setNameSaved(true);
-    }
-  }, [isAuthenticated, savedName, nameSaved]);
+  // Signed-in user: use their profile name directly (no input needed)
+  const isSignedIn = isAuthenticated && savedName !== null && savedName !== undefined;
+  const displayName = isSignedIn ? (savedName ?? "") : name;
+
+  // First-time signed-in users: still need to set a name
+  const needsNameSetup = isAuthenticated && savedName === null;
+  const showNameInput = !isAuthenticated || needsNameSetup;
 
   useEffect(() => {
     if (boyImgSrc && !boyImg.complete) {
@@ -55,16 +54,16 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
   }, []);
 
   const handleConfirm = async () => {
-    if (selected && name.trim()) {
-      // If signed in and this is the first time entering a name, save it to their profile
-      if (isAuthenticated && savedName === null && !nameSaved) {
+    if (selected && displayName.trim()) {
+      // If signed in and first time, save name to profile
+      if (needsNameSetup) {
         try {
-          await savePlayerName({ name: name.trim() });
+          await savePlayerName({ name: displayName.trim() });
         } catch {
           // Profile save failed — still allow play
         }
       }
-      onSelect(selected, name.trim());
+      onSelect(selected, displayName.trim());
     }
   };
 
@@ -118,9 +117,16 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           <h2 className="text-xl sm:text-2xl neon-purple">
             Pick Your Character
           </h2>
-          {isAuthenticated && savedName && (
+          {/* Show profile name for signed-in users with a saved name */}
+          {isSignedIn && savedName && (
             <p className="text-xs text-[#6a6a8a] mt-2">
               Playing as <span className="neon-cyan">{savedName}</span>
+            </p>
+          )}
+          {/* First-time signed-in users: prompt to set name */}
+          {needsNameSetup && (
+            <p className="text-xs text-[#6a6a8a] mt-2">
+              First time here — set your username below
             </p>
           )}
         </motion.div>
@@ -193,8 +199,8 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           ))}
         </motion.div>
 
-        {/* Name input — only show if no saved name */}
-        {!(isAuthenticated && savedName) && (
+        {/* Name input — only for guests and first-time signed-in users */}
+        {showNameInput && (
           <motion.div
             className="w-full max-w-xs"
             initial={{ y: 20, opacity: 0 }}
@@ -202,7 +208,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
             transition={{ delay: 0.4 }}
           >
             <label className="block text-[10px] mb-2 neon-cyan opacity-50">
-              Your Name
+              {needsNameSetup ? "Choose Your Username" : "Your Name"}
             </label>
             <input
               type="text"
@@ -220,14 +226,14 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
         {/* Confirm button */}
         <motion.button
           onClick={handleConfirm}
-          disabled={!selected || !name.trim()}
+          disabled={!selected || !displayName.trim()}
           className={`pixel-btn w-full max-w-xs ${
-            selected && name.trim()
+            selected && displayName.trim()
               ? "bg-[#c850ff] border-[#c850ff] text-[#06060e]"
               : "bg-[#1a1a2e] border-[#2a2a40] text-[#3a3a52] cursor-not-allowed"
           }`}
-          whileHover={selected && name.trim() ? { boxShadow: "0 0 30px rgba(200,80,255,0.5), 0 0 60px rgba(200,80,255,0.25)" } : undefined}
-          whileTap={selected && name.trim() ? { scale: 0.94 } : undefined}
+          whileHover={selected && displayName.trim() ? { boxShadow: "0 0 30px rgba(200,80,255,0.5), 0 0 60px rgba(200,80,255,0.25)" } : undefined}
+          whileTap={selected && displayName.trim() ? { scale: 0.94 } : undefined}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.6 }}

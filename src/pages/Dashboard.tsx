@@ -2,7 +2,9 @@ import { useAuth } from "@/hooks/use-auth";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { LogOut, Trophy, Target, Flame, Play } from "lucide-react";
+import { LogOut, Trophy, Target, Flame, Play, Pencil, Check, X } from "lucide-react";
+import { api } from "@/convex/_generated/api";
+import { useQuery, useMutation } from "convex/react";
 import { getLeaderboard, formatScore, formatDate } from "@/game/leaderboard";
 import type { ScoreEntry } from "@/game/types";
 import shawarmaPixel from "../assets/shawarma-pixel.png";
@@ -14,6 +16,12 @@ export default function Dashboard() {
   const [bestRound, setBestRound] = useState(0);
   const [gamesPlayed, setGamesPlayed] = useState(0);
   const [recentGames, setRecentGames] = useState<ScoreEntry[]>([]);
+
+  // Username editor state
+  const savedName = useQuery(api.profiles.getPlayerName);
+  const updatePlayerName = useMutation(api.profiles.updatePlayerName);
+  const [editingName, setEditingName] = useState(false);
+  const [nameValue, setNameValue] = useState("");
 
   // Check if user recently signed out — force guest mode for 60 seconds
   const forcedGuest = (() => {
@@ -43,6 +51,31 @@ export default function Dashboard() {
       setRecentGames([]);
     }
   }, [showAsGuest]);
+
+  // Sync name editor when saved name loads
+  useEffect(() => {
+    if (savedName && !editingName) {
+      setNameValue(savedName);
+    }
+  }, [savedName, editingName]);
+
+  const handleSaveName = async () => {
+    const trimmed = nameValue.trim();
+    if (trimmed && trimmed !== savedName) {
+      try {
+        await updatePlayerName({ name: trimmed });
+      } catch {
+        // Revert on failure
+        setNameValue(savedName ?? "");
+      }
+    }
+    setEditingName(false);
+  };
+
+  const handleCancelEdit = () => {
+    setNameValue(savedName ?? "");
+    setEditingName(false);
+  };
 
   const handleSignOut = async () => {
     // Set timestamp flag BEFORE sign out — persists through reloads for 60s
@@ -119,6 +152,67 @@ export default function Dashboard() {
             Ready to run?
           </h1>
         </motion.div>
+
+        {/* Username editor — signed-in users only */}
+        {!showAsGuest && (
+          <motion.div
+            className="mt-4 bg-[#0e0e1a] rounded-xl border border-[#2a2a40] px-5 py-4 flex items-center justify-between"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.1, duration: 0.4 }}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-[10px] text-[#6a6a8a]">Username</span>
+              {editingName ? (
+                <input
+                  type="text"
+                  value={nameValue}
+                  onChange={(e) => setNameValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSaveName();
+                    if (e.key === "Escape") handleCancelEdit();
+                  }}
+                  maxLength={16}
+                  autoFocus
+                  className="px-3 py-1.5 rounded-lg text-sm bg-[#1a1a2e] border-2 border-[#c850ff]/50 text-[#e0e0f0] outline-none focus:shadow-[0_0_10px_rgba(200,80,255,0.15)]"
+                  style={{ fontSize: "12px" }}
+                />
+              ) : (
+                <span className="neon-cyan" style={{ fontSize: "14px" }}>
+                  {savedName ?? "..."}
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              {editingName ? (
+                <>
+                  <button
+                    onClick={handleSaveName}
+                    className="p-1.5 rounded-lg bg-[#00ccff]/10 border border-[#00ccff]/30 text-[#00ccff] hover:bg-[#00ccff]/20 transition-colors"
+                  >
+                    <Check className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={handleCancelEdit}
+                    className="p-1.5 rounded-lg bg-[#ff3366]/10 border border-[#ff3366]/30 text-[#ff3366] hover:bg-[#ff3366]/20 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => {
+                    setNameValue(savedName ?? "");
+                    setEditingName(true);
+                  }}
+                  className="p-1.5 rounded-lg bg-[#c850ff]/10 border border-[#c850ff]/30 text-[#c850ff] hover:bg-[#c850ff]/20 transition-colors"
+                >
+                  <Pencil className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </motion.div>
+        )}
 
         {/* Guest banner */}
         {showAsGuest && (
@@ -202,7 +296,8 @@ export default function Dashboard() {
               {gamesPlayed}
             </p>
             <p className="text-[10px] text-[#6a6a8a] mt-2">Games Played</p>
-          </motion.div>          </motion.div>
+          </motion.div>
+          </motion.div>
 
         {/* Recent games */}
         <motion.div
