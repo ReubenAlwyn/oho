@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 import shawarmaPixel from "../assets/shawarma-pixel.png";
 import Footer from "@/components/Footer";
+import { playClick, initAudio } from "../game/audio";
 
 const floatingShawarmas = [
   { x: "8%", y: "15%", size: 140, delay: 0, duration: 7, rotation: 12 },
@@ -75,7 +76,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
 
       {/* Back to dashboard — big button */}
       <motion.button
-        onClick={() => navigate("/dashboard")}
+        onClick={() => { initAudio(); playClick(); navigate("/dashboard"); }}
         className="absolute top-8 left-8 z-20 flex items-center gap-3 px-6 py-3 rounded-xl border-2 border-[#00ccff]/30 bg-[#00ccff]/5 text-[#00ccff] hover:bg-[#00ccff]/15 hover:border-[#00ccff]/60 transition-all"
         style={{ fontSize: "18px" }}
         whileHover={{ x: -4, boxShadow: "0 0 20px rgba(0,204,255,0.2)" }}
@@ -135,7 +136,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
           transition={{ delay: 0.5, duration: 0.4 }}
         >
           <motion.button
-            onClick={onPlay}
+            onClick={() => { initAudio(); playClick(); onPlay(); }}
             className="pixel-btn w-full bg-[#c850ff] border-[#c850ff] text-[#06060e]"
             whileHover={{ boxShadow: "0 0 30px rgba(200,80,255,0.5), 0 0 60px rgba(200,80,255,0.25)" }}
             whileTap={{ scale: 0.94 }}
@@ -144,7 +145,7 @@ export default function MainMenu({ onPlay, onLeaderboard }: MainMenuProps) {
           </motion.button>
 
           <motion.button
-            onClick={onLeaderboard}
+            onClick={() => { initAudio(); playClick(); onLeaderboard(); }}
             className="pixel-btn w-full bg-transparent border-[#2a2a40] text-[#6a6a8a] hover:text-[#ffdd00] hover:border-[#ffdd00]/40"
             whileHover={{ boxShadow: "0 0 20px rgba(255,221,0,0.15)" }}
             whileTap={{ scale: 0.96 }}

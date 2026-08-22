@@ -4,6 +4,7 @@ import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../game/constants";
 import { useGameEngine } from "../game/useGameEngine";
 import type { CharacterType } from "../game/types";
 import LeaderboardScreen from "./LeaderboardScreen";
+import { stopMusic, initAudio, toggleMute, isMuted } from "../game/audio";
 
 interface GameScreenProps {
   character: CharacterType;
@@ -15,10 +16,17 @@ interface GameScreenProps {
 export default function GameScreen({ character, onGameOver, onMainMenu, onLeaderboard }: GameScreenProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { startGame, togglePause, isPaused } = useGameEngine(canvasRef, { character, onGameOver });
+  const [muted, setMuted] = useState(false);
+
+  const handleMuteToggle = () => {
+    initAudio();
+    const nowMuted = toggleMute();
+    setMuted(nowMuted);
+  };
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => startGame(), 100);
+    const timer = setTimeout(() => { initAudio(); startGame(); }, 100);
     return () => clearTimeout(timer);
   }, [startGame]);
 
@@ -54,6 +62,17 @@ export default function GameScreen({ character, onGameOver, onMainMenu, onLeader
         className="block"
         style={{ imageRendering: "pixelated" }}
       />
+
+      {/* Mute toggle */}
+      <motion.button
+        onClick={handleMuteToggle}
+        className="absolute top-4 right-4 z-30 w-10 h-10 flex items-center justify-center rounded-lg border border-[#2a2a40] bg-[#0e0e1a]/80 text-[#6a6a8a] hover:text-[#c850ff] hover:border-[#c850ff]/40 transition-all text-lg"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        title={muted ? "Unmute" : "Mute"}
+      >
+        {muted ? "🔇" : "🔊"}
+      </motion.button>
 
       {/* Pause overlay */}
       <AnimatePresence>
@@ -118,6 +137,7 @@ export default function GameScreen({ character, onGameOver, onMainMenu, onLeader
                   <motion.button
                     onClick={() => {
                       togglePause();
+                      stopMusic();
                       onMainMenu();
                     }}
                     className="pixel-btn w-full bg-transparent border-[#2a2a40] text-[#3a3a52] hover:text-[#6a6a8a] hover:border-[#3a3a52]"

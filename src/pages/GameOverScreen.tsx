@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { formatScore } from "../game/leaderboard";
 import { useNavigate } from "react-router";
 import Footer from "@/components/Footer";
+import { playClick } from "../game/audio";
 
 interface GameOverScreenProps {
   score: number;
@@ -113,7 +114,7 @@ export default function GameOverScreen({
           transition={{ delay: 0.6 }}
         >
           <motion.button
-            onClick={onPlayAgain}
+            onClick={() => { playClick(); onPlayAgain(); }}
             className="pixel-btn w-full bg-[#c850ff] border-[#c850ff] text-[#06060e]"
             whileHover={{ boxShadow: "0 0 30px rgba(200,80,255,0.5), 0 0 60px rgba(200,80,255,0.25)" }}
             whileTap={{ scale: 0.94 }}
@@ -122,7 +123,7 @@ export default function GameOverScreen({
           </motion.button>
 
           <motion.button
-            onClick={onLeaderboard}
+            onClick={() => { playClick(); onLeaderboard(); }}
             className="pixel-btn w-full bg-transparent border-[#2a2a40] text-[#6a6a8a] hover:text-[#ffdd00] hover:border-[#ffdd00]/40"
             whileHover={{ boxShadow: "0 0 20px rgba(255,221,0,0.15)" }}
             whileTap={{ scale: 0.96 }}
@@ -131,7 +132,7 @@ export default function GameOverScreen({
           </motion.button>
 
           <motion.button
-            onClick={onMainMenu}
+            onClick={() => { playClick(); onMainMenu(); }}
             className="pixel-btn w-full bg-transparent border-[#2a2a40] text-[#3a3a52] hover:text-[#6a6a8a] hover:border-[#3a3a52]"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.96 }}

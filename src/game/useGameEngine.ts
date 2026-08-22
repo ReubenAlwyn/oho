@@ -8,6 +8,7 @@ import { findPath, getSpawnPositions } from "./pathfinding";
 import { renderFrame, resetMazeBuffer } from "./renderer";
 import { createCollectParticles, createHitParticles, createRoundCompleteParticles, updateParticles, createCollectText } from "./particles";
 import type { Player, Enemy, Shawarma, Particle, Direction, CharacterType, GameState, FloatingText } from "./types";
+import { playCollect, playCombo, playHit, playRoundComplete, playGameOver, startMusic, stopMusic } from "./audio";
 
 interface GameEngineOptions {
   character: CharacterType;
@@ -132,6 +133,8 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     player.invincible = true;
     player.invincibleTimer = INVINCIBLE_DURATION;
 
+    playHit();
+
     shakeRef.current = { x: 0, y: 0, intensity: 10 };
 
     particlesRef.current.push(
@@ -156,6 +159,8 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
 
     if (player.lives <= 0) {
       gameStateRef.current = "game-over";
+      playGameOver();
+      stopMusic();
       setTimeout(() => {
         onGameOver(scoreRef.current, roundRef.current);
       }, 1500);
@@ -472,10 +477,13 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
         s.collected = true;
         scoreRef.current += SHAWARMA_SCORE;
 
+        playCollect();
+
         // Combo tracking
         comboRef.current++;
         comboTimerRef.current = 90; // ~1.5s to chain next combo
         const combo = comboRef.current;
+        if (combo > 1) playCombo(combo);
         const collectX = s.tilePos.col * TILE_SIZE + TILE_SIZE / 2;
         const collectY = s.tilePos.row * TILE_SIZE + TILE_SIZE / 2;
 
@@ -510,6 +518,7 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       scoreRef.current += ROUND_COMPLETE_SCORE;
       gameStateRef.current = "round-transition";
       transitionTimerRef.current = 120;
+      playRoundComplete();
       transitionTextRef.current = `Round ${roundRef.current} Complete! +${ROUND_COMPLETE_SCORE}`;
       particlesRef.current.push(
         ...createRoundCompleteParticles(CANVAS_WIDTH, CANVAS_HEIGHT)
@@ -545,6 +554,7 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     gameStateRef.current = "playing";
     initRound(1);
     setHudState({ score: 0, round: 1, lives: PLAYER_START_LIVES });
+    startMusic();
   }, [initRound]);
 
   /**

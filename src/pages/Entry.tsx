@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "@/hooks/use-auth";
 import shawarmaPixel from "../assets/shawarma-pixel.png";
 import Footer from "@/components/Footer";
+import { playClick, initAudio } from "../game/audio";
 
 export default function Entry() {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ export default function Entry() {
 
       {/* Back to home — big button */}
       <motion.button
-        onClick={() => navigate("/")}
+        onClick={() => { initAudio(); playClick(); navigate("/"); }}
         className="absolute top-8 left-8 z-20 flex items-center gap-3 px-6 py-3 rounded-xl border-2 border-[#00ccff]/30 bg-[#00ccff]/5 text-[#00ccff] hover:bg-[#00ccff]/15 hover:border-[#00ccff]/60 transition-all"
         style={{ fontSize: "18px" }}
         whileHover={{ x: -4, boxShadow: "0 0 20px rgba(0,204,255,0.2)" }}
@@ -90,7 +91,7 @@ export default function Entry() {
         >
           {/* Sign In */}
           <motion.button
-            onClick={handleSignIn}
+            onClick={() => { initAudio(); playClick(); handleSignIn(); }}
             className="pixel-btn w-full bg-[#c850ff] border-[#c850ff] text-[#06060e]"
             whileHover={{ boxShadow: "0 0 30px rgba(200,80,255,0.5), 0 0 60px rgba(200,80,255,0.25)" }}
             whileTap={{ scale: 0.94 }}
@@ -107,7 +108,7 @@ export default function Entry() {
 
           {/* Play as Guest */}
           <motion.button
-            onClick={handleGuest}
+            onClick={() => { initAudio(); playClick(); handleGuest(); }}
             className="pixel-btn w-full bg-transparent border-[#00ccff]/40 text-[#00ccff] hover:bg-[#00ccff]/10 hover:border-[#00ccff]/70"
             whileHover={{ boxShadow: "0 0 20px rgba(0,204,255,0.2)" }}
             whileTap={{ scale: 0.96 }}
