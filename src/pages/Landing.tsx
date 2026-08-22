@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { useNavigate } from "react-router";
 import shawarmaPixel from "../assets/shawarma-pixel.png";
+import Footer from "@/components/Footer";
 
 const floatingShawarmas = [
   { x: "8%", y: "15%", size: 140, delay: 0, duration: 7, rotation: 12 },
@@ -185,11 +186,7 @@ export default function Landing() {
         </motion.div>
       </main>
 
-      {/* Footer */}
-      <footer className="relative z-10 flex items-center justify-between py-6 px-6 sm:px-10 border-t border-[#2a2a40]/30" style={{ color: "#3a3a52" }}>
-        <p className="text-[10px]">&copy; 2026 All Rights Reserved</p>
-        <p className="text-[10px]">Designed &amp; Developed by <span style={{ color: "#6a6a8a" }}>Reuben Alwyn</span></p>
-      </footer>
+      <Footer />
     </div>
   );
 }
