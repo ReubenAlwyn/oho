@@ -634,8 +634,9 @@ function drawHUD(
   const pixSize = Math.floor(T * 0.09);
   const gridW = heartGrid[0].length * pixSize;
   const gridH = heartGrid.length * pixSize;
+  const heartsStartX = livesX + T * 2.2;
   for (let i = 0; i < 3; i++) {
-    const hx = livesX + i * (gridW + T * 0.2);
+    const hx = heartsStartX + i * (gridW + T * 0.25);
     const hy = cy - gridH * 0.5;
     const filled = i < lives;
     ctx.save();
