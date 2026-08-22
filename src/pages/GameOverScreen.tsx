@@ -55,11 +55,11 @@ export default function GameOverScreen({
           transition={{ delay: 0.3 }}
         >
           <div className="text-center">
-            <p className="text-[10px] text-[#6a6a8a] mb-1">
+            <p className="text-[#6a6a8a] mb-2" style={{ fontSize: "14px" }}>
               Score
             </p>
             <motion.p
-              className="text-3xl neon-yellow"
+              className="text-4xl neon-yellow"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", delay: 0.5 }}
@@ -68,14 +68,14 @@ export default function GameOverScreen({
             </motion.p>
           </div>
 
-          <div className="flex justify-between text-[10px]">
+          <div className="flex justify-between text-sm">
             <div className="text-center">
-              <p className="text-[#6a6a8a] mb-1">Round</p>
-              <p className="neon-purple">{round}</p>
+              <p className="text-[#6a6a8a] mb-2" style={{ fontSize: "14px" }}>Round</p>
+              <p className="neon-purple" style={{ fontSize: "28px" }}>{round}</p>
             </div>
             <div className="text-center">
-              <p className="text-[#6a6a8a] mb-1">Character</p>
-              <p className={character === "boy" ? "neon-cyan" : "neon-purple"}>
+              <p className="text-[#6a6a8a] mb-2" style={{ fontSize: "14px" }}>Character</p>
+              <p className={character === "boy" ? "neon-cyan" : "neon-purple"} style={{ fontSize: "28px" }}>
                 {character === "boy" ? "Boy" : "Girl"}
               </p>
             </div>
