@@ -664,29 +664,27 @@ function drawHUD(
   ctx.font = fontLabel;
   ctx.fillStyle = "#6a6a8a";
   ctx.fillText("LIVES", livesX, labelY);
-  // Draw pixel hearts
-  const heartSize = T * 0.16;
+  // Draw hearts using bezier curves
+  const heartW = T * 0.22;
+  const heartH = T * 0.2;
   for (let i = 0; i < 5; i++) {
-    const hx = livesX + i * (heartSize * 2.4);
-    const hy = valueY;
+    const hx = livesX + i * (heartW + T * 0.08);
+    const hy = valueY - heartH * 0.35;
     const filled = i < lives;
     ctx.save();
     ctx.shadowColor = filled ? "#ff3366" : "transparent";
-    ctx.shadowBlur = filled ? 10 : 0;
-    // Heart shape using two arcs and a triangle
+    ctx.shadowBlur = filled ? 12 : 0;
     ctx.fillStyle = filled ? "#ff3366" : "#2a2a40";
     ctx.beginPath();
-    ctx.arc(hx + heartSize * 0.35, hy - heartSize * 0.1, heartSize * 0.45, Math.PI, 0);
-    ctx.arc(hx + heartSize * 1.05, hy - heartSize * 0.1, heartSize * 0.45, Math.PI, 0);
-    ctx.lineTo(hx + heartSize * 1.5, hy + heartSize * 0.05);
-    ctx.lineTo(hx, hy + heartSize * 0.05);
-    ctx.closePath();
+    ctx.moveTo(hx + heartW * 0.5, hy + heartH * 0.9);
+    ctx.bezierCurveTo(hx - heartW * 0.1, hy + heartH * 0.5, hx - heartW * 0.1, hy - heartW * 0.1, hx + heartW * 0.5, hy + heartH * 0.05);
+    ctx.bezierCurveTo(hx + heartW * 1.1, hy - heartW * 0.1, hx + heartW * 1.1, hy + heartH * 0.5, hx + heartW * 0.5, hy + heartH * 0.9);
     ctx.fill();
-    // Inner glow for filled hearts
+    // Shine on filled hearts
     if (filled) {
-      ctx.fillStyle = "rgba(255,100,130,0.4)";
+      ctx.fillStyle = "rgba(255,180,200,0.5)";
       ctx.beginPath();
-      ctx.arc(hx + heartSize * 0.5, hy - heartSize * 0.2, heartSize * 0.18, 0, Math.PI * 2);
+      ctx.arc(hx + heartW * 0.35, hy + heartH * 0.25, heartW * 0.12, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.restore();

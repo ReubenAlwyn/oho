@@ -20,12 +20,21 @@ export default function GameScreen({ character, onGameOver, onMainMenu, onLeader
     return () => clearTimeout(timer);
   }, [startGame]);
 
-  // Scale canvas to fill entire viewport (cover — no black bars)
+  // Scale canvas to fill viewport while preserving aspect ratio
   const updateCanvasSize = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    canvas.style.width = `${window.innerWidth}px`;
-    canvas.style.height = `${window.innerHeight}px`;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const canvasAspect = CANVAS_WIDTH / CANVAS_HEIGHT;
+    const screenAspect = vw / vh;
+    if (screenAspect > canvasAspect) {
+      canvas.style.height = `${vh}px`;
+      canvas.style.width = `${Math.floor(vh * canvasAspect)}px`;
+    } else {
+      canvas.style.width = `${vw}px`;
+      canvas.style.height = `${Math.floor(vw / canvasAspect)}px`;
+    }
   }, []);
 
   useEffect(() => {
