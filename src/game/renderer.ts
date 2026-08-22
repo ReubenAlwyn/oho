@@ -15,12 +15,13 @@ import type { Player, Enemy, Shawarma, Particle, FloatingText } from "./types";
 let mazeBuffer: OffscreenCanvas | null = null;
 let mazeBufferRound = -1;
 
-// ─── Character images (loaded dynamically, graceful fallback) ───
+// ─── Images (loaded dynamically, graceful fallback) ───
 let boyImg: HTMLImageElement | null = null;
 let girlImg: HTMLImageElement | null = null;
+let shawarmaImg: HTMLImageElement | null = null;
 let imagesLoaded = false;
 
-function loadCharacterImages() {
+function loadImages() {
   if (imagesLoaded) return;
   imagesLoaded = true;
 
@@ -35,9 +36,15 @@ function loadCharacterImages() {
     girlImg = new Image();
     girlImg.src = girlSrc;
   } catch { /* girl.jpg not yet added */ }
+
+  try {
+    const shawSrc = new URL("../assets/shawarma-pixel.png", import.meta.url).href;
+    shawarmaImg = new Image();
+    shawarmaImg.src = shawSrc;
+  } catch { /* shawarma image not yet added */ }
 }
 
-loadCharacterImages();
+loadImages();
 
 // ─── Scale helper ───
 
@@ -473,102 +480,55 @@ function drawShawarma(
   const cx = s.tilePos.col * T + T / 2;
   const cy = s.tilePos.row * T + T / 2;
 
-  // Bob animation
+  // Bob and tilt animation
   const bob = Math.sin(frame * 0.06 + s.id * 1.5) * 3;
-  const tilt = Math.sin(frame * 0.04 + s.id * 2) * 0.1;
-  const x = cx;
-  const y = cy + bob;
+  const tilt = Math.sin(frame * 0.04 + s.id * 2) * 0.12;
+
+  // Glow under pellet
+  const glowPulse = 0.25 + Math.sin(frame * 0.08 + s.id) * 0.1;
+  drawGlow(ctx, cx, cy + bob, T * 0.5, "#fbbf24", glowPulse);
 
   ctx.save();
-  ctx.translate(x, y);
+  ctx.translate(cx, cy + bob);
   ctx.rotate(tilt);
 
-  const w = T * 0.22;
-  const h = T * 0.5;
+  const pelletW = T * 0.35;
+  const pelletH = T * 0.55;
 
-  // Skewer (vertical line)
-  ctx.strokeStyle = "#8B7355";
-  ctx.lineWidth = 2.5;
-  ctx.beginPath();
-  ctx.moveTo(0, -h * 0.55);
-  ctx.lineTo(0, h * 0.55);
-  ctx.stroke();
-
-  // Wrap body (golden cylinder)
-  const bodyGrad = ctx.createLinearGradient(-w, 0, w, 0);
-  bodyGrad.addColorStop(0, "#b8860b");
-  bodyGrad.addColorStop(0.3, "#daa520");
-  bodyGrad.addColorStop(0.6, "#f0c040");
-  bodyGrad.addColorStop(1, "#b8860b");
-  ctx.fillStyle = bodyGrad;
-  ctx.beginPath();
-  ctx.roundRect(-w, -h * 0.4, w * 2, h * 0.8, 4);
-  ctx.fill();
-
-  // Toasted spots
-  ctx.fillStyle = "rgba(139,69,19,0.25)";
-  ctx.beginPath();
-  ctx.ellipse(-w * 0.3, -h * 0.1, w * 0.25, h * 0.08, 0.2, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.ellipse(w * 0.2, h * 0.15, w * 0.2, h * 0.06, -0.3, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Shine highlight
-  ctx.fillStyle = "rgba(255,255,255,0.2)";
-  ctx.beginPath();
-  ctx.roundRect(-w * 0.6, -h * 0.35, w * 0.3, h * 0.65, 3);
-  ctx.fill();
-
-  // Fold crease lines
-  ctx.strokeStyle = "rgba(139,69,19,0.2)";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(-w * 0.2, -h * 0.35);
-  ctx.lineTo(-w * 0.4, h * 0.3);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(w * 0.15, -h * 0.3);
-  ctx.lineTo(w * 0.35, h * 0.25);
-  ctx.stroke();
-
-  // Fillings poking out top
-  // Lettuce
-  ctx.fillStyle = "#22c55e";
-  ctx.beginPath();
-  ctx.ellipse(-w * 0.3, -h * 0.42, w * 0.25, h * 0.06, -0.3, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#16a34a";
-  ctx.beginPath();
-  ctx.ellipse(w * 0.1, -h * 0.44, w * 0.2, h * 0.05, 0.4, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Tomato
-  ctx.fillStyle = "#ef4444";
-  ctx.beginPath();
-  ctx.arc(w * 0.05, -h * 0.46, w * 0.14, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Sauce drip
-  ctx.fillStyle = "#fef08a";
-  ctx.beginPath();
-  ctx.ellipse(-w * 0.15, -h * 0.4, w * 0.12, h * 0.04, 0, 0, Math.PI * 2);
-  ctx.fill();
+  if (imgReady(shawarmaImg)) {
+    // Draw the shawarma image, taller than wide
+    ctx.drawImage(shawarmaImg, -pelletW / 2, -pelletH / 2, pelletW, pelletH);
+  } else {
+    // Fallback: simple golden pill shape
+    const bodyGrad = ctx.createLinearGradient(-pelletW / 2, 0, pelletW / 2, 0);
+    bodyGrad.addColorStop(0, "#b8860b");
+    bodyGrad.addColorStop(0.3, "#daa520");
+    bodyGrad.addColorStop(0.6, "#f0c040");
+    bodyGrad.addColorStop(1, "#b8860b");
+    ctx.fillStyle = bodyGrad;
+    ctx.beginPath();
+    ctx.roundRect(-pelletW / 2, -pelletH / 2, pelletW, pelletH, pelletW * 0.3);
+    ctx.fill();
+    // Shine
+    ctx.fillStyle = "rgba(255,255,255,0.2)";
+    ctx.beginPath();
+    ctx.roundRect(-pelletW * 0.3, -pelletH * 0.35, pelletW * 0.25, pelletH * 0.6, 3);
+    ctx.fill();
+  }
 
   ctx.restore();
 
-  // Sparkle particles on sides
+  // Sparkle
   const sparklePhase = (frame * 0.05 + s.id) % (Math.PI * 2);
-  const sparkleAlpha = Math.max(0, Math.sin(sparklePhase)) * 0.6;
+  const sparkleAlpha = Math.max(0, Math.sin(sparklePhase)) * 0.5;
   if (sparkleAlpha > 0.1) {
     ctx.save();
     ctx.globalAlpha = sparkleAlpha;
     ctx.fillStyle = "#fef08a";
-    const sparkX = x + Math.cos(sparklePhase) * T * 0.35;
-    const sparkY = y + Math.sin(sparklePhase * 1.3) * T * 0.25;
-    ctx.beginPath();
-    // 4-point star
+    const sparkX = cx + Math.cos(sparklePhase) * T * 0.35;
+    const sparkY = cy + bob + Math.sin(sparklePhase * 1.3) * T * 0.2;
     const ss = 3;
+    ctx.beginPath();
     ctx.moveTo(sparkX, sparkY - ss * 2);
     ctx.lineTo(sparkX + ss * 0.5, sparkY - ss * 0.5);
     ctx.lineTo(sparkX + ss * 2, sparkY);
@@ -627,9 +587,9 @@ function drawHUD(
   remaining: number
 ) {
   const T = TILE_SIZE;
-  const barH = T * 0.8;
-  const fontLabel = `bold ${Math.floor(T * 0.2)}px "Silkscreen", monospace, system-ui`;
-  const fontValue = `bold ${Math.floor(T * 0.38)}px "Silkscreen", monospace, system-ui`;
+  const barH = T * 0.9;
+  const fontLabel = `bold ${Math.floor(T * 0.26)}px "Silkscreen", monospace, system-ui`;
+  const fontValue = `bold ${Math.floor(T * 0.46)}px "Silkscreen", monospace, system-ui`;
 
   // HUD background bar with gradient
   const barGrad = ctx.createLinearGradient(0, 0, 0, barH);
@@ -643,11 +603,11 @@ function drawHUD(
   ctx.fillRect(0, barH - 2, CANVAS_WIDTH, 2);
   ctx.globalAlpha = 1;
 
-  const labelY = barH * 0.35;
-  const valueY = barH * 0.7;
+  const labelY = barH * 0.32;
+  const valueY = barH * 0.72;
 
   // ── Round (left) ──
-  const roundX = T * 0.8;
+  const roundX = T * 1;
   ctx.textAlign = "left";
   ctx.font = fontLabel;
   ctx.fillStyle = "#6a6a8a";
@@ -659,21 +619,21 @@ function drawHUD(
   ctx.fillText(String(round), roundX, valueY);
   ctx.shadowBlur = 0;
 
-  // ── Lives (hearts) ──
-  const livesX = T * 3.2;
+  // ── Lives (3 hearts) ──
+  const livesX = T * 4;
   ctx.font = fontLabel;
   ctx.fillStyle = "#6a6a8a";
   ctx.fillText("LIVES", livesX, labelY);
-  // Draw hearts using bezier curves
-  const heartW = T * 0.22;
-  const heartH = T * 0.2;
-  for (let i = 0; i < 5; i++) {
-    const hx = livesX + i * (heartW + T * 0.08);
+  // Draw 3 hearts (matching PLAYER_START_LIVES)
+  const heartW = T * 0.3;
+  const heartH = T * 0.28;
+  for (let i = 0; i < 3; i++) {
+    const hx = livesX + i * (heartW + T * 0.12);
     const hy = valueY - heartH * 0.35;
     const filled = i < lives;
     ctx.save();
     ctx.shadowColor = filled ? "#ff3366" : "transparent";
-    ctx.shadowBlur = filled ? 12 : 0;
+    ctx.shadowBlur = filled ? 14 : 0;
     ctx.fillStyle = filled ? "#ff3366" : "#2a2a40";
     ctx.beginPath();
     ctx.moveTo(hx + heartW * 0.5, hy + heartH * 0.9);
@@ -696,16 +656,15 @@ function drawHUD(
   ctx.font = fontLabel;
   ctx.fillStyle = "#6a6a8a";
   ctx.fillText("SCORE", scoreX, labelY);
-  // Score with golden glow
-  ctx.font = `bold ${Math.floor(T * 0.45)}px "Silkscreen", monospace, system-ui`;
+  ctx.font = `bold ${Math.floor(T * 0.55)}px "Silkscreen", monospace, system-ui`;
   ctx.shadowColor = "#ffdd00";
-  ctx.shadowBlur = 16;
+  ctx.shadowBlur = 18;
   ctx.fillStyle = "#ffdd00";
-  ctx.fillText(score.toLocaleString(), scoreX, valueY + T * 0.02);
+  ctx.fillText(score.toLocaleString(), scoreX, valueY + T * 0.03);
   ctx.shadowBlur = 0;
 
   // ── Remaining shawarmas (right) ──
-  const shawX = CANVAS_WIDTH - T * 0.8;
+  const shawX = CANVAS_WIDTH - T * 1;
   ctx.textAlign = "right";
   ctx.font = fontLabel;
   ctx.fillStyle = "#6a6a8a";
