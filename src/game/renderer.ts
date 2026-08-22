@@ -492,8 +492,8 @@ function drawShawarma(
   ctx.translate(cx, cy + bob);
   ctx.rotate(tilt);
 
-  const pelletW = T * 0.35;
-  const pelletH = T * 0.55;
+  const pelletW = T * 0.55;
+  const pelletH = T * 0.8;
 
   if (imgReady(shawarmaImg)) {
     // Draw the shawarma image, taller than wide
@@ -625,10 +625,10 @@ function drawHUD(
   ctx.fillStyle = "#6a6a8a";
   ctx.fillText("LIVES", livesX, labelY);
   // Draw 3 hearts (matching PLAYER_START_LIVES)
-  const heartW = T * 0.3;
-  const heartH = T * 0.28;
+  const heartW = T * 0.45;
+  const heartH = T * 0.42;
   for (let i = 0; i < 3; i++) {
-    const hx = livesX + i * (heartW + T * 0.12);
+    const hx = livesX + i * (heartW + T * 0.18);
     const hy = valueY - heartH * 0.35;
     const filled = i < lives;
     ctx.save();
