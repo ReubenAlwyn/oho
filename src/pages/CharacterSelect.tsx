@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useAuth } from "@/hooks/use-auth";
+import { api } from "@/convex/_generated/api";
+import { useQuery, useMutation } from "convex/react";
 import type { CharacterType } from "../game/types";
 
 interface CharacterSelectProps {
@@ -28,6 +31,19 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
   const [name, setName] = useState("");
   const [boyReady, setBoyReady] = useState(boyImg.complete && boyImg.naturalWidth > 0);
   const [girlReady, setGirlReady] = useState(girlImg.complete && girlImg.naturalWidth > 0);
+  const [nameSaved, setNameSaved] = useState(false);
+
+  const { isAuthenticated } = useAuth();
+  const savedName = useQuery(api.profiles.getPlayerName);
+  const savePlayerName = useMutation(api.profiles.savePlayerName);
+
+  // Auto-fill name if user has a saved profile name
+  useEffect(() => {
+    if (isAuthenticated && savedName && !nameSaved) {
+      setName(savedName);
+      setNameSaved(true);
+    }
+  }, [isAuthenticated, savedName, nameSaved]);
 
   useEffect(() => {
     if (boyImgSrc && !boyImg.complete) {
@@ -38,8 +54,16 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
     }
   }, []);
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (selected && name.trim()) {
+      // If signed in and this is the first time entering a name, save it to their profile
+      if (isAuthenticated && savedName === null && !nameSaved) {
+        try {
+          await savePlayerName({ name: name.trim() });
+        } catch {
+          // Profile save failed — still allow play
+        }
+      }
       onSelect(selected, name.trim());
     }
   };
@@ -94,6 +118,11 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           <h2 className="text-xl sm:text-2xl neon-purple">
             Pick Your Character
           </h2>
+          {isAuthenticated && savedName && (
+            <p className="text-xs text-[#6a6a8a] mt-2">
+              Playing as <span className="neon-cyan">{savedName}</span>
+            </p>
+          )}
         </motion.div>
 
         {/* Character cards */}
@@ -164,27 +193,29 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
           ))}
         </motion.div>
 
-        {/* Name input */}
-        <motion.div
-          className="w-full max-w-xs"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          <label className="block text-[10px] mb-2 neon-cyan opacity-50">
-            Your Name
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleConfirm()}
-            maxLength={16}
-            placeholder="Enter your name..."
-            className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all duration-200 bg-[#0e0e1a] border-2 border-[#2a2a40] text-[#e0e0f0] placeholder:text-[#3a3a52] focus:border-[#c850ff]/50 focus:shadow-[0_0_15px_rgba(200,80,255,0.15)]"
-            style={{ fontSize: "11px" }}
-          />
-        </motion.div>
+        {/* Name input — only show if no saved name */}
+        {!(isAuthenticated && savedName) && (
+          <motion.div
+            className="w-full max-w-xs"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            <label className="block text-[10px] mb-2 neon-cyan opacity-50">
+              Your Name
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleConfirm()}
+              maxLength={16}
+              placeholder="Enter your name..."
+              className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all duration-200 bg-[#0e0e1a] border-2 border-[#2a2a40] text-[#e0e0f0] placeholder:text-[#3a3a52] focus:border-[#c850ff]/50 focus:shadow-[0_0_15px_rgba(200,80,255,0.15)]"
+              style={{ fontSize: "11px" }}
+            />
+          </motion.div>
+        )}
 
         {/* Confirm button */}
         <motion.button

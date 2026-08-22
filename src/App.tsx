@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router";
 import { useAuth } from "@/hooks/use-auth";
@@ -10,6 +10,16 @@ import LeaderboardScreen from "./pages/LeaderboardScreen";
 import { addScoreEntry } from "./game/leaderboard";
 import type { CharacterType, GameScreenName } from "./game/types";
 
+const PENDING_SCORE_KEY = "shawarma-pending-guest-score";
+
+interface PendingScore {
+  playerName: string;
+  score: number;
+  round: number;
+  character: CharacterType;
+  timestamp: number;
+}
+
 export default function App() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -18,6 +28,22 @@ export default function App() {
   const [playerName, setPlayerName] = useState("Player");
   const [lastScore, setLastScore] = useState(0);
   const [lastRound, setLastRound] = useState(1);
+
+  // When user signs in, retroactively save any pending guest scores
+  useEffect(() => {
+    if (isAuthenticated) {
+      try {
+        const raw = localStorage.getItem(PENDING_SCORE_KEY);
+        if (raw) {
+          const pending: PendingScore = JSON.parse(raw);
+          addScoreEntry(pending.playerName, pending.score, pending.round, pending.character);
+          localStorage.removeItem(PENDING_SCORE_KEY);
+        }
+      } catch {
+        // Ignore parse errors
+      }
+    }
+  }, [isAuthenticated]);
 
   const handleSelectCharacter = useCallback((char: CharacterType, name: string) => {
     setCharacter(char);
@@ -29,9 +55,19 @@ export default function App() {
     (score: number, round: number) => {
       setLastScore(score);
       setLastRound(round);
-      // Only save to leaderboard if user is signed in
       if (isAuthenticated) {
+        // Signed in — save directly
         addScoreEntry(playerName, score, round, character);
+      } else {
+        // Guest — save as pending so it can be retroactively added on sign-in
+        const pending: PendingScore = {
+          playerName,
+          score,
+          round,
+          character,
+          timestamp: Date.now(),
+        };
+        localStorage.setItem(PENDING_SCORE_KEY, JSON.stringify(pending));
       }
       setScreen("game-over");
     },
