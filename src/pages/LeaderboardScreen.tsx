@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   getLeaderboard,
-  clearLeaderboard,
   formatScore,
   formatDate,
 } from "../game/leaderboard";
@@ -16,18 +15,12 @@ interface LeaderboardScreenProps {
 
 export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
   const [entries, setEntries] = useState<ScoreEntry[]>([]);
-  const [showConfirmClear, setShowConfirmClear] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     setEntries(getLeaderboard());
   }, []);
 
-  const handleClear = () => {
-    clearLeaderboard();
-    setEntries([]);
-    setShowConfirmClear(false);
-  };
 
   const rankColors = ["#ffdd00", "#c0c0d8", "#cd7f32"];
 
@@ -145,39 +138,6 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
           )}
         </div>
 
-        {/* Clear button */}
-        {entries.length > 0 && (
-          <div className="flex justify-center mt-4">
-            {showConfirmClear ? (
-              <div className="flex items-center gap-3">
-                <span className="text-[10px] text-[#ff3366]/50">
-                  Clear all scores?
-                </span>
-                <motion.button
-                  onClick={handleClear}
-                  className="text-[10px] px-3 py-1 rounded border border-[#ff3366]/30 text-[#ff3366] hover:bg-[#ff3366]/10 transition-all"
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Yes
-                </motion.button>
-                <motion.button
-                  onClick={() => setShowConfirmClear(false)}
-                  className="text-[10px] px-3 py-1 rounded border border-[#2a2a40] text-[#6a6a8a] hover:bg-[#1a1a2e] transition-all"
-                  whileTap={{ scale: 0.95 }}
-                >
-                  No
-                </motion.button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setShowConfirmClear(true)}
-                className="text-[10px] text-[#3a3a52] hover:text-[#6a6a8a] transition-colors"
-              >
-                Clear all scores
-              </button>
-            )}
-          </div>
-        )}
       </div>
       <Footer />
     </div>
