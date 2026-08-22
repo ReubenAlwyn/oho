@@ -45,8 +45,15 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
 
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
-      // Only clear guest flag if user was NOT authenticated when this page loaded
-      // (i.e. they just signed in, not just visiting while already logged in)
+      // Don't auto-redirect if force-guest flag is active — user clicked Sign In
+      // but has a stale session; let them see the form or re-authenticate
+      const hasForceGuest = localStorage.getItem("force-guest-ts");
+      if (hasForceGuest) {
+        // Clear the flag so future real sign-ins work normally
+        localStorage.removeItem("force-guest-ts");
+        return;
+      }
+      // Only clear guest flag if auth CHANGED during this session
       if (!wasAuthenticatedRef.current) {
         localStorage.removeItem("force-guest-ts");
       }
