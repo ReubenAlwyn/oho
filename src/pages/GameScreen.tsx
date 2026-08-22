@@ -1,8 +1,9 @@
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../game/constants";
 import { useGameEngine } from "../game/useGameEngine";
 import type { CharacterType } from "../game/types";
+import LeaderboardScreen from "./LeaderboardScreen";
 
 interface GameScreenProps {
   character: CharacterType;
@@ -14,6 +15,7 @@ interface GameScreenProps {
 export default function GameScreen({ character, onGameOver, onMainMenu, onLeaderboard }: GameScreenProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { startGame, togglePause, isPaused } = useGameEngine(canvasRef, { character, onGameOver });
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => startGame(), 100);
@@ -102,10 +104,7 @@ export default function GameScreen({ character, onGameOver, onMainMenu, onLeader
                 {/* Leaderboard */}
                 {onLeaderboard && (
                   <motion.button
-                    onClick={() => {
-                      togglePause();
-                      onLeaderboard();
-                    }}
+                    onClick={() => setShowLeaderboard(true)}
                     className="pixel-btn w-full bg-transparent border-[#2a2a40] text-[#6a6a8a] hover:text-[#ffdd00] hover:border-[#ffdd00]/40"
                     whileHover={{ boxShadow: "0 0 20px rgba(255,221,0,0.15)" }}
                     whileTap={{ scale: 0.96 }}
@@ -130,6 +129,20 @@ export default function GameScreen({ character, onGameOver, onMainMenu, onLeader
                 )}
               </div>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Leaderboard overlay (stays in pause, no score reset) */}
+      <AnimatePresence>
+        {showLeaderboard && (
+          <motion.div
+            className="absolute inset-0 z-20"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <LeaderboardScreen onBack={() => setShowLeaderboard(false)} />
           </motion.div>
         )}
       </AnimatePresence>

@@ -7,16 +7,16 @@ export const CANVAS_WIDTH = MAZE_COLS * TILE_SIZE;
 export const CANVAS_HEIGHT = MAZE_ROWS * TILE_SIZE;
 
 // Player
-export const PLAYER_SPEED = 6; // pixels per frame (zippy)
+export const PLAYER_SPEED = 7; // pixels per frame (zippy)
 export const PLAYER_START_LIVES = 3;
 export const INVINCIBLE_DURATION = 90; // frames (~1.5s at 60fps)
 export const SHAWARMA_SCORE = 10;
 export const ROUND_COMPLETE_SCORE = 500;
 
 // Enemies
-export const BASE_ENEMY_SPEED = 2.5;
-export const ENEMY_SPEED_INCREMENT = 0.3;
-export const ENEMY_CHASE_INTERVAL = 24; // frames between pathfinding recalculations
+export const BASE_ENEMY_SPEED = 3.0;
+export const ENEMY_SPEED_INCREMENT = 0.35;
+export const ENEMY_CHASE_INTERVAL = 20; // frames between pathfinding recalculations
 
 // Maze
 export const MIN_SHAWARMAS = 8;
