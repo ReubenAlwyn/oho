@@ -67,7 +67,7 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       targetPixelPos: { x: startCol * TILE_SIZE, y: startRow * TILE_SIZE },
       direction: "right",
       moving: false,
-      lives: playerRef.current?.lives ?? PLAYER_START_LIVES,
+      lives: PLAYER_START_LIVES,
       invincible: true,
       invincibleTimer: INVINCIBLE_DURATION,
     };
@@ -94,13 +94,17 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     const shuffledSpawns = spawnPositions.sort(() => Math.random() - 0.5);
     enemiesRef.current = [];
     for (let i = 0; i < enemyCount; i++) {
+      // Use unique spawn positions — slice instead of modulo to avoid overlap
       const pos = shuffledSpawns[i % shuffledSpawns.length];
+      // If wrapping, offset by 2 tiles to avoid stacking
+      const offset = i >= shuffledSpawns.length ? (i - shuffledSpawns.length + 1) * 2 : 0;
+      const adjustedCol = Math.min(pos[1] + offset, CANVAS_WIDTH / TILE_SIZE - 1);
       enemiesRef.current.push({
         id: i,
         type: i % 5,
-        tilePos: { row: pos[0], col: pos[1] },
-        pixelPos: { x: pos[1] * TILE_SIZE, y: pos[0] * TILE_SIZE },
-        targetPixelPos: { x: pos[1] * TILE_SIZE, y: pos[0] * TILE_SIZE },
+        tilePos: { row: pos[0], col: adjustedCol },
+        pixelPos: { x: adjustedCol * TILE_SIZE, y: pos[0] * TILE_SIZE },
+        targetPixelPos: { x: adjustedCol * TILE_SIZE, y: pos[0] * TILE_SIZE },
         direction: "right",
         speed: BASE_ENEMY_SPEED + (round - 1) * ENEMY_SPEED_INCREMENT,
         active: true,
@@ -169,6 +173,13 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     col: Math.round(px / TILE_SIZE),
   });
 
+  /** Check if a tile is already occupied by another active enemy */
+  const isTileOccupiedByEnemy = (row: number, col: number, excludeId: number): boolean => {
+    return enemiesRef.current.some(
+      (e) => e.active && e.id !== excludeId && e.tilePos.row === row && e.tilePos.col === col
+    );
+  };
+
   /**
    * Start moving in a direction if the target tile is open.
    */
@@ -235,7 +246,8 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
         gameStateRef.current = "playing";
         roundRef.current++;
         initRound(roundRef.current);
-        setHudState({ score: scoreRef.current, round: roundRef.current, lives: player.lives });
+        const freshPlayer = playerRef.current;
+        setHudState({ score: scoreRef.current, round: roundRef.current, lives: freshPlayer?.lives ?? PLAYER_START_LIVES });
       }
       renderFrame(
         ctx, gridRef.current, player, enemiesRef.current, shawarmasRef.current,
@@ -301,12 +313,29 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
         // Immediately pick next direction — no waiting for interval
         // This makes CHUB move smoothly without pausing at each tile
         if (!graceActive) {
+          // Spread enemies: each targets a different offset from the player
+          // This prevents them from all converging on the same tile
+          const spreadOffsets = [
+            { dr: 0, dc: 0 },
+            { dr: -2, dc: 0 },
+            { dr: 2, dc: 0 },
+            { dr: 0, dc: -2 },
+            { dr: 0, dc: 2 },
+            { dr: -1, dc: -1 },
+            { dr: 1, dc: 1 },
+          ];
+          const offset = spreadOffsets[enemy.id % spreadOffsets.length];
+          const targetRow = player.tilePos.row + offset.dr;
+          const targetCol = player.tilePos.col + offset.dc;
+          // Clamp target to valid grid bounds
+          const clampedRow = Math.max(1, Math.min(targetRow, gridRef.current.length - 2));
+          const clampedCol = Math.max(1, Math.min(targetCol, gridRef.current[0].length - 2));
           const dir = findPath(
             gridRef.current,
             enemy.tilePos.row,
             enemy.tilePos.col,
-            player.tilePos.row,
-            player.tilePos.col
+            clampedRow,
+            clampedCol
           );
           if (dir) {
             enemy.direction = dir;
@@ -321,9 +350,40 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
             if (
               nr >= 0 && nr < gridRef.current.length &&
               nc >= 0 && nc < gridRef.current[0].length &&
-              gridRef.current[nr][nc] === 0
+              gridRef.current[nr][nc] === 0 &&
+              !isTileOccupiedByEnemy(nr, nc, enemy.id)
             ) {
               enemy.targetPixelPos = { x: nc * TILE_SIZE, y: nr * TILE_SIZE };
+            } else if (
+              nr >= 0 && nr < gridRef.current.length &&
+              nc >= 0 && nc < gridRef.current[0].length &&
+              gridRef.current[nr][nc] === 0 &&
+              isTileOccupiedByEnemy(nr, nc, enemy.id)
+            ) {
+              // Another CHUB is here — wander randomly to spread out
+              const altDirs: Direction[] = ["up", "down", "left", "right"];
+              const shuffledAlt = altDirs.sort(() => Math.random() - 0.5);
+              let found = false;
+              for (const ad of shuffledAlt) {
+                let adr = 0, adc = 0;
+                if (ad === "up") adr = -1;
+                else if (ad === "down") adr = 1;
+                else if (ad === "left") adc = -1;
+                else adc = 1;
+                const anr = enemy.tilePos.row + adr;
+                const anc = enemy.tilePos.col + adc;
+                if (
+                  anr >= 0 && anr < gridRef.current.length &&
+                  anc >= 0 && anc < gridRef.current[0].length &&
+                  gridRef.current[anr][anc] === 0 &&
+                  !isTileOccupiedByEnemy(anr, anc, enemy.id)
+                ) {
+                  enemy.targetPixelPos = { x: anc * TILE_SIZE, y: anr * TILE_SIZE };
+                  found = true;
+                  break;
+                }
+              }
+              if (!found) enemy.targetPixelPos = { ...enemy.pixelPos };
             } else {
               // Wall — stay put briefly
               enemy.targetPixelPos = { ...enemy.pixelPos };
