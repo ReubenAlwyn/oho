@@ -1,7 +1,7 @@
 // ─── Game Types ───
 
 export type Direction = "up" | "down" | "left" | "right";
-export type CharacterType = "boy" | "girl";
+export type CharacterType = "boy" | "girl" | "shawarminator";
 
 export interface Position {
   x: number;

@@ -310,7 +310,7 @@ export function useGameEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       const arrived = moveEntity(player.pixelPos, player.targetPixelPos, PLAYER_SPEED);
       // Trail particles while moving
       if (frame % 3 === 0) {
-        const trailColor = player.type === "boy" ? "#00ccff" : "#c850ff";
+        const trailColor = player.type === "boy" ? "#00ccff" : player.type === "girl" ? "#c850ff" : "#ff3366";
         particlesRef.current.push({
           x: player.pixelPos.x + TILE_SIZE / 2 + (Math.random() - 0.5) * 8,
           y: player.pixelPos.y + TILE_SIZE / 2 + (Math.random() - 0.5) * 8,

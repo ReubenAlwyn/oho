@@ -7,6 +7,7 @@ import {
 } from "../game/leaderboard";
 import type { ScoreEntry } from "../game/types";
 import Footer from "@/components/Footer";
+import { CHARACTER_INFO } from "../game/characters";
 import { useNavigate } from "react-router";
 
 interface LeaderboardScreenProps {
@@ -108,11 +109,11 @@ export default function LeaderboardScreen({ onBack }: LeaderboardScreenProps) {
                         <span
                           className="text-[9px] px-1.5 py-0.5 rounded"
                           style={{
-                            background: entry.character === "boy" ? "rgba(0,204,255,0.15)" : "rgba(200,80,255,0.15)",
-                            color: entry.character === "boy" ? "#00ccff" : "#c850ff",
+                            background: CHARACTER_INFO[entry.character].tintBg,
+                            color: CHARACTER_INFO[entry.character].color,
                           }}
                         >
-                          {entry.character === "boy" ? "Shawarzilla" : "Shawarpunzel"}
+                          {CHARACTER_INFO[entry.character].label}
                         </span>
                       </div>
                       <p className="text-[10px] text-[#3a3a52] mt-0.5">

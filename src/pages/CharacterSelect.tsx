@@ -6,6 +6,7 @@ import { useQuery, useMutation } from "convex/react";
 import type { CharacterType } from "../game/types";
 import Footer from "@/components/Footer";
 import { playClick } from "../game/audio";
+import { CHARACTER_INFO } from "../game/characters";
 
 interface CharacterSelectProps {
   onSelect: (character: CharacterType, name: string) => void;
@@ -15,24 +16,31 @@ interface CharacterSelectProps {
 // Try importing images — fall back to empty strings if they don't exist
 let boyImgSrc = "";
 let girlImgSrc = "";
+let shawarminatorImgSrc = "";
 try {
   boyImgSrc = new URL("../assets/boy.jpg", import.meta.url).href;
 } catch { /* no image yet */ }
 try {
   girlImgSrc = new URL("../assets/girl.jpg", import.meta.url).href;
 } catch { /* no image yet */ }
+try {
+  shawarminatorImgSrc = new URL("../assets/shawarminator.jpg", import.meta.url).href;
+} catch { /* no image yet */ }
 
 // Preload images
 const boyImg = new Image();
 const girlImg = new Image();
+const shawarminatorImg = new Image();
 if (boyImgSrc) boyImg.src = boyImgSrc;
 if (girlImgSrc) girlImg.src = girlImgSrc;
+if (shawarminatorImgSrc) shawarminatorImg.src = shawarminatorImgSrc;
 
 export default function CharacterSelect({ onSelect, onBack }: CharacterSelectProps) {
   const [selected, setSelected] = useState<CharacterType | null>(null);
   const [name, setName] = useState("");
   const [boyReady, setBoyReady] = useState(boyImg.complete && boyImg.naturalWidth > 0);
   const [girlReady, setGirlReady] = useState(girlImg.complete && girlImg.naturalWidth > 0);
+  const [shawarminatorReady, setShawarminatorReady] = useState(shawarminatorImg.complete && shawarminatorImg.naturalWidth > 0);
 
   const { isAuthenticated, user } = useAuth();
   const savedName = useQuery(api.profiles.getPlayerName);
@@ -57,6 +65,9 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
     }
     if (girlImgSrc && !girlImg.complete) {
       girlImg.onload = () => setGirlReady(true);
+    }
+    if (shawarminatorImgSrc && !shawarminatorImg.complete) {
+      shawarminatorImg.onload = () => setShawarminatorReady(true);
     }
   }, []);
 
@@ -87,8 +98,9 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
   }
 
   const characters: CharDef[] = [
-    { type: "boy", label: "Shawarzilla", imgSrc: boyImgSrc, imgReady: boyReady, glow: "rgba(0,204,255,0.3)", bg: "rgba(0,204,255,0.04)", border: "rgba(0,204,255,0.5)", badgeBg: "#00ccff", fallbackColor: "#00ccff" },
-    { type: "girl", label: "Shawarpunzel", imgSrc: girlImgSrc, imgReady: girlReady, glow: "rgba(200,80,255,0.3)", bg: "rgba(200,80,255,0.04)", border: "rgba(200,80,255,0.5)", badgeBg: "#c850ff", fallbackColor: "#c850ff" },
+    { type: "boy", label: CHARACTER_INFO.boy.label, imgSrc: boyImgSrc, imgReady: boyReady, glow: "rgba(0,204,255,0.3)", bg: "rgba(0,204,255,0.04)", border: "rgba(0,204,255,0.5)", badgeBg: CHARACTER_INFO.boy.badgeBg, fallbackColor: CHARACTER_INFO.boy.color },
+    { type: "girl", label: CHARACTER_INFO.girl.label, imgSrc: girlImgSrc, imgReady: girlReady, glow: "rgba(200,80,255,0.3)", bg: "rgba(200,80,255,0.04)", border: "rgba(200,80,255,0.5)", badgeBg: CHARACTER_INFO.girl.badgeBg, fallbackColor: CHARACTER_INFO.girl.color },
+    { type: "shawarminator", label: CHARACTER_INFO.shawarminator.label, imgSrc: shawarminatorImgSrc, imgReady: shawarminatorReady, glow: "rgba(255,51,102,0.3)", bg: "rgba(255,51,102,0.04)", border: "rgba(255,51,102,0.5)", badgeBg: CHARACTER_INFO.shawarminator.badgeBg, fallbackColor: CHARACTER_INFO.shawarminator.color },
   ];
 
   return (
@@ -116,7 +128,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
       </motion.button>
 
       <div className="flex-1 flex items-center justify-center w-full">
-      <div className="relative z-10 flex flex-col items-center gap-8 px-4 w-full max-w-lg">
+      <div className="relative z-10 flex flex-col items-center gap-8 px-4 w-full max-w-3xl">
         <motion.div
           className="text-center flex flex-col items-center"
           initial={{ y: -20, opacity: 0 }}
@@ -141,7 +153,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
 
         {/* Character cards */}
         <motion.div
-          className="flex gap-6 sm:gap-10"
+          className="flex flex-wrap justify-center gap-4 sm:gap-6"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -150,7 +162,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
             <motion.button
               key={char.type}
               onClick={() => setSelected(char.type)}
-              className={`relative flex flex-col items-center gap-4 p-6 sm:p-8 rounded-xl transition-all duration-300 border-2 ${
+              className={`relative flex flex-col items-center gap-4 p-4 sm:p-5 rounded-xl transition-all duration-300 border-2 ${
                 selected === char.type
                   ? "scale-105"
                   : "border-[#2a2a40] hover:scale-[1.03]"
@@ -172,7 +184,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
                   P1
                 </motion.div>
               )}
-              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden border-2 border-[#2a2a40] bg-[#0e0e1a]">
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden border-2 border-[#2a2a40] bg-[#0e0e1a]">
                 {char.imgReady && char.imgSrc ? (
                   <img
                     src={char.imgSrc}
@@ -198,9 +210,7 @@ export default function CharacterSelect({ onSelect, onBack }: CharacterSelectPro
                   </div>
                 )}
               </div>
-              <span
-                className={`text-sm ${char.type === "boy" ? "neon-cyan" : "neon-purple"}`}
-              >
+              <span className="text-sm" style={{ color: char.badgeBg, textShadow: `0 0 7px ${char.badgeBg}, 0 0 18px ${char.glow}` }}>
                 {char.label}
               </span>
             </motion.button>

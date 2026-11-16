@@ -3,11 +3,13 @@ import { formatScore } from "../game/leaderboard";
 import { useNavigate } from "react-router";
 import Footer from "@/components/Footer";
 import { playClick } from "../game/audio";
+import { CHARACTER_INFO } from "../game/characters";
+import type { CharacterType } from "../game/types";
 
 interface GameOverScreenProps {
   score: number;
   round: number;
-  character: string;
+  character: CharacterType;
   playerName: string;
   onPlayAgain: () => void;
   onMainMenu: () => void;
@@ -78,8 +80,8 @@ export default function GameOverScreen({
             </div>
             <div className="text-center">
               <p className="text-[#6a6a8a] mb-2" style={{ fontSize: "14px" }}>Character</p>
-              <p className={character === "boy" ? "neon-cyan" : "neon-purple"} style={{ fontSize: "28px" }}>
-                {character === "boy" ? "Shawarzilla" : "Shawarpunzel"}
+              <p style={{ fontSize: "28px", color: CHARACTER_INFO[character].color, textShadow: `0 0 7px ${CHARACTER_INFO[character].color}, 0 0 20px ${CHARACTER_INFO[character].color}80` }}>
+                {CHARACTER_INFO[character].label}
               </p>
             </div>
           </div>

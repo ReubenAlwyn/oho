@@ -9,6 +9,7 @@ import { getLeaderboard, formatScore, formatDate } from "@/game/leaderboard";
 import type { ScoreEntry } from "@/game/types";
 import shawarmaPixel from "../assets/shawarma-pixel.png";
 import Footer from "@/components/Footer";
+import { CHARACTER_INFO } from "@/game/characters";
 
 export default function Dashboard() {
   const { user, isAuthenticated, signOut } = useAuth();
@@ -328,11 +329,11 @@ export default function Dashboard() {
                     <span
                       className="text-[9px] px-1.5 py-0.5 rounded"
                       style={{
-                        background: game.character === "boy" ? "rgba(0,204,255,0.15)" : "rgba(200,80,255,0.15)",
-                        color: game.character === "boy" ? "#00ccff" : "#c850ff",
+                        background: CHARACTER_INFO[game.character].tintBg,
+                        color: CHARACTER_INFO[game.character].color,
                       }}
                     >
-                      {game.character === "boy" ? "Shawarzilla" : "Shawarpunzel"}
+                      {CHARACTER_INFO[game.character].label}
                     </span>
                     <div>
                       <p className="text-[10px] text-[#e0e0f0]">

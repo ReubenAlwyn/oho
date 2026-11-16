@@ -18,6 +18,7 @@ let mazeBufferRound = -1;
 // ─── Images (loaded dynamically, graceful fallback) ───
 let boyImg: HTMLImageElement | null = null;
 let girlImg: HTMLImageElement | null = null;
+let shawarminatorImg: HTMLImageElement | null = null;
 let shawarmaImg: HTMLImageElement | null = null;
 let imagesLoaded = false;
 
@@ -36,6 +37,12 @@ function loadImages() {
     girlImg = new Image();
     girlImg.src = girlSrc;
   } catch { /* girl.jpg not yet added */ }
+
+  try {
+    const shawarminatorSrc = new URL("../assets/shawarminator.jpg", import.meta.url).href;
+    shawarminatorImg = new Image();
+    shawarminatorImg.src = shawarminatorSrc;
+  } catch { /* shawarminator.jpg not yet added */ }
 
   try {
     const shawSrc = new URL("../assets/shawarma-pixel.png", import.meta.url).href;
@@ -190,15 +197,15 @@ function drawPlayer(
   // Invincibility flash
   if (player.invincible && Math.floor(_frame / 4) % 2 === 0) return;
 
-  const glowColor = player.type === "boy" ? COLORS.player : COLORS.neonPurple;
+  const glowColor = player.type === "boy" ? COLORS.player : player.type === "girl" ? COLORS.neonPurple : "#ff3366";
   const radius = T * 0.45;
 
   // Glow
   drawGlow(ctx, x, y, T * 0.8, glowColor, 0.5);
 
   // Character photo or fallback
-  const img = player.type === "boy" ? boyImg : girlImg;
-  const fallbackColor = player.type === "boy" ? "#00ccff" : "#c850ff";
+  const img = player.type === "boy" ? boyImg : player.type === "girl" ? girlImg : shawarminatorImg;
+  const fallbackColor = player.type === "boy" ? "#00ccff" : player.type === "girl" ? "#c850ff" : "#ff3366";
 
   if (imgReady(img)) {
     drawCircularImage(ctx, img, x, y, radius);
